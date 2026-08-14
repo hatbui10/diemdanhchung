@@ -1,4 +1,13 @@
-
+📂 Mở File
+🔄 Reset
+↩ Undo
+↪ Redo
+⌨️ Phím nhanh
+HTML
+CSS
+JS
+💾 LƯU FILE
+CHẠY ▶
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -1808,7 +1817,7 @@ function startProcessingExcel(input) {
 
 
 
-async function toggleAbsent(targetUniqueKey) {
+async function toggleAbsent(targetUniqueKey, buttonElement) {
     let found = false;
 
     for (let className in bigClassesDatabase) {
@@ -1824,6 +1833,14 @@ async function toggleAbsent(targetUniqueKey) {
                     ? "present"
                     : "absent";
 
+
+// Đổi màu nút Vắng ngay lập tức
+if (buttonElement) {
+    buttonElement.classList.toggle(
+        'active',
+        student.status === 'absent'
+    );
+}
 
             // =================================================
             // Nếu bấm VẮNG
@@ -2184,6 +2201,10 @@ function renderAbsentRowsHtml(classKey, students) {
 
 
 
+
+
+
+
 function renderStudentCardsHtml(classKey, students) {
     return students.map((student, idx) => {
        
@@ -2211,13 +2232,15 @@ const absentActive = student.status === 'absent' ? 'active' : '';
             Có phép
         </label>
 
-      <button
+
+
+
+     <button
     type="button"
     class="btn-quick-absent ${absentActive}"
-    onclick="toggleAbsent('${student.uniqueKey}'); event.stopPropagation();">
+    onclick="toggleAbsent('${student.uniqueKey}', this); event.stopPropagation();">
     Vắng
 </button>
-
 
 
     </div>
@@ -2316,6 +2339,54 @@ function refreshClassUI(classKey) {
     
     document.getElementById(`absentList-${classKeyId}`).innerHTML = renderAbsentRowsHtml(classKey, studentsArr);
     document.getElementById(`studentList-${classKeyId}`).innerHTML = renderStudentCardsHtml(classKey, studentsArr);
+
+// ============================================================
+// CẬP NHẬT LUÔN DANH SÁCH HỌC SINH Ở GIAO DIỆN LỊCH PHÍA TRÊN
+// ============================================================
+
+function normalizeClassNameForRefresh(name) {
+    return String(name || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-zA-Z0-9]/g, "")
+        .toLowerCase();
+}
+
+const normalizedClassKey =
+    normalizeClassNameForRefresh(classKey);
+
+document.querySelectorAll('.class-card').forEach(classCard => {
+
+    const classNameEl =
+        classCard.querySelector('.class-name');
+
+    const scheduleStudentList =
+        classCard.querySelector('.schedule-student-list');
+
+    if (!classNameEl || !scheduleStudentList) {
+        return;
+    }
+
+    const scheduleClassName =
+        normalizeClassNameForRefresh(
+            classNameEl.textContent
+        );
+
+    // So sánh tên lớp sau khi đã chuẩn hóa
+    if (scheduleClassName === normalizedClassKey) {
+
+        scheduleStudentList.innerHTML =
+            renderStudentCardsHtml(
+                classKey,
+                studentsArr
+            );
+    }
+});
+
+
+
+
+
 
     // 🟢 BỔ SUNG: Cập nhật lại trạng thái mờ/khóa và checked của nút ĐỦ ngay khi sĩ số vắng thay đổi
     const hasAbsentStudents = absent > 0;
