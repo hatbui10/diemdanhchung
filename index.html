@@ -995,7 +995,76 @@ margin-right: 20px; /* Thêm dòng này để cách mép phải 20px */
     }
 
 
+// ============================================================
+// MỞ / ĐÓNG DANH SÁCH HỌC SINH NGAY DƯỚI THẺ LỚP
+// ============================================================
+window.toggleScheduleStudentList = function(className, element) {
 
+    const classCard = element.closest('.class-card');
+
+    if (!classCard) {
+        console.error("Không tìm thấy thẻ lớp:", className);
+        return;
+    }
+
+    const studentList = classCard.querySelector('.schedule-student-list');
+
+    if (!studentList) {
+        console.error("Không tìm thấy khu vực danh sách học sinh:", className);
+        return;
+    }
+
+    // Nếu đang mở thì đóng lại
+    if (studentList.style.display === 'block') {
+        studentList.style.display = 'none';
+        return;
+    }
+
+    // Tìm dữ liệu lớp
+    const classData = bigClassesDatabase[className];
+
+    if (!classData || !Array.isArray(classData.students)) {
+        studentList.innerHTML = `
+            <div style="
+                padding: 15px;
+                text-align: center;
+                color: #ffd700;
+                border: 1px solid rgba(255,215,0,0.3);
+                border-radius: 6px;
+            ">
+                ⚠️ Không tìm thấy danh sách học sinh của lớp ${className}
+            </div>
+        `;
+
+        studentList.style.display = 'block';
+        return;
+    }
+
+    const students = classData.students;
+
+    // Hiển thị danh sách học sinh
+    studentList.innerHTML = `
+        <div style="
+            margin-bottom: 10px;
+            padding: 10px;
+            color: #00f0ff;
+            font-weight: bold;
+            border-bottom: 1px solid rgba(0,240,255,0.3);
+        ">
+            👨‍🎓 DANH SÁCH HỌC SINH: ${className}
+            <span style="
+                float: right;
+                color: #00ff66;
+            ">
+                ${students.length} học sinh
+            </span>
+        </div>
+
+        ${renderStudentCardsHtml(className, students)}
+    `;
+
+    studentList.style.display = 'block';
+};
 
 
     // HÀM RENDER ĐÃ BỎ HOÀN TOÀN KHỐI TOÀ NHÀ TRUNG GIAN
@@ -1029,9 +1098,15 @@ margin-right: 20px; /* Thêm dòng này để cách mép phải 20px */
                     <button class="btn-delete" style="${deleteBtnStyle}" title="Xóa lịch" onclick="deleteCard('${day}', ${index})">✕</button>
                     
                     <!-- 1. TÊN LỚP -->
-                    <div class="class-name-container">
-                        <a href="${targetLink}" target="_blank" class="class-name">${item.lopName}</a>
-                    </div>
+<div class="class-name-container">
+    <span
+        class="class-name"
+        style="cursor: pointer;"
+        onclick="toggleScheduleStudentList('${item.lopName.replace(/'/g, "\\'")}', this)"
+    >
+        ${item.lopName}
+    </span>
+</div>
                     
                     <!-- 2. PHÒNG HỌC -->
                     <div class="info-row">
@@ -1063,6 +1138,18 @@ margin-right: 20px; /* Thêm dòng này để cách mép phải 20px */
                         <input type="checkbox" id="check-${day}-${index}" ${checkedAttr} onchange="updateCheckboxStatus('${day}', ${index}, this.checked)">
                         <label for="check-${day}-${index}">Đã điểm danh</label>
                     </div>
+
+                   <div
+    class="schedule-student-list"
+    id="schedule-students-${day}-${index}"
+    style="display: none; margin-top: 12px;"
+></div>
+
+
+
+
+
+
                 </div>
             `;
         });
