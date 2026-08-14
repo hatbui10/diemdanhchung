@@ -1,13 +1,3 @@
-📂 Mở File
-🔄 Reset
-↩ Undo
-↪ Redo
-⌨️ Phím nhanh
-HTML
-CSS
-JS
-💾 LƯU FILE
-CHẠY ▶
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -2316,6 +2306,9 @@ function updateStudentStatus(classKey, studentId, status) {
     }
 }
 
+
+
+
 // Hàm phụ trợ giúp vẽ lại giao diện lớp nhanh gọn tránh lặp code
 function refreshClassUI(classKey) {
     const classKeyId = classKey.replace(/\s+/g, '-');
@@ -2340,6 +2333,10 @@ function refreshClassUI(classKey) {
     document.getElementById(`absentList-${classKeyId}`).innerHTML = renderAbsentRowsHtml(classKey, studentsArr);
     document.getElementById(`studentList-${classKeyId}`).innerHTML = renderStudentCardsHtml(classKey, studentsArr);
 
+
+
+
+
 // ============================================================
 // CẬP NHẬT LUÔN DANH SÁCH HỌC SINH Ở GIAO DIỆN LỊCH PHÍA TRÊN
 // ============================================================
@@ -2354,6 +2351,9 @@ function normalizeClassNameForRefresh(name) {
 
 const normalizedClassKey =
     normalizeClassNameForRefresh(classKey);
+
+
+
 
 document.querySelectorAll('.class-card').forEach(classCard => {
 
@@ -3499,6 +3499,25 @@ function updateVisibleClassesFromFirebase() {
                 );
         }
 
+
+// -------------------------
+// Cập nhật danh sách học sinh phía trên
+// -------------------------
+
+document.querySelectorAll('.schedule-student-list').forEach(list => {
+
+    if (list.style.display !== 'none') {
+
+        list.innerHTML =
+            renderStudentCardsHtml(
+                classKey,
+                students
+            );
+    }
+
+});
+
+
         // -------------------------
         // Cập nhật nút ĐỦ
         // -------------------------
@@ -3570,6 +3589,9 @@ function updateVisibleClassesFromFirebase() {
         }
     });
 }
+
+
+
 
 function backupAttendanceData(){
     const backup = {};
