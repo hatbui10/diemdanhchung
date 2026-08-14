@@ -997,6 +997,7 @@ margin-right: 20px; /* Thêm dòng này để cách mép phải 20px */
 
 // ============================================================
 // MỞ / ĐÓNG DANH SÁCH HỌC SINH NGAY DƯỚI THẺ LỚP
+// Tự động ghép tên lớp lịch học với tên lớp trong database
 // ============================================================
 window.toggleScheduleStudentList = function(className, element) {
 
@@ -1010,7 +1011,7 @@ window.toggleScheduleStudentList = function(className, element) {
     const studentList = classCard.querySelector('.schedule-student-list');
 
     if (!studentList) {
-        console.error("Không tìm thấy khu vực danh sách học sinh:", className);
+        console.error("Không tìm thấy vùng danh sách học sinh:", className);
         return;
     }
 
@@ -1020,10 +1021,56 @@ window.toggleScheduleStudentList = function(className, element) {
         return;
     }
 
-    // Tìm dữ liệu lớp
-    const classData = bigClassesDatabase[className];
+    // ============================================================
+    // CHUẨN HÓA TÊN LỚP
+    // ============================================================
+    function normalizeClassName(name) {
 
-    if (!classData || !Array.isArray(classData.students)) {
+        return String(name || "")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toUpperCase()
+            .replace(/L(?=\d)/g, "")
+            .replace(/[^A-Z0-9]/g, "");
+    }
+
+    const wantedName = normalizeClassName(className);
+
+    console.log("Tên lớp từ lịch:", className);
+    console.log("Tên lớp chuẩn hóa:", wantedName);
+
+    // ============================================================
+    // TÌM KEY PHÙ HỢP TRONG DATABASE
+    // ============================================================
+    let classKey = Object.keys(bigClassesDatabase).find(key => {
+
+        const normalizedKey = normalizeClassName(key);
+
+        // Khớp hoàn toàn
+        if (normalizedKey === wantedName) {
+            return true;
+        }
+
+        // Tên lớp lịch nằm ở đầu tên database
+        if (normalizedKey.startsWith(wantedName)) {
+            return true;
+        }
+
+        // Tên database nằm ở đầu tên lịch
+        if (wantedName.startsWith(normalizedKey)) {
+            return true;
+        }
+
+        return false;
+    });
+
+    console.log("Key tìm được trong database:", classKey);
+
+    // ============================================================
+    // NẾU KHÔNG TÌM THẤY
+    // ============================================================
+    if (!classKey) {
+
         studentList.innerHTML = `
             <div style="
                 padding: 15px;
@@ -1032,7 +1079,39 @@ window.toggleScheduleStudentList = function(className, element) {
                 border: 1px solid rgba(255,215,0,0.3);
                 border-radius: 6px;
             ">
-                ⚠️ Không tìm thấy danh sách học sinh của lớp ${className}
+                ⚠️ Không tìm thấy dữ liệu học sinh của lớp
+                <b>${className}</b>
+            </div>
+        `;
+
+        studentList.style.display = 'block';
+
+        console.warn(
+            "Không tìm thấy lớp:",
+            className,
+            "| Tên chuẩn:",
+            wantedName
+        );
+
+        return;
+    }
+
+    // ============================================================
+    // LẤY DỮ LIỆU LỚP
+    // ============================================================
+    const classData = bigClassesDatabase[classKey];
+
+    if (!classData || !Array.isArray(classData.students)) {
+
+        studentList.innerHTML = `
+            <div style="
+                padding: 15px;
+                text-align: center;
+                color: #ffd700;
+                border: 1px solid rgba(255,215,0,0.3);
+                border-radius: 6px;
+            ">
+                ⚠️ Lớp <b>${classKey}</b> chưa có danh sách học sinh.
             </div>
         `;
 
@@ -1042,7 +1121,15 @@ window.toggleScheduleStudentList = function(className, element) {
 
     const students = classData.students;
 
-    // Hiển thị danh sách học sinh
+    console.log(
+        `Đã tìm thấy lớp "${className}" → "${classKey}"`,
+        "| Số học sinh:",
+        students.length
+    );
+
+    // ============================================================
+    // HIỂN THỊ DANH SÁCH HỌC SINH
+    // ============================================================
     studentList.innerHTML = `
         <div style="
             margin-bottom: 10px;
@@ -1052,6 +1139,7 @@ window.toggleScheduleStudentList = function(className, element) {
             border-bottom: 1px solid rgba(0,240,255,0.3);
         ">
             👨‍🎓 DANH SÁCH HỌC SINH: ${className}
+
             <span style="
                 float: right;
                 color: #00ff66;
@@ -1060,11 +1148,14 @@ window.toggleScheduleStudentList = function(className, element) {
             </span>
         </div>
 
-        ${renderStudentCardsHtml(className, students)}
+        ${renderStudentCardsHtml(classKey, students)}
     `;
 
     studentList.style.display = 'block';
 };
+
+
+
 
 
     // HÀM RENDER ĐÃ BỎ HOÀN TOÀN KHỐI TOÀ NHÀ TRUNG GIAN
