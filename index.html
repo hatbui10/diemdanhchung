@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -453,12 +454,12 @@ margin-right: 20px; /* Thêm dòng này để cách mép phải 20px */
             box-sizing: border-box;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0f172a;
-            margin: 0;
-            padding: 10px;
-            color: #cbd5e1;
-        }
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0f172a;
+    margin: 0 auto;
+    padding: 10px;
+    color: #cbd5e1;
+}
         h2 {
             text-align: center;
             color: #f8fafc;
@@ -739,11 +740,187 @@ margin-right: 20px; /* Thêm dòng này để cách mép phải 20px */
             cursor: pointer;
         }
 
+
+
+
+/* =========================================================
+   KHUNG DANH SÁCH VẮNG TRONG THẺ LỚP
+   ========================================================= */
+
+.schedule-absent-section {
+    margin: 12px 0 15px 0;
+    padding: 0;
+    border: 1px solid rgba(255, 80, 80, 0.45);
+    border-radius: 10px;
+    background: rgba(80, 20, 25, 0.35);
+    overflow: hidden;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+}
+
+.schedule-absent-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    background: rgba(120, 25, 30, 0.45);
+    border-bottom: 1px solid rgba(255, 80, 80, 0.3);
+}
+
+.schedule-absent-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: #ff6b6b;
+    letter-spacing: 0.5px;
+}
+
+.schedule-absent-section .absent-list {
+    margin: 0;
+    padding: 8px 12px;
+    list-style: none;
+}
+
+.schedule-absent-section .absent-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    padding: 8px 6px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.schedule-absent-section .absent-row:last-child {
+    border-bottom: none;
+}
+
+.schedule-absent-section .absent-info {
+    flex: 1;
+    min-width: 0;
+    color: #f1f5f9;
+    font-size: 13px;
+}
+
+.schedule-absent-section .btn-da-den {
+    flex-shrink: 0;
+    padding: 5px 9px;
+    border: 1px solid rgba(0, 255, 120, 0.4);
+    border-radius: 6px;
+    background: rgba(0, 120, 60, 0.25);
+    color: #4ade80;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.schedule-absent-section .btn-da-den:hover {
+    background: rgba(0, 180, 90, 0.35);
+    transform: translateY(-1px);
+}
+
+/* Khi chưa có học sinh vắng */
+.schedule-absent-section .absent-list li:has(em) {
+    padding: 10px 6px;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 12px;
+    font-style: italic;
+}
+
 </style>
 </head>
+
+
+
 <body class="role-teacher">
+
+<h2>SƠ ĐỒ PHÂN TẦNG LỚP HỌC</h2>
+
+
+<!-- 👑 THANH CHỌN QUYỀN HỆ THỐNG VÀ NÚT TẢI LẠI CÙNG 1 HÀNG -->
+<div class="top-header-bar">
+    <div class="role-selector-bar">
+        <span>👑 Chế độ xem:</span>
+        <select id="userRoleSelect" onchange="switchUserRole(this.value)">
+            <option value="guest">Khách</option>
+            <option value="teacher" selected>Giáo Viên</option>
+            <option value="assistant">Trợ Giảng</option>
+        </select>
+    </div>
+
+    <button class="sparkle-reload-btn" onclick="location.reload()">
+      <span class="icon">&#x21BB;</span> 
+      <span class="text">Tải lại trang web</span>
+    </button>
+</div>
+
+
+
+<div class="upload-card">
+    <div class="btn-group-top">
+        <!-- Ô nhập mật khẩu -->
+        <input type="password" id="uploadPasswordInput" placeholder="Nhập mật khẩu để mở khóa..." oninput="verifyUploadPassword(this)" style="width: 100%; background: #050508; border: 1px solid #ffd700; color: #fff; padding: 10px; font-size: 0.85rem; border-radius: 4px; outline: none; margin-bottom: 10px; text-align: center;">
+       
+        <!-- Nhóm nút tải file và xóa dữ liệu (Ban đầu ẩn đi) -->
+<div id="protectedUploadActions" style="display: none; align-items: center; gap: 10px;">
+    <!-- Nút tải lên File Excel (Biến thẻ label thành dạng nút bấm ngang) -->
+    <label for="excelFileInput" class="custom-upload-btn" style="margin: 0;margin-top: 3%; cursor: pointer; text-align: center;">📂 Tải lên File Excel</label>
+    
+   
+    <input type="file" id="excelFileInput" accept=".xlsx, .xls" style="display: none;" onchange="startProcessingExcel(this)">
+    
+    <button class="btn-danger-top" onclick="clearSystemCache()">XÓA điểm danh cũ</button>
+</div>
+
+    </div>
+    <div id="fileStatusMessage" class="file-status">Vui lòng nhập mật khẩu để hiển thị chức năng tải file.</div>
+</div>
+
+
+
+
+
+<div class="progress-container" id="progressContainer">
+    <div class="progress-bar" id="progressBar">0%</div>
+</div>
+
+
+
+
+
+	
+<div class="search-box">
+    <input type="text" id="globalSearchInput" class="search-input" placeholder="Nhập tên hoặc số điện thoại để tìm nhanh..." onkeypress="handleSearchKeyPress(event)">
+    <button class="search-btn" onclick="searchGlobalStudent()">Tìm Kiếm</button>
+</div>
+
+<div id="searchResultBox" class="search-result-panel">
+    <div class="result-title">
+        <span>🔍 KẾT QUẢ TÌM KIẾM TOÀN HỆ THỐNG:</span>
+        <span id="resultCount" style="color: #ffd700;"></span>
+    </div>
+    <table class="result-table">
+        <thead>
+            <tr>
+                <th>Họ và Tên</th>
+                <th>SĐT</th>
+                <th>Lớp Học</th>
+                <th>Gọi</th>
+            </tr>
+        </thead>
+        <tbody id="resultTableBody"></tbody>
+    </table>
+</div>
+
+
+
+
+
+
+
 <div class="container-wrapper">
-    <h2>SƠ ĐỒ PHÂN TẦNG LỚP HỌC</h2>
+    
 
     <!-- KHU VỰC NÚT ĐĂNG NHẬP MẬT KHẨU -->
     <div class="password-trigger-container">
@@ -832,87 +1009,32 @@ margin-right: 20px; /* Thêm dòng này để cách mép phải 20px */
     <div class="schedule-list-grid" id="schedule-container"></div>
 </div>
 
-<!-- 👑 THANH CHỌN QUYỀN HỆ THỐNG VÀ NÚT TẢI LẠI CÙNG 1 HÀNG -->
-<div class="top-header-bar">
-    <div class="role-selector-bar">
-        <span>👑 Chế độ xem:</span>
-        <select id="userRoleSelect" onchange="switchUserRole(this.value)">
-            <option value="guest">Khách</option>
-            <option value="teacher" selected>Giáo Viên</option>
-            <option value="assistant">Trợ Giảng</option>
-        </select>
-    </div>
 
-    <button class="sparkle-reload-btn" onclick="location.reload()">
-      <span class="icon">&#x21BB;</span> 
-      <span class="text">Tải lại trang web</span>
-    </button>
-</div>
+
+
+
+
+
+
+
+
 
 <h2>HỆ THỐNG QUẢN LÝ ĐIỂM DANH ĐỘNG</h2>
 
 
 
 
-<div class="upload-card">
-    <div class="btn-group-top">
-        <!-- Ô nhập mật khẩu -->
-        <input type="password" id="uploadPasswordInput" placeholder="Nhập mật khẩu để mở khóa..." oninput="verifyUploadPassword(this)" style="width: 100%; background: #050508; border: 1px solid #ffd700; color: #fff; padding: 10px; font-size: 0.85rem; border-radius: 4px; outline: none; margin-bottom: 10px; text-align: center;">
-       
-        <!-- Nhóm nút tải file và xóa dữ liệu (Ban đầu ẩn đi) -->
-<div id="protectedUploadActions" style="display: none; align-items: center; gap: 10px;">
-    <!-- Nút tải lên File Excel (Biến thẻ label thành dạng nút bấm ngang) -->
-    <label for="excelFileInput" class="custom-upload-btn" style="margin: 0;margin-top: 3%; cursor: pointer; text-align: center;">📂 Tải lên File Excel</label>
-    
-   
-    <input type="file" id="excelFileInput" accept=".xlsx, .xls" style="display: none;" onchange="startProcessingExcel(this)">
-    
-    <button class="btn-danger-top" onclick="clearSystemCache()">XÓA điểm danh cũ</button>
-</div>
-
-    </div>
-    <div id="fileStatusMessage" class="file-status">Vui lòng nhập mật khẩu để hiển thị chức năng tải file.</div>
-</div>
-
-
-
-
-
-<div class="progress-container" id="progressContainer">
-    <div class="progress-bar" id="progressBar">0%</div>
-</div>
-
-
-
-
-
-	
-<div class="search-box">
-    <input type="text" id="globalSearchInput" class="search-input" placeholder="Nhập tên hoặc số điện thoại để tìm nhanh..." onkeypress="handleSearchKeyPress(event)">
-    <button class="search-btn" onclick="searchGlobalStudent()">Tìm Kiếm</button>
-</div>
-
-<div id="searchResultBox" class="search-result-panel">
-    <div class="result-title">
-        <span>🔍 KẾT QUẢ TÌM KIẾM TOÀN HỆ THỐNG:</span>
-        <span id="resultCount" style="color: #ffd700;"></span>
-    </div>
-    <table class="result-table">
-        <thead>
-            <tr>
-                <th>Họ và Tên</th>
-                <th>SĐT</th>
-                <th>Lớp Học</th>
-                <th>Gọi</th>
-            </tr>
-        </thead>
-        <tbody id="resultTableBody"></tbody>
-    </table>
-</div>
 
 <div id="dynamicMainContainer">
     <div class="empty-alert">Danh sách trống. Hệ thống sẽ tự động vẽ giao diện HTML sau khi bạn nạp file Excel thành công!</div>
 </div>
+
+
+
+
+
+
+
 
 <script>
 
@@ -1131,25 +1253,53 @@ window.toggleScheduleStudentList = function(className, element) {
     // HIỂN THỊ DANH SÁCH HỌC SINH
     // ============================================================
     studentList.innerHTML = `
-        <div style="
-            margin-bottom: 10px;
-            padding: 10px;
-            color: #00f0ff;
-            font-weight: bold;
-            border-bottom: 1px solid rgba(0,240,255,0.3);
-        ">
-            👨‍🎓 DANH SÁCH HỌC SINH: ${className}
 
-            <span style="
-                float: right;
-                color: #00ff66;
-            ">
-                ${students.length} học sinh
+    <!-- DANH SÁCH VẮNG -->
+    <div class="schedule-absent-section">
+
+        <div class="schedule-absent-header">
+            <span class="schedule-absent-title">
+                DANH SÁCH VẮNG HÔM NAY
             </span>
+
+            <button
+                class="copy-btn"
+                onclick="copyAbsentReport('${classKey}')"
+            >
+                Copy
+            </button>
         </div>
 
-        ${renderStudentCardsHtml(classKey, students)}
-    `;
+        <ul
+            class="absent-list"
+            id="schedule-absent-${classKey.replace(/\s+/g, '-')}"
+        >
+            ${renderAbsentRowsHtml(classKey, students)}
+        </ul>
+
+    </div>
+
+
+    <!-- DANH SÁCH HỌC SINH -->
+    <div style="
+        margin: 10px 0;
+        padding: 10px;
+        color: #00f0ff;
+        font-weight: bold;
+        border-bottom: 1px solid rgba(0,240,255,0.3);
+    ">
+        👨‍🎓 DANH SÁCH HỌC SINH: ${className}
+
+        <span style="
+            float: right;
+            color: #00ff66;
+        ">
+            ${students.length} học sinh
+        </span>
+    </div>
+
+    ${renderStudentCardsHtml(classKey, students)}
+`;
 
     studentList.style.display = 'block';
 };
@@ -1703,15 +1853,112 @@ async function toggleAbsent(targetUniqueKey) {
             }
 
 
-            found = true;
+          found = true;
 
-            // Cập nhật giao diện ngay
-            refreshClassUI(className);
+// ============================================================
+// 1. CẬP NHẬT GIAO DIỆN DANH SÁCH HỌC SINH CŨ
+// ============================================================
+refreshClassUI(className);
 
-            // Lưu Firebase
-            await saveDatabaseState();
 
-            break;
+// ============================================================
+// 2. CẬP NHẬT DANH SÁCH ĐANG MỞ DƯỚI THẺ LỚP LỊCH HỌC
+// ============================================================
+document.querySelectorAll('.schedule-student-list').forEach(list => {
+
+    if (list.style.display !== 'block') return;
+
+    const classCard = list.closest('.class-card');
+    if (!classCard) return;
+
+    const classNameEl = classCard.querySelector('.class-name');
+    if (!classNameEl) return;
+
+    const scheduleClassName = classNameEl.textContent.trim();
+
+    // Chuẩn hóa tên lớp
+    function normalizeClassName(name) {
+        return String(name || "")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toUpperCase()
+            .replace(/L(?=\d)/g, "")
+            .replace(/[^A-Z0-9]/g, "");
+    }
+
+    const wantedName = normalizeClassName(scheduleClassName);
+
+    // Tìm key thật trong database
+    const matchedKey = Object.keys(bigClassesDatabase).find(key => {
+
+        const normalizedKey = normalizeClassName(key);
+
+        return (
+            normalizedKey === wantedName ||
+            normalizedKey.startsWith(wantedName) ||
+            wantedName.startsWith(normalizedKey)
+        );
+    });
+
+    // Không phải lớp này
+    if (matchedKey !== className) return;
+
+    const classData = bigClassesDatabase[matchedKey];
+
+    if (!classData || !Array.isArray(classData.students)) return;
+
+    const students = classData.students;
+
+
+    // ========================================================
+    // 3. CHỈ CẬP NHẬT DANH SÁCH VẮNG
+    //    KHÔNG render lại toàn bộ student-list
+    // ========================================================
+    const absentList = list.querySelector(
+        '.schedule-absent-section .absent-list'
+    );
+
+    if (absentList) {
+
+    absentList.innerHTML =
+        renderAbsentRowsHtml(
+            matchedKey,
+            students
+        );
+
+    console.log(
+        "Đã cập nhật danh sách vắng:",
+        students.filter(s => s.status === "absent")
+    );
+}
+
+    // ========================================================
+    // 4. CẬP NHẬT TRẠNG THÁI CÁC THẺ HỌC SINH
+    // ========================================================
+    const currentStudentList = list.querySelector(
+        '.schedule-students-container'
+    );
+
+    if (currentStudentList) {
+
+        currentStudentList.innerHTML =
+            renderStudentCardsHtml(
+                matchedKey,
+                students
+            );
+    }
+
+});
+
+
+// ============================================================
+// 5. LƯU FIREBASE
+// ============================================================
+await saveDatabaseState();
+
+
+
+
         }
     }
 
@@ -1924,7 +2171,13 @@ function renderAbsentRowsHtml(classKey, students) {
             <div class="absent-info">
                 • ${s.name} ${excusedBadge} (${displayReason})
             </div>
-            <button class="btn-da-den" onclick="updateStudentStatusByUniqueKey('${classKey}', '${s.uniqueKey}', 'present')">Đã đến</button>
+            <button
+    type="button"
+    class="btn-da-den"
+    onclick="toggleAbsent('${s.uniqueKey}'); event.stopPropagation();"
+>
+    Đã đến
+</button>
         </li>`;
     }).join('');
 }
