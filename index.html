@@ -106,30 +106,10 @@ body.role-teacher .add-student-box {
         .result-table th { background-color: #4a0025; color: #fff; text-transform: uppercase; font-size: 0.75rem; }
         .result-table tr:nth-child(even) { background-color: rgba(255, 0, 127, 0.03); }
 
-        /* 📦 KHỐI NHÓM LỚP */
-        .group-block-wrapper { margin-bottom: 20px; background: #04040a; border: 1px solid #ffd700; border-radius: 8px; overflow: hidden; box-shadow: 0 0 12px rgba(255, 215, 0, 0.05); }
-        .group-accordion-header { padding: 14px 12px; background: #111122; cursor: pointer; user-select: none; transition: background 0.2s; position: relative; border-bottom: 2px solid #ffd700; display: flex; justify-content: space-between; align-items: center; }
-        .group-accordion-header:active { background: #1c1c38; }
-        .group-accordion-header::after { content: '▼'; color: #ffd700; font-size: 0.9rem; transition: transform 0.3s; margin-left: 10px; }
-        .group-block-wrapper.active .group-accordion-header::after { content: '▲'; }
-        .group-main-title { color: #ffd700; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; text-shadow: 0 0 8px rgba(255, 215, 0, 0.2); }
-        .group-stats { color: #aaa; font-size: 0.85rem; font-weight: bold; }
-        .group-panel { padding: 12px 6px; display: none; background: #06060c; }
-        .group-block-wrapper.active .group-panel { display: block; }
+       
 
         /* 🏫 KHỐI GIAO DIỆN CHÍNH & ACCORDION LỚP CON */
-        .class-block-wrapper { margin-bottom: 12px; background: #0a0a14; border: 1px solid #333; border-radius: 6px; overflow: hidden; }
-        .class-accordion-header { padding: 12px 10px; background: #0d0d1f; cursor: pointer; user-select: none; transition: background 0.2s; position: relative; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .class-accordion-header:active { background: #151530; }
-        .class-accordion-header::after { content: '▼'; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #00f0ff; font-size: 0.8rem; transition: transform 0.3s; }
-        .class-block-wrapper.active .class-accordion-header::after { content: '▲'; color: #00ff66; }
-        
-        .class-main-title { color: #00f0ff; text-shadow: 0 0 10px rgba(0, 240, 255, 0.3); font-size: 1.15rem; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
-        .class-stats { text-align: left; color: #00ff66; font-size: 0.85rem; margin-top: 3px; font-weight: 500; }
-        
-        .class-panel { padding: 15px 8px; display: none; background: #0a0a14; }
-        .class-block-wrapper.active .class-panel { display: block; }
-        
+       
         .add-student-box { display: flex; flex-direction: column; gap: 8px; background: #0d0d1a; border: 1px solid #ffd700; border-radius: 4px; padding: 12px 10px; margin-bottom: 15px; }
         .add-student-box input { width: 100%; background: #050508; border: 1px solid #333; color: #fff; padding: 10px; font-size: 0.9rem; border-radius: 4px; outline: none; }
         .add-student-box input:focus { border-color: #ffd700; }
@@ -2012,15 +1992,7 @@ await saveDatabaseState();
 
 
 
-function toggleClassAccordion(headerElement) {
-    const wrapper = headerElement.parentElement;
-    wrapper.classList.toggle('active');
-}
 
-function toggleGroupAccordion(headerElement) {
-    const wrapper = headerElement.parentElement;
-    wrapper.classList.toggle('active');
-}
 
 function getGroupKeyBySheet(sheetName) {
     const s = sheetName.trim();
@@ -2572,25 +2544,7 @@ function updateStudentNote(classKey, studentId, value) {
     }
 }
 
-function updateGroupStatsText(sheetName) {
-    const groupInfo = getGroupKeyBySheet(sheetName);
-    const gKey = groupInfo.key;
-    
-    let totalClasses = 0;
-    let totalStudents = 0;
-    
-    Object.keys(bigClassesDatabase).forEach(key => {
-        if (getGroupKeyBySheet(bigClassesDatabase[key].sheet).key === gKey) {
-            totalClasses++;
-            totalStudents += bigClassesDatabase[key].students.length;
-        }
-    });
-    
-    const statsElem = document.getElementById(`group-stats-${gKey}`);
-    if (statsElem) {
-        statsElem.innerText = `Tổng số lớp: ${totalClasses} | Học sinh: ${totalStudents}`;
-    }
-}
+
 
 
 
@@ -2629,7 +2583,7 @@ function addNewStudentToClass(classKey) {
     nameInput.value = '';
     phoneInput.value = '';
     refreshClassUI(classKey);
-    updateGroupStatsText(bigClassesDatabase[classKey].sheet);
+    
 }
 
 
@@ -2656,11 +2610,7 @@ function deleteStudentFromClass(classKey, studentId, studentName) {
         saveDatabaseState();
         refreshClassUI(classKey);
         
-        if (typeof updateGroupStatsText === 'function') {
-            updateGroupStatsText(targetSheet);
-        }
-
-        console.log(`[XÓA THÀNH CÔNG]: Đã xóa và cập nhật lại lớp ${classKey}`);
+       
     }
 }
 
@@ -3487,8 +3437,7 @@ function initRealtimeSync() {
          * tất cả accordion sẽ bị dựng lại.
          */
 
-        updateVisibleClassesFromFirebase();
-
+      
         console.log(
             "Đã tự động đồng bộ điểm danh từ máy khác"
         );
@@ -3545,211 +3494,7 @@ function initRealtimeSync() {
 
 
 
-function updateVisibleClassesFromFirebase() {
 
-    Object.keys(bigClassesDatabase).forEach(classKey => {
-
-        const classKeyId = classKey.replace(/\s+/g, '-');
-
-        // Kiểm tra lớp này có đang tồn tại trên giao diện không
-        const classBox = document.querySelector(
-            `[data-classname-box="${CSS.escape(classKey)}"]`
-        );
-
-        if (!classBox) {
-            return;
-        }
-
-        /*
-         * Chỉ cập nhật nội dung của lớp.
-         * KHÔNG tạo lại class-block-wrapper.
-         * KHÔNG đụng vào class active.
-         */
-
-        const students =
-            bigClassesDatabase[classKey].students || [];
-
-        const total = students.length;
-
-        const absent =
-            students.filter(s => s.status === 'absent').length;
-
-        const present = total - absent;
-
-        // -------------------------
-        // Cập nhật thống kê
-        // -------------------------
-
-        const statsEl =
-            document.getElementById(`stats-${classKeyId}`);
-
-        if (statsEl) {
-            statsEl.innerText =
-                ' Có mặt: ' + present +
-                ' ----- Vắng: ' + absent +
-                ' ----- 🕒 Cuối: ' +
-                (bigClassesDatabase[classKey].lastUpdateTime ||
-                 'Chưa cập nhật');
-        }
-
-        // -------------------------
-        // Cập nhật danh sách Vắng
-        // -------------------------
-
-        const absentListEl =
-            document.getElementById(`absentList-${classKeyId}`);
-
-        if (absentListEl) {
-            absentListEl.innerHTML =
-                renderAbsentRowsHtml(
-                    classKey,
-                    students
-                );
-        }
-
-        // -------------------------
-        // Cập nhật danh sách học sinh
-        // -------------------------
-
-        const studentListEl =
-            document.getElementById(`studentList-${classKeyId}`);
-
-        if (studentListEl) {
-            studentListEl.innerHTML =
-                renderStudentCardsHtml(
-                    classKey,
-                    students
-                );
-        }
-
-
-// -------------------------
-// Cập nhật danh sách học sinh phía trên
-// -------------------------
-
-// ============================================================
-// ĐỒNG BỘ GIAO DIỆN PHÍA TRÊN
-// Giáo viên bấm Vắng -> Trợ giảng thấy:
-// 1. Nút Vắng đổi màu
-// 2. Thẻ học sinh có status-absent
-// 3. Nút 📞 Gọi xuất hiện
-// ============================================================
-
-document.querySelectorAll('.schedule-student-list').forEach(list => {
-
-    if (list.style.display === 'none') return;
-
-    const classCard = list.closest('.class-card');
-    if (!classCard) return;
-
-    const classNameEl = classCard.querySelector('.class-name');
-    if (!classNameEl) return;
-
-    const displayedClassName =
-        classNameEl.textContent.trim();
-
-    const normalize = name =>
-        String(name || '')
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/[^a-zA-Z0-9]/g, '')
-            .toLowerCase();
-
-   const displayedName = normalize(displayedClassName);
-const databaseName = normalize(classKey);
-
-if (
-    displayedName === databaseName ||
-    displayedName.startsWith(databaseName) ||
-    databaseName.startsWith(displayedName)
-) {
-
-
-
-
-        // QUAN TRỌNG:
-        // Render lại TOÀN BỘ thẻ học sinh,
-        // không chỉ đổi màu nút Vắng.
-        list.innerHTML =
-            renderStudentCardsHtml(
-                classKey,
-                students
-            );
-    }
-});
-
-
-        // -------------------------
-        // Cập nhật nút ĐỦ
-        // -------------------------
-
-        const checkboxEl =
-            document.getElementById(
-                `checkbox-full-${classKeyId}`
-            );
-
-        const hasAbsentStudents = absent > 0;
-
-        if (checkboxEl) {
-
-            checkboxEl.checked =
-                hasAbsentStudents
-                    ? false
-                    : !!bigClassesDatabase[classKey].isFull;
-
-            checkboxEl.disabled =
-                hasAbsentStudents;
-
-            if (checkboxEl.parentElement) {
-
-                checkboxEl.parentElement.style.opacity =
-                    hasAbsentStudents ? '0.4' : '1';
-
-                checkboxEl.parentElement.style.cursor =
-                    hasAbsentStudents
-                        ? 'not-allowed'
-                        : 'pointer';
-            }
-
-            checkboxEl.style.cursor =
-                hasAbsentStudents
-                    ? 'not-allowed'
-                    : 'pointer';
-        }
-
-        // -------------------------
-        // Cập nhật chữ ĐỦ
-        // -------------------------
-
-        const fullLabel =
-            document.getElementById(
-                `label-full-text-${classKeyId}`
-            );
-
-        if (fullLabel) {
-            fullLabel.style.display =
-                bigClassesDatabase[classKey].isFull
-                    ? 'inline'
-                    : 'none';
-        }
-
-        // -------------------------
-        // Cập nhật chữ học sinh mới
-        // -------------------------
-
-        const newStudentLabel =
-            document.getElementById(
-                `label-new-student-${classKeyId}`
-            );
-
-        if (newStudentLabel) {
-            newStudentLabel.style.display =
-                bigClassesDatabase[classKey].hasNewStudent
-                    ? 'block'
-                    : 'none';
-        }
-    });
-}
 
 
 
