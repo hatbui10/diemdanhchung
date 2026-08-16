@@ -1883,7 +1883,10 @@ document.querySelectorAll('.schedule-student-list').forEach(list => {
 
     const scheduleClassName = classNameEl.textContent.trim();
 
-    // Chuẩn hóa tên lớp
+
+    // ========================================================
+    // CHUẨN HÓA TÊN LỚP
+    // ========================================================
     function normalizeClassName(name) {
         return String(name || "")
             .normalize("NFD")
@@ -1893,58 +1896,78 @@ document.querySelectorAll('.schedule-student-list').forEach(list => {
             .replace(/[^A-Z0-9]/g, "");
     }
 
-    const wantedName = normalizeClassName(scheduleClassName);
+    const wantedName =
+        normalizeClassName(scheduleClassName);
 
-    // Tìm key thật trong database
-    const matchedKey = Object.keys(bigClassesDatabase).find(key => {
 
-        const normalizedKey = normalizeClassName(key);
+    // ========================================================
+    // TÌM KEY THẬT TRONG DATABASE
+    // ========================================================
+    const matchedKey =
+        Object.keys(bigClassesDatabase).find(key => {
 
-        return (
-            normalizedKey === wantedName ||
-            normalizedKey.startsWith(wantedName) ||
-            wantedName.startsWith(normalizedKey)
+            const normalizedKey =
+                normalizeClassName(key);
+
+            return (
+                normalizedKey === wantedName ||
+                normalizedKey.startsWith(wantedName) ||
+                wantedName.startsWith(normalizedKey)
+            );
+        });
+
+
+    // Không tìm thấy lớp tương ứng
+    if (!matchedKey) return;
+
+
+    const classData =
+        bigClassesDatabase[matchedKey];
+
+    if (
+        !classData ||
+        !Array.isArray(classData.students)
+    ) {
+        return;
+    }
+
+
+    const students =
+        classData.students;
+
+
+    // ========================================================
+    // 3. CẬP NHẬT RIÊNG KHUNG DANH SÁCH VẮNG
+    // ========================================================
+    const absentList =
+        list.querySelector(
+            '.schedule-absent-section .absent-list'
         );
-    });
-
-    // Không phải lớp này
-    if (matchedKey !== className) return;
-
-    const classData = bigClassesDatabase[matchedKey];
-
-    if (!classData || !Array.isArray(classData.students)) return;
-
-    const students = classData.students;
-
-
-    // ========================================================
-    // 3. CHỈ CẬP NHẬT DANH SÁCH VẮNG
-    //    KHÔNG render lại toàn bộ student-list
-    // ========================================================
-    const absentList = list.querySelector(
-        '.schedule-absent-section .absent-list'
-    );
 
     if (absentList) {
 
-    absentList.innerHTML =
-        renderAbsentRowsHtml(
-            matchedKey,
-            students
+        absentList.innerHTML =
+            renderAbsentRowsHtml(
+                matchedKey,
+                students
+            );
+
+        console.log(
+            "✅ Đã cập nhật danh sách vắng:",
+            students.filter(
+                s => s.status === "absent"
+            )
         );
+    }
 
-    console.log(
-        "Đã cập nhật danh sách vắng:",
-        students.filter(s => s.status === "absent")
-    );
-}
 
     // ========================================================
-    // 4. CẬP NHẬT TRẠNG THÁI CÁC THẺ HỌC SINH
+    // 4. CẬP NHẬT RIÊNG DANH SÁCH HỌC SINH
     // ========================================================
-    const currentStudentList = list.querySelector(
-        '.schedule-students-container'
-    );
+    const currentStudentList =
+        list.querySelector(
+            '.schedule-students-container'
+        );
 
     if (currentStudentList) {
 
@@ -1953,9 +1976,17 @@ document.querySelectorAll('.schedule-student-list').forEach(list => {
                 matchedKey,
                 students
             );
+
+        console.log(
+            "✅ Đã cập nhật danh sách học sinh:",
+            matchedKey
+        );
     }
 
 });
+
+
+
 
 
 // ============================================================
@@ -2333,6 +2364,98 @@ function refreshClassUI(classKey) {
     document.getElementById(`absentList-${classKeyId}`).innerHTML = renderAbsentRowsHtml(classKey, studentsArr);
     document.getElementById(`studentList-${classKeyId}`).innerHTML = renderStudentCardsHtml(classKey, studentsArr);
 
+
+
+function refreshScheduleStudentUI(className) {
+
+    const classData = bigClassesDatabase[className];
+
+    if (!classData || !Array.isArray(classData.students)) {
+        return;
+    }
+
+    const students = classData.students;
+
+    document.querySelectorAll('.schedule-student-list').forEach(list => {
+
+        if (list.style.display === 'none') return;
+
+        const classCard = list.closest('.class-card');
+        if (!classCard) return;
+
+        const classNameEl =
+            classCard.querySelector('.class-name');
+
+        if (!classNameEl) return;
+
+        const scheduleClassName =
+            classNameEl.textContent.trim();
+
+
+        // Chuẩn hóa tên lớp
+        const normalizeClassName = name =>
+            String(name || '')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toUpperCase()
+                .replace(/L(?=\d)/g, '')
+                .replace(/[^A-Z0-9]/g, '');
+
+
+        const scheduleName =
+            normalizeClassName(scheduleClassName);
+
+        const databaseName =
+            normalizeClassName(className);
+
+
+        // Chỉ xử lý đúng lớp
+        if (
+            scheduleName !== databaseName &&
+            !scheduleName.startsWith(databaseName) &&
+            !databaseName.startsWith(scheduleName)
+        ) {
+            return;
+        }
+
+
+        // =====================================================
+        // QUAN TRỌNG:
+        // DÙNG CHÍNH HÀM ĐANG CHẠY ĐÚNG Ở PHÍA DƯỚI
+        // =====================================================
+
+        const studentContainer =
+            list.querySelector(
+                '.schedule-students-container'
+            );
+
+        if (studentContainer) {
+
+            studentContainer.innerHTML =
+                renderStudentCardsHtml(
+                    className,
+                    students
+                );
+        }
+
+
+        // Cập nhật luôn danh sách học sinh vắng
+        const absentList =
+            list.querySelector(
+                '.schedule-absent-section .absent-list'
+            );
+
+        if (absentList) {
+
+            absentList.innerHTML =
+                renderAbsentRowsHtml(
+                    className,
+                    students
+                );
+        }
+
+    });
+}
 
 
 
@@ -3504,17 +3627,55 @@ function updateVisibleClassesFromFirebase() {
 // Cập nhật danh sách học sinh phía trên
 // -------------------------
 
+// ============================================================
+// ĐỒNG BỘ GIAO DIỆN PHÍA TRÊN
+// Giáo viên bấm Vắng -> Trợ giảng thấy:
+// 1. Nút Vắng đổi màu
+// 2. Thẻ học sinh có status-absent
+// 3. Nút 📞 Gọi xuất hiện
+// ============================================================
+
 document.querySelectorAll('.schedule-student-list').forEach(list => {
 
-    if (list.style.display !== 'none') {
+    if (list.style.display === 'none') return;
 
+    const classCard = list.closest('.class-card');
+    if (!classCard) return;
+
+    const classNameEl = classCard.querySelector('.class-name');
+    if (!classNameEl) return;
+
+    const displayedClassName =
+        classNameEl.textContent.trim();
+
+    const normalize = name =>
+        String(name || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-zA-Z0-9]/g, '')
+            .toLowerCase();
+
+   const displayedName = normalize(displayedClassName);
+const databaseName = normalize(classKey);
+
+if (
+    displayedName === databaseName ||
+    displayedName.startsWith(databaseName) ||
+    databaseName.startsWith(displayedName)
+) {
+
+
+
+
+        // QUAN TRỌNG:
+        // Render lại TOÀN BỘ thẻ học sinh,
+        // không chỉ đổi màu nút Vắng.
         list.innerHTML =
             renderStudentCardsHtml(
                 classKey,
                 students
             );
     }
-
 });
 
 
