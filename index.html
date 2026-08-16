@@ -1632,33 +1632,52 @@ margin-right: 20px; /* Thêm dòng này để cách mép phải 20px */
 
 // ============================================================
 // MỞ / ĐÓNG DANH SÁCH HỌC SINH NGAY DƯỚI THẺ LỚP
-// Tự động ghép tên lớp lịch học với tên lớp trong database
+// Dùng CHUNG logic với phần KHỐI LỚP
 // ============================================================
-window.toggleScheduleStudentList = function(className, element) {
+function toggleScheduleStudentList(className, element) {
 
-    const classCard = element.closest('.class-card');
+    // ============================================================
+    // 1. TÌM THẺ LỚP
+    // ============================================================
+
+    const classCard =
+        element.closest('.class-card');
 
     if (!classCard) {
-        console.error("Không tìm thấy thẻ lớp:", className);
         return;
     }
 
-    const studentList = classCard.querySelector('.schedule-student-list');
+
+    // ============================================================
+    // 2. TÌM KHUNG DANH SÁCH HỌC SINH
+    // ============================================================
+
+    const studentList =
+        classCard.querySelector(
+            '.schedule-student-list'
+        );
 
     if (!studentList) {
-        console.error("Không tìm thấy vùng danh sách học sinh:", className);
         return;
     }
 
-    // Nếu đang mở thì đóng lại
+
+    // ============================================================
+    // 3. NẾU ĐANG MỞ → ĐÓNG
+    // ============================================================
+
     if (studentList.style.display === 'block') {
+
         studentList.style.display = 'none';
+
         return;
     }
 
+
     // ============================================================
-    // CHUẨN HÓA TÊN LỚP
+    // 4. HÀM CHUẨN HÓA TÊN LỚP
     // ============================================================
+
     function normalizeClassName(name) {
 
         return String(name || "")
@@ -1667,56 +1686,97 @@ window.toggleScheduleStudentList = function(className, element) {
             .toUpperCase()
             .replace(/L(?=\d)/g, "")
             .replace(/[^A-Z0-9]/g, "");
+
     }
 
-    const wantedName = normalizeClassName(className);
-
-    console.log("Tên lớp từ lịch:", className);
-    console.log("Tên lớp chuẩn hóa:", wantedName);
 
     // ============================================================
-    // TÌM KEY PHÙ HỢP TRONG DATABASE
+    // 5. CHUẨN HÓA TÊN LỚP TỪ LỊCH HỌC
     // ============================================================
-    let classKey = Object.keys(bigClassesDatabase).find(key => {
 
-        const normalizedKey = normalizeClassName(key);
+    const wantedName =
+        normalizeClassName(className);
 
-        // Khớp hoàn toàn
-        if (normalizedKey === wantedName) {
-            return true;
-        }
 
-        // Tên lớp lịch nằm ở đầu tên database
-        if (normalizedKey.startsWith(wantedName)) {
-            return true;
-        }
+    console.log(
+        "Tên lớp từ lịch:",
+        className
+    );
 
-        // Tên database nằm ở đầu tên lịch
-        if (wantedName.startsWith(normalizedKey)) {
-            return true;
-        }
+    console.log(
+        "Tên lớp chuẩn hóa:",
+        wantedName
+    );
 
-        return false;
-    });
-
-    console.log("Key tìm được trong database:", classKey);
 
     // ============================================================
-    // NẾU KHÔNG TÌM THẤY
+    // 6. TÌM KEY THẬT TRONG DATABASE
     // ============================================================
+
+    const classKey =
+        Object.keys(bigClassesDatabase).find(key => {
+
+            const normalizedKey =
+                normalizeClassName(key);
+
+
+            // Khớp hoàn toàn
+            if (
+                normalizedKey === wantedName
+            ) {
+                return true;
+            }
+
+
+            // Tên lịch nằm ở đầu tên database
+            if (
+                normalizedKey.startsWith(wantedName)
+            ) {
+                return true;
+            }
+
+
+            // Tên database nằm ở đầu tên lịch
+            if (
+                wantedName.startsWith(normalizedKey)
+            ) {
+                return true;
+            }
+
+
+            return false;
+
+        });
+
+
+    console.log(
+        "Key tìm được trong database:",
+        classKey
+    );
+
+
+    // ============================================================
+    // 7. KHÔNG TÌM THẤY LỚP
+    // ============================================================
+
     if (!classKey) {
 
         studentList.innerHTML = `
+
             <div style="
                 padding: 15px;
                 text-align: center;
                 color: #ffd700;
                 border: 1px solid rgba(255,215,0,0.3);
-                border-radius: 6px;
+                border-radius: 8px;
+                margin-top: 10px;
             ">
+
                 ⚠️ Không tìm thấy dữ liệu học sinh của lớp
                 <b>${className}</b>
+
             </div>
+
         `;
 
         studentList.style.display = 'block';
@@ -1731,30 +1791,52 @@ window.toggleScheduleStudentList = function(className, element) {
         return;
     }
 
-    // ============================================================
-    // LẤY DỮ LIỆU LỚP
-    // ============================================================
-    const classData = bigClassesDatabase[classKey];
 
-    if (!classData || !Array.isArray(classData.students)) {
+    // ============================================================
+    // 8. LẤY DỮ LIỆU LỚP
+    // ============================================================
+
+    const classData =
+        bigClassesDatabase[classKey];
+
+
+    if (
+        !classData ||
+        !Array.isArray(classData.students)
+    ) {
 
         studentList.innerHTML = `
+
             <div style="
                 padding: 15px;
                 text-align: center;
                 color: #ffd700;
                 border: 1px solid rgba(255,215,0,0.3);
-                border-radius: 6px;
+                border-radius: 8px;
+                margin-top: 10px;
             ">
-                ⚠️ Lớp <b>${classKey}</b> chưa có danh sách học sinh.
+
+                ⚠️ Lớp
+                <b>${classKey}</b>
+                chưa có danh sách học sinh.
+
             </div>
+
         `;
 
         studentList.style.display = 'block';
+
         return;
     }
 
-    const students = classData.students;
+
+    // ============================================================
+    // 9. LẤY DANH SÁCH HỌC SINH
+    // ============================================================
+
+    const students =
+        classData.students;
+
 
     console.log(
         `Đã tìm thấy lớp "${className}" → "${classKey}"`,
@@ -1762,45 +1844,90 @@ window.toggleScheduleStudentList = function(className, element) {
         students.length
     );
 
+
     // ============================================================
-    // HIỂN THỊ DANH SÁCH HỌC SINH
+    // 10. RENDER GIỐNG PHẦN KHỐI LỚP
     // ============================================================
+    //
+    // KHÔNG tự viết logic điểm danh mới.
+    //
+    // Dùng trực tiếp:
+    //
+    // renderAbsentRowsHtml()
+    // renderStudentCardsHtml()
+    //
+    // để phía trên và khối lớp dùng CHUNG một logic.
+    // ============================================================
+
     studentList.innerHTML = `
 
-    <!-- DANH SÁCH VẮNG -->
-    <div class="schedule-absent-section">
+        <!-- ================================================= -->
+        <!-- DANH SÁCH VẮNG -->
+        <!-- ================================================= -->
 
-        <div class="schedule-absent-header">
-            <span class="schedule-absent-title">
-                DANH SÁCH VẮNG HÔM NAY
-            </span>
+        <div class="schedule-absent-section">
 
-            <button
-                class="copy-btn"
-                onclick="copyAbsentReport('${classKey}')"
+            <div class="schedule-absent-header">
+
+                <span class="schedule-absent-title">
+                    DANH SÁCH VẮNG HÔM NAY
+                </span>
+
+
+                <button
+                    type="button"
+                    class="copy-btn"
+                    onclick="
+                        copyAbsentReport('${classKey.replace(/'/g, "\\'")}');
+                        event.stopPropagation();
+                    "
+                >
+                    Copy
+                </button>
+
+            </div>
+
+
+            <ul
+                class="absent-list"
+                id="schedule-absent-${classKey
+                    .replace(/\s+/g, '-')
+                    .replace(/[^a-zA-Z0-9_-]/g, '')}"
             >
-                Copy
-            </button>
+
+                ${renderAbsentRowsHtml(
+                    classKey,
+                    students
+                )}
+
+            </ul>
+
         </div>
 
-        <ul
-            class="absent-list"
-            id="schedule-absent-${classKey.replace(/\s+/g, '-')}"
-        >
-            ${renderAbsentRowsHtml(classKey, students)}
-        </ul>
 
-    </div>
+        <!-- ================================================= -->
+        <!-- DANH SÁCH TOÀN BỘ HỌC SINH -->
+        <!-- ================================================= -->
+
+        <div class="schedule-students-container">
+
+            ${renderStudentCardsHtml(
+                classKey,
+                students
+            )}
+
+        </div>
+
+    `;
 
 
-    
-
-    ${renderStudentCardsHtml(classKey, students)}
-`;
+    // ============================================================
+    // 11. HIỂN THỊ
+    // ============================================================
 
     studentList.style.display = 'block';
-};
 
+}
 
 
 
