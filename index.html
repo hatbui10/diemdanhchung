@@ -1270,6 +1270,77 @@ margin-right: 20px; /* Thêm dòng này để cách mép phải 20px */
 }
 
 
+.class-bottom-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.schedule-new-student-btn {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 7px 12px !important;
+    font-size: 12px !important;
+}
+
+.schedule-add-student-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    margin-top: 8px;
+    padding: 10px;
+
+    border: 1px solid rgba(255, 215, 0, 0.5);
+    border-radius: 8px;
+
+    background: rgba(8, 12, 28, 0.95);
+
+    box-shadow:
+        0 0 12px rgba(255, 215, 0, 0.12);
+}
+
+.schedule-add-student-box input {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 9px 10px;
+
+    border: 1px solid #39445c;
+    border-radius: 6px;
+
+    background: #05070d;
+    color: white;
+
+    outline: none;
+}
+
+.schedule-add-student-box input:focus {
+    border-color: #ffd700;
+
+    box-shadow:
+        0 0 7px rgba(255, 215, 0, 0.2);
+}
+
+.schedule-add-student-box .btn-add {
+    width: 100%;
+    padding: 9px;
+
+    border: none;
+    border-radius: 6px;
+
+    background: #ffd700;
+    color: #111;
+
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+
 </style>
 </head>
 
@@ -1846,21 +1917,63 @@ const lastUpdate = classData?.lastUpdateTime || 'Chưa cập nhật';
 
                 
 
-<!-- 6. Ô CHECKBOX BỔ SUNG -->
-<div class="class-checkbox-container">
-    <input
-        type="checkbox"
-        id="check-${day}-${index}"
-        ${checkedAttr}
-        onchange="updateCheckboxStatus('${day}', ${index}, this.checked)"
-    >
+<!-- 6. CHECKBOX + NÚT CÓ HỌC SINH MỚI -->
+<div class="class-bottom-actions">
 
-    <label for="check-${day}-${index}">
-        Đã điểm danh
-    </label>
+    <!-- ĐÃ ĐIỂM DANH -->
+    <div class="class-checkbox-container">
+        <input
+            type="checkbox"
+            id="check-${day}-${index}"
+            ${checkedAttr}
+            onchange="updateCheckboxStatus('${day}', ${index}, this.checked)"
+        >
+
+        <label for="check-${day}-${index}">
+            Đã điểm danh
+        </label>
+    </div>
+
+    <!-- CÓ HỌC SINH MỚI -->
+    <button
+        type="button"
+        class="btn-new-student-direct schedule-new-student-btn"
+        onclick="toggleScheduleNewStudent(this, '${item.lopName.replace(/'/g, "\\'")}', '${day}', ${index})"
+    >
+        ➕ Có học sinh mới
+    </button>
+
 </div>
 
 
+<!-- HỘP NHẬP HỌC SINH MỚI -->
+<div
+    id="schedule-addBox-${day}-${index}"
+    class="schedule-add-student-box"
+    style="display: none;"
+>
+
+    <input
+        type="text"
+        id="schedule-inputName-${day}-${index}"
+        placeholder="Nhập tên học sinh mới..."
+    >
+
+    <input
+        type="tel"
+        id="schedule-inputPhone-${day}-${index}"
+        placeholder="Nhập số điện thoại..."
+    >
+
+    <button
+        type="button"
+        class="btn-add"
+        onclick="addNewStudentFromSchedule('${item.lopName.replace(/'/g, "\\'")}', '${day}', ${index})"
+    >
+        ✓ Thêm học sinh
+    </button>
+
+</div>
 
 
 
@@ -1885,7 +1998,296 @@ const lastUpdate = classData?.lastUpdateTime || 'Chưa cập nhật';
 
    
    
+// MỞ / ĐÓNG HỘP THÊM HỌC SINH TỪ THẺ LỊCH
+function toggleScheduleNewStudent(button, classKey, day, index) {
 
+    const box = document.getElementById(
+        `schedule-addBox-${day}-${index}`
+    );
+
+    if (!box) {
+        console.error('Không tìm thấy hộp thêm học sinh');
+        return;
+    }
+
+    if (box.style.display === 'none') {
+
+        box.style.display = 'flex';
+
+        button.classList.add('is-blinking');
+
+        const nameInput = document.getElementById(
+            `schedule-inputName-${day}-${index}`
+        );
+
+        if (nameInput) {
+            nameInput.focus();
+        }
+
+    } else {
+
+        box.style.display = 'none';
+
+        button.classList.remove('is-blinking');
+    }
+}
+
+
+function addNewStudentFromSchedule(className, day, index) {
+
+    const nameInput = document.getElementById(
+        `schedule-inputName-${day}-${index}`
+    );
+
+    const phoneInput = document.getElementById(
+        `schedule-inputPhone-${day}-${index}`
+    );
+
+    if (!nameInput || !phoneInput) {
+        console.error("Không tìm thấy ô nhập học sinh");
+        return;
+    }
+
+    const name = nameInput.value.trim();
+
+    const phone =
+        phoneInput.value.trim().replace(/\s+/g, '') || 'Chưa có';
+
+
+    // ==========================================
+    // 1. KIỂM TRA TÊN
+    // ==========================================
+
+    if (!name) {
+        alert('Vui lòng nhập tên học viên!');
+        nameInput.focus();
+        return;
+    }
+
+
+    // ==========================================
+    // 2. CHUẨN HÓA TÊN LỚP
+    // GIỐNG HỆ THỐNG ĐANG DÙNG
+    // ==========================================
+
+    function normalizeClassName(name) {
+
+        return String(name || "")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toUpperCase()
+            .replace(/L(?=\d)/g, "")
+            .replace(/[^A-Z0-9]/g, "");
+    }
+
+
+    const wantedName = normalizeClassName(className);
+
+
+    // ==========================================
+    // 3. TÌM KEY THẬT TRONG DATABASE
+    // ==========================================
+
+    const classKey = Object.keys(bigClassesDatabase).find(key => {
+
+        const normalizedKey =
+            normalizeClassName(key);
+
+
+        // Khớp hoàn toàn
+        if (normalizedKey === wantedName) {
+            return true;
+        }
+
+
+        // Tên lịch nằm đầu tên database
+        if (normalizedKey.startsWith(wantedName)) {
+            return true;
+        }
+
+
+        // Tên database nằm đầu tên lịch
+        if (wantedName.startsWith(normalizedKey)) {
+            return true;
+        }
+
+
+        return false;
+    });
+
+
+    console.log(
+        "Tên lớp từ lịch:",
+        className
+    );
+
+    console.log(
+        "Tên lớp chuẩn hóa:",
+        wantedName
+    );
+
+    console.log(
+        "Key database tìm được:",
+        classKey
+    );
+
+
+    // ==========================================
+    // 4. KHÔNG TÌM THẤY LỚP
+    // ==========================================
+
+    if (!classKey) {
+
+        alert(
+            `Không tìm thấy dữ liệu lớp "${className}"!`
+        );
+
+        console.error(
+            "Không tìm thấy key database cho:",
+            className
+        );
+
+        return;
+    }
+
+
+    // ==========================================
+    // 5. LẤY DỮ LIỆU LỚP
+    // ==========================================
+
+    const classData =
+        bigClassesDatabase[classKey];
+
+
+    if (
+        !classData ||
+        !Array.isArray(classData.students)
+    ) {
+
+        alert(
+            `Lớp "${classKey}" chưa có danh sách học sinh!`
+        );
+
+        return;
+    }
+
+
+    const studentsList =
+        classData.students;
+
+
+    // ==========================================
+    // 6. TẠO ID HỌC SINH
+    // ==========================================
+
+    const nextId =
+        studentsList.length > 0
+            ? Math.max(
+                ...studentsList.map(s => Number(s.id) || 0)
+              ) + 1
+            : 1;
+
+
+    // ==========================================
+    // 7. THÊM HỌC SINH
+    // ==========================================
+
+    studentsList.push({
+
+        id: nextId,
+
+        name: name,
+
+        phone: phone,
+
+        uniqueKey:
+            `${name.trim().toLowerCase()}_${phone}`,
+
+        status: 'absent',
+
+        isNewStudentFlag: true,
+
+        note: 'Học sinh mới',
+
+        timeSlots: Array.from(
+            { length: 8 },
+            () => ({
+                state: 'normal',
+                timestamp: null
+            })
+        )
+    });
+
+
+    // ==========================================
+    // 8. ĐÁNH DẤU HỌC SINH MỚI
+    // ==========================================
+
+    classData.hasNewStudent = true;
+
+
+    // ==========================================
+    // 9. LƯU DATABASE
+    // ==========================================
+
+    saveDatabaseState();
+
+
+    // ==========================================
+    // 10. XÓA FORM
+    // ==========================================
+
+    nameInput.value = '';
+    phoneInput.value = '';
+
+
+    // ==========================================
+    // 11. ĐÓNG HỘP NHẬP
+    // ==========================================
+
+    const box = document.getElementById(
+        `schedule-addBox-${day}-${index}`
+    );
+
+    if (box) {
+        box.style.display = 'none';
+    }
+
+
+    // ==========================================
+    // 12. RENDER LẠI THẺ LỊCH
+    // ==========================================
+
+    renderScheduleList(day);
+
+
+    // ==========================================
+    // 13. MỞ LẠI DANH SÁCH HỌC SINH
+    //    ĐỂ THẤY NGAY HỌC SINH VỪA THÊM
+    // ==========================================
+
+    setTimeout(() => {
+
+        const classCard =
+            document
+                .querySelectorAll('.class-card')[index];
+
+        if (!classCard) return;
+
+        const classNameElement =
+            classCard.querySelector('.class-name');
+
+        if (classNameElement) {
+
+            toggleScheduleStudentList(
+                className,
+                classNameElement
+            );
+        }
+
+    }, 50);
+
+}
    
 
   // ĐẶT TOÀN BỘ CODE NÀY VÀO TRONG MỘT THẺ SCRIPT DUY NHẤT Ở CUỐI BODY
@@ -2689,13 +3091,19 @@ function renderAbsentRowsHtml(classKey, students) {
             <div class="absent-info">
                 • ${s.name} ${excusedBadge} (${displayReason})
             </div>
+
+
+
             <button
     type="button"
     class="btn-da-den"
-    onclick="toggleAbsent('${s.uniqueKey}'); event.stopPropagation();"
+    onclick="toggleAbsent('${s.uniqueKey}', this); event.stopPropagation();"
 >
     Đã đến
 </button>
+
+
+
         </li>`;
     }).join('');
 }
