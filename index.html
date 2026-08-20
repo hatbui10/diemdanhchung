@@ -836,6 +836,12 @@
       box-shadow: 0 0 17px rgba(255, 213, 74, .22);
     }
 
+    .absent-count {
+      color: #3b82f6 !important;
+      font-weight: 850;
+      text-shadow: 0 0 6px rgba(59, 130, 246, .38);
+    }
+
     .new-student-count {
       display: inline-block;
       color: #b8c0cc;
@@ -2069,7 +2075,7 @@
               <div class="schedule-summary">
                 <span style="color:var(--green)">Có mặt: ${present}</span>
                 <span class="new-student-count${newStudentsCount > 0 ? " is-active" : ""}">HSM: ${newStudentsCount}</span>
-                <span style="color:var(--pink)">Vắng: ${absent.length}</span>
+                <span class="absent-count">Vắng: ${absent.length}</span>
                 <span>Cập nhật: ${this.esc(classData?.lastUpdateTime || "Chưa cập nhật")}</span>
               </div>
 
@@ -3411,5 +3417,5 @@
 
     window.AttendanceApp.attachFirebase(firebaseApi);
   </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2e2c8cca8b385e6',t:'MTc4NzI0MzQ0NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2e2d03fca770506',t:'MTc4NzI0Mzc1MA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
