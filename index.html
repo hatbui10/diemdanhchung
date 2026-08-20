@@ -168,10 +168,7 @@
       box-shadow: 0 0 10px rgba(0, 233, 255, .15);
     }
 
-    body.role-teacher .system-lock-row {
-      grid-template-columns: 1fr;
-    }
-
+    body.role-teacher .system-lock-row,
     body.role-guest .system-lock-row {
       display: none !important;
     }
@@ -821,11 +818,6 @@
       transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
     }
 
-    .schedule-card:hover {
-      border-color: rgba(0, 233, 255, .65);
-      box-shadow: 0 7px 20px rgba(0, 233, 255, .13);
-    }
-
     .schedule-card.is-expanded {
       border-color: var(--cyan);
       box-shadow: 0 0 16px rgba(0, 233, 255, .2);
@@ -834,6 +826,18 @@
     .schedule-card.has-new-students {
       border-color: var(--yellow);
       box-shadow: 0 0 17px rgba(255, 213, 74, .22);
+    }
+
+    /* Thẻ được rê chuột sẽ phát sáng rõ, không ảnh hưởng các thẻ khác. */
+    .schedule-card:hover,
+    .schedule-card.is-expanded:hover,
+    .schedule-card.has-new-students:hover {
+      border-color: #67e8f9;
+      box-shadow:
+        0 0 7px rgba(255, 255, 255, .45),
+        0 0 19px rgba(0, 233, 255, .62),
+        0 0 34px rgba(37, 99, 235, .38);
+      transform: translateY(-2px);
     }
 
     .absent-count {
@@ -1110,6 +1114,7 @@
     body.role-guest .edit-control,
     body.role-guest .schedule-admin-control,
     body.role-guest .assistant-only,
+    body.role-teacher .schedule-admin-control,
     body.role-teacher .assistant-only {
       display: none !important;
     }
@@ -1516,7 +1521,12 @@
         if (!["guest", "teacher", "assistant"].includes(role)) return;
         this.role = role;
         sessionStorage.setItem("attendance_role", role);
-        if (role !== "assistant") this.closeUploadPanel();
+        if (role !== "assistant") {
+          this.closeUploadPanel();
+          this.scheduleAdminUnlocked = false;
+          this.dom.scheduleAdminPanel.hidden = true;
+          this.dom.scheduleAuthBtn.textContent = "🔐 Mở khóa xếp lịch";
+        }
         this.applyRole();
         this.renderSchedule();
         if (this.dom.searchInput.value.trim()) this.runSearch({ scroll: false, silent: true });
@@ -1915,8 +1925,8 @@
       },
 
       toggleScheduleAdmin() {
-        if (this.role === "guest") {
-          this.showToast("Chế độ Khách không được sửa lịch.", true);
+        if (this.role !== "assistant") {
+          this.showToast("Chỉ Trợ giảng mới được mở khóa xếp lịch.", true);
           return;
         }
 
@@ -3417,5 +3427,5 @@
 
     window.AttendanceApp.attachFirebase(firebaseApi);
   </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2e2d03fca770506',t:'MTc4NzI0Mzc1MA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2e2d827ccac20e2',t:'MTc4NzI0NDA3NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
