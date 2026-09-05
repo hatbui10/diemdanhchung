@@ -1893,6 +1893,17 @@
                 if (digits.length === 10) return `${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7)}`;
                 return digits;
               },
+
+              // SĐT đã ẩn 4 số ở giữa cho thẻ học sinh, vd: 0396 963 955 -> 039 **** 955
+              maskedDisplayPhone(phone) {
+                const digits = this.normalizePhone(phone);
+                if (!digits) return "Chưa có";
+                if (digits.length < 8) return digits;
+                const start = Math.floor((digits.length - 4) / 2);
+                const before = digits.slice(0, start);
+                const after = digits.slice(start + 4);
+                return `${before} **** ${after}`.trim();
+              },
             
               formatDateTime(date = new Date()) {
                 return date.toLocaleString("vi-VN", {
@@ -2671,7 +2682,7 @@
                   <article class="student status-${isNew ? "new" : (absent ? "absent" : "present")}" id="${this.esc(idPrefix)}-${classToken}-${this.esc(student.uid)}" data-uid="${this.esc(student.uid)}">
                     <div class="student-top">
                       <span class="student-name">${index + 1}. ${this.esc(student.name)}${isNew ? ' <span class="student-new-badge">HSM</span>' : ""}</span>
-                      <span class="student-phone private-phone">${this.esc(this.displayPhone(student.phone))}</span>
+                      <span class="student-phone private-phone">${this.esc(this.maskedDisplayPhone(student.phone))}</span>
                     </div>
                     <div class="student-controls edit-control">
                       ${isNew ? "" : `
@@ -3852,6 +3863,6 @@
         <script>
             (function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3685ee169cf045f',t:'MTc4ODY0NDE5OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
         </script>
-    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a36871a04b567558',t:'MTc4ODY0NDk2Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3688126fc38dd99',t:'MTc4ODY0NTYwMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
