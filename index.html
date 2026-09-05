@@ -264,6 +264,10 @@
               margin-top: 10px;
             }
             
+            .upload-actions #restoreDefaultBtn {
+              grid-column: 1 / -1;
+            }
+            
             .file-status {
               min-height: 20px;
               margin-top: 9px;
@@ -1303,7 +1307,7 @@
 
         <section id="uploadCard" class="card upload-card assistant-only" aria-labelledby="uploadTitle" hidden>
             <h2 id="uploadTitle" class="card-title">Tải danh sách từ Excel</h2>
-            <p class="help-text">Đọc toàn bộ sheet 2–12: tên học sinh ở cột B, số điện thoại ở cột Q. Dòng không có SĐT sẽ kết thúc lớp hiện tại.</p>
+            <p class="help-text">Đọc toàn bộ sheet 2–12: tên học sinh ở cột B, số điện thoại ở cột Q. Dòng không có SĐT sẽ kết thúc lớp hiện tại.<br>Hệ thống tự lưu bản lưu mặc định mỗi 24 giờ – bấm "🔁 Khôi phục mặc định" để hoàn tác khi thao tác nhầm.</p>
 
             <div class="row">
                 <input id="uploadPassword" class="input" type="password" autocomplete="off" placeholder="Nhập mật khẩu mở chức năng tải file">
@@ -1312,6 +1316,7 @@
             <div id="uploadActions" class="upload-actions" hidden>
                 <button type="button" id="chooseExcelBtn" class="btn btn-primary">📂 Chọn file Excel</button>
                 <button type="button" id="clearAttendanceBtn" class="btn btn-danger">Xóa điểm danh cũ</button>
+                <button type="button" id="restoreDefaultBtn" class="btn btn-success">🔁 Khôi phục mặc định</button>
             </div>
             <input id="excelFileInput" type="file" accept=".xlsx,.xls" hidden>
             <div id="fileStatus" class="file-status">Chưa mở khóa chức năng tải file.</div>
@@ -1436,6 +1441,9 @@
               LOCAL_DB_KEY: "big_classes_database",
               LOCAL_FILENAME_KEY: "big_classes_filename",
               LOCAL_RESET_KEY: "attendance_night_reset_key",
+              // Bản lưu mặc định: tự chụp phiên làm việc mỗi 24 giờ, dùng cho nút "Khôi phục mặc định".
+              DEFAULT_BACKUP_KEY: "big_classes_default_backup",
+              DEFAULT_BACKUP_INTERVAL_MS: 24 * 60 * 60 * 1000,
               UPLOAD_UI_PASSWORD: "123456",
               NOTE_OPTIONS: ["", "***", "Đi muộn", "Không nghe máy", "Nghỉ hôm nay", "Nghỉ tuần này", "Phản ánh chất lượng", "Xin nghỉ hẳn", "Ốm đau", "Học sinh mới"],
             
@@ -1456,6 +1464,7 @@
               pendingScheduleReset: false,
               attendanceRetryTimer: null,
               scheduleRetryTimer: null,
+              defaultBackupTimer: null,
               filename: "",
               role: "teacher",
               firebase: null,
@@ -1501,6 +1510,7 @@
                 this.cacheDom();
                 this.bindEvents();
                 this.loadLocal();
+                this.startDefaultBackupTimer();
                 this.syncScheduleClassNamesWithDatabase();
                 this.initScheduleDropdowns();
                 this.role = this.storageGet("sessionStorage", "attendance_role") || "teacher";
@@ -1528,6 +1538,7 @@
                   uploadActions: document.getElementById("uploadActions"),
                   chooseExcelBtn: document.getElementById("chooseExcelBtn"),
                   clearAttendanceBtn: document.getElementById("clearAttendanceBtn"),
+                  restoreDefaultBtn: document.getElementById("restoreDefaultBtn"),
                   excelFileInput: document.getElementById("excelFileInput"),
                   fileStatus: document.getElementById("fileStatus"),
                   progressWrap: document.getElementById("progressWrap"),
@@ -1561,6 +1572,10 @@
                 this.dom.clearAttendanceBtn.addEventListener("click", () => {
                   if (!this.requireAssistantAndUnlock()) return;
                   this.manualResetAttendance();
+                });
+                this.dom.restoreDefaultBtn.addEventListener("click", () => {
+                  if (!this.requireAssistantAndUnlock()) return;
+                  this.restoreDefaultBackup();
                 });
                 this.dom.excelFileInput.addEventListener("change", event => this.importExcel(event.target.files[0]));
                 this.dom.searchBtn.addEventListener("click", () => this.runSearch({ scroll: true, silent: false }));
@@ -3464,6 +3479,90 @@
             
               
             
+              /* ===== BẢN LƯU MẶC ĐỊNH (tự lưu mỗi 24h) ===== */
+
+              loadDefaultBackup() {
+                try {
+                  const raw = this.storageGet("localStorage", this.DEFAULT_BACKUP_KEY);
+                  if (!raw) return null;
+                  const parsed = JSON.parse(raw);
+                  const savedAt = Number(parsed?.savedAt);
+                  if (!parsed || typeof parsed !== "object" || !Number.isFinite(savedAt) || savedAt <= 0) return null;
+                  return parsed;
+                } catch (error) {
+                  console.error("Lỗi đọc bản lưu mặc định:", error);
+                  return null;
+                }
+              },
+
+              saveDefaultBackup() {
+                const hasClasses = Object.keys(this.db).length > 0;
+                const hasSchedule = Object.values(this.schedule || {}).some(list => (list || []).length);
+                // Không chụp bản lưu khi chưa có dữ liệu, tránh "mặc định" là dữ liệu trống.
+                if (!hasClasses && !hasSchedule) return false;
+                const snapshot = {
+                  savedAt: Date.now(),
+                  database: JSON.parse(JSON.stringify(this.db)),
+                  filename: this.filename || "",
+                  nightResetKey: this.meta.nightResetKey || "",
+                  schedule: JSON.parse(JSON.stringify(this.schedule))
+                };
+                this.storageSet("localStorage", this.DEFAULT_BACKUP_KEY, JSON.stringify(snapshot));
+                return true;
+              },
+
+              maybeSaveDefaultBackup() {
+                const now = Date.now();
+                const existing = this.loadDefaultBackup();
+                if (existing && now - Number(existing.savedAt) < this.DEFAULT_BACKUP_INTERVAL_MS) return;
+                this.saveDefaultBackup();
+              },
+
+              startDefaultBackupTimer() {
+                if (this.defaultBackupTimer) clearInterval(this.defaultBackupTimer);
+                this.maybeSaveDefaultBackup();
+                // Trang mở liên tục thì cứ 1 giờ kiểm tra lại; đủ 24 giờ là tự lưu bản mặc định mới.
+                this.defaultBackupTimer = setInterval(() => this.maybeSaveDefaultBackup(), 60 * 60 * 1000);
+              },
+
+              restoreDefaultBackup() {
+                const backup = this.loadDefaultBackup();
+                if (!backup) {
+                  this.showToast("Chưa có bản lưu mặc định để khôi phục. Hệ thống sẽ tự lưu bản lưu mỗi 24 giờ khi có dữ liệu.", true);
+                  return;
+                }
+
+                const when = this.formatDateTime(new Date(Number(backup.savedAt)));
+                const backupDb = this.normalizeDatabase(backup.database || {});
+                const backupSchedule = this.normalizeSchedule(backup.schedule || null);
+                const classCount = Object.keys(backupDb).length;
+                const studentCount = Object.values(backupDb).reduce(
+                  (sum, classData) => sum + (Array.isArray(classData.students) ? classData.students.length : 0),
+                  0
+                );
+
+                if (!confirm(
+                  `Khôi phục về bản lưu mặc định lúc ${when} (${classCount} lớp, ${studentCount} học sinh)?\nToàn bộ dữ liệu hiện tại sẽ được thay bằng dữ liệu của bản lưu.`
+                )) return;
+
+                this.db = backupDb;
+                this.filename = String(backup.filename || "");
+                this.meta.nightResetKey = String(backup.nightResetKey || "");
+                this.schedule = backupSchedule;
+                this.expandedScheduleCards.clear();
+                this.openScheduleAddForms.clear();
+                this.openScheduleEditForms.clear();
+                this.openAddForms.clear();
+                this.syncScheduleClassNamesWithDatabase();
+                this.initScheduleDropdowns();
+                this.persistLocal();
+                this.renderSchedule();
+                this.renderAll(false);
+                this.queueAttendanceSave(0);
+                this.queueScheduleSave(0);
+                this.showToast(`Đã khôi phục về bản lưu mặc định lúc ${when}.`);
+              },
+
               commit(message) {
                 this.persistLocal();
                 this.renderSchedule();
@@ -3532,6 +3631,9 @@
                     this.setSync("Mất kết nối realtime lịch học.", "error");
                   }
                 );
+
+                // Sau khi Firebase đồng bộ xong, kiểm tra lại bản lưu mặc định để không chụp dữ liệu cũ.
+                this.maybeSaveDefaultBackup();
               },
             
               applyRemote(payload) {
@@ -3750,6 +3852,6 @@
         <script>
             (function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3685ee169cf045f',t:'MTc4ODY0NDE5OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
         </script>
-    </body>
+    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a36871a04b567558',t:'MTc4ODY0NDk2Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
