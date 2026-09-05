@@ -840,6 +840,39 @@
               box-shadow: 0 0 11px rgba(59,130,246,.35);
             }
             
+            /* Sub-tab Buổi sáng / Buổi chiều – chỉ hiện ở Chủ nhật. */
+            .session-tabs {
+              display: flex;
+              justify-content: center;
+              gap: 8px;
+              margin-bottom: 12px;
+            }
+            
+            .session-tab {
+              flex: 0 0 auto;
+              padding: 8px 20px;
+              color: #9eacc0;
+              font-size: .82rem;
+              font-weight: 800;
+              border: 1px solid #40516a;
+              border-radius: 999px;
+              background: #172033;
+            }
+            
+            .session-tab[data-session="sang"].active {
+              color: #171000;
+              border-color: var(--yellow);
+              background: linear-gradient(135deg, #ffd54a, #ffb700);
+              box-shadow: 0 0 11px rgba(255, 213, 74, .4);
+            }
+            
+            .session-tab[data-session="chieu"].active {
+              color: #fff;
+              border-color: var(--pink);
+              background: linear-gradient(135deg, #b45309, #ff2688);
+              box-shadow: 0 0 11px rgba(255, 38, 136, .35);
+            }
+            
             .schedule-grid {
               display: grid;
               gap: 11px;
@@ -1325,6 +1358,11 @@
                 <button type="button" id="addScheduleCardBtn" class="day-tab add-card-btn schedule-admin-control" hidden>➕ Thêm thẻ lớp</button>
             </div>
 
+            <div id="sundaySessionTabs" class="session-tabs" hidden>
+                <button type="button" class="session-tab" data-session="sang">🌅 Buổi sáng</button>
+                <button type="button" class="session-tab" data-session="chieu">🌇 Buổi chiều</button>
+            </div>
+
             <div id="scheduleContainer" class="schedule-grid"></div>
         </section>
 
@@ -1353,7 +1391,7 @@
                 cn: "Chủ nhật"
               },
               TIMES: [
-                "8h00 - 9h30", "8h30 - 10h00", "9h30 - 11h00", "10h00 - 11h30","16h00 - 17h30",
+                "8h00 - 9h30", "8h30 - 10h00", "9h30 - 11h00","10h00 - 11h30", "16h00 - 17h30",
                 "16h30 - 18h00", "17h00 - 18h30", "18h00 - 19h30", "18h15 - 19h45",
                 "18h30 - 20h00", "18h45 - 20h15", "19h20 - 21h00", "19h30 - 21h00", "20h00 - 21h30"
               ],
@@ -1376,7 +1414,6 @@
                 { name: "Ngô Thị Thu Hằng", phone: "0968125259" },
                 { name: "Lê Minh Phương", phone: "0332323361" },
                 { name: "Nguyễn Như Mai", phone: "0395729123" },
-            { name: "Quỳnh Anh NP", phone: "0000000000" },
                 { name: "Hoàng Yến", phone: "0888281294" }
               ],
               // Danh sách GVNN có cùng cấu trúc { name, phone } như danh sách giáo viên.
@@ -1406,6 +1443,7 @@
               memoryStorage: {},
               schedule: { thu2: [], thu3: [], thu4: [], thu5: [], thu6: [], thu7: [], cn: [] },
               currentScheduleDay: "thu2",
+              sundaySessionFilter: "",
               scheduleClassOptions: [],
               scheduleAdminUnlocked: false,
               expandedScheduleCards: new Set(),
@@ -1501,6 +1539,7 @@
                   resultBody: document.getElementById("resultBody"),
                   scheduleAuthBtn: document.getElementById("scheduleAuthBtn"),
                   scheduleDayTabs: document.getElementById("scheduleDayTabs"),
+                  sundaySessionTabs: document.getElementById("sundaySessionTabs"),
                   scheduleContainer: document.getElementById("scheduleContainer"),
                   addScheduleCardBtn: document.getElementById("addScheduleCardBtn"),
                   clearScheduleCardDayBtn: document.getElementById("clearScheduleCardDayBtn"),
@@ -1539,6 +1578,11 @@
                   const button = event.target.closest("[data-schedule-day]");
                   if (!button) return;
                   this.changeScheduleDay(button.dataset.scheduleDay);
+                });
+                this.dom.sundaySessionTabs.addEventListener("click", event => {
+                  const button = event.target.closest("[data-session]");
+                  if (!button) return;
+                  this.setSundaySessionFilter(button.dataset.session);
                 });
             
                 document.addEventListener("click", event => {
@@ -1971,9 +2015,33 @@
               changeScheduleDay(day) {
                 if (!Object.prototype.hasOwnProperty.call(this.SCHEDULE_DAYS, day)) return;
                 this.currentScheduleDay = day;
+                this.sundaySessionFilter = "";
                 this.dom.scheduleDayTabs.querySelectorAll("[data-schedule-day]").forEach(button => {
                   button.classList.toggle("active", button.dataset.scheduleDay === day);
                 });
+                this.renderSchedule();
+              },
+            
+              // Giờ bắt đầu của ca học (vd "8h30 - 10h00" -> 8). Trả về null nếu không đọc được.
+              parseStartHour(time) {
+                const match = String(time || "").match(/(\d{1,2})\s*(?:h|:)/i);
+                if (!match) return null;
+                const hour = Number(match[1]);
+                return hour >= 0 && hour <= 23 ? hour : null;
+              },
+            
+              // Thẻ trước 12h thuộc buổi sáng, từ 12h trở đi thuộc buổi chiều.
+              // Thẻ chưa xếp ca học hiện ở cả hai buổi để không bị "mất" khi đang lọc.
+              itemMatchesSession(item, session) {
+                const startHour = this.parseStartHour(item.time);
+                if (startHour === null) return true;
+                return session === "sang" ? startHour < 12 : startHour >= 12;
+              },
+            
+              // Bấm buổi đang chọn thì tắt lọc, quay về hiện tất cả lớp của ngày.
+              setSundaySessionFilter(session) {
+                if (this.currentScheduleDay !== "cn") return;
+                this.sundaySessionFilter = this.sundaySessionFilter === session ? "" : session;
                 this.renderSchedule();
               },
             
@@ -2015,11 +2083,27 @@
                 // Nút "Thêm thẻ lớp" chỉ xuất hiện khi đã mở khóa chế độ sửa lịch.
                 // Nút "Xóa ngày" luôn hiển thị ở chế độ Trợ giảng (bấm vào sẽ yêu cầu nhập mật khẩu quản lý).
                 if (this.dom.addScheduleCardBtn) this.dom.addScheduleCardBtn.hidden = !this.scheduleAdminUnlocked;
+                // Sub-tab Buổi sáng / Buổi chiều chỉ hiện khi đang xem Chủ nhật.
+                if (this.dom.sundaySessionTabs) {
+                  this.dom.sundaySessionTabs.hidden = this.currentScheduleDay !== "cn";
+                  this.dom.sundaySessionTabs.querySelectorAll("[data-session]").forEach(button => {
+                    button.classList.toggle("active", button.dataset.session === this.sundaySessionFilter);
+                  });
+                }
                 // Giữ nguyên thứ tự thêm: lớp xếp sau luôn nằm dưới lớp đã xếp trước.
-                const list = [...(this.schedule[this.currentScheduleDay] || [])];
+                let list = [...(this.schedule[this.currentScheduleDay] || [])];
+            
+                // Chủ nhật có thể lọc theo buổi; thẻ chưa xếp ca học hiện ở cả hai buổi để không bị "mất".
+                if (this.currentScheduleDay === "cn" && this.sundaySessionFilter) {
+                  list = list.filter(item => this.itemMatchesSession(item, this.sundaySessionFilter));
+                }
             
                 if (!list.length) {
-                  this.dom.scheduleContainer.innerHTML = '<div class="empty">Không có lịch học nào trong ngày này.</div>';
+                  const fullCount = (this.schedule[this.currentScheduleDay] || []).length;
+                  const message = this.currentScheduleDay === "cn" && this.sundaySessionFilter && fullCount
+                    ? `Chủ nhật không có lớp nào trong buổi ${this.sundaySessionFilter === "sang" ? "sáng" : "chiều"}.`
+                    : "Không có lịch học nào trong ngày này.";
+                  this.dom.scheduleContainer.innerHTML = `<div class="empty">${message}</div>`;
                   return;
                 }
             
@@ -3663,7 +3747,7 @@
             (function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a35560b47f3f853b',t:'MTc4ODQ0NTA0Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
         </script>
         <script>
-            (function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a36837ca3b9764c8',t:'MTc4ODY0MjU5Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
+            (function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a368562f9bb1045f',t:'MTc4ODY0Mzg0Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
         </script>
     </body>
 
