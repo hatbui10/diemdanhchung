@@ -1500,13 +1500,7 @@
                 this.renderAll(false);
                 this.initialized = true;
             
-                this.nightTimer = setInterval(() => this.checkNightReset(), 60 * 1000);
-                setTimeout(() => {
-                  if (!this.firebase) {
-                    this.setSync("Đang dùng dữ liệu cục bộ; chưa kết nối được Firebase.", "error");
-                    this.checkNightReset();
-                  }
-                }, 4500);
+               
             
                 if (this.firebase) this.connectFirebase();
               },
@@ -3276,9 +3270,9 @@
             
              
             
-
-
-
+            
+            
+            
               
             
               commit(message) {
@@ -3328,7 +3322,7 @@
                   this.setSync("Không tải được Firebase; đang dùng dữ liệu cục bộ.", "error");
                 } finally {
                   this.firebaseLoadFinished = true;
-                  this.checkNightReset();
+                 
                   // Nếu đã reset khi Firebase chưa sẵn sàng, đẩy lại ngay sau khi kết nối.
                   if (this.pendingResetKey) this.queueAttendanceSave(0);
                   if (this.pendingScheduleReset) this.queueScheduleSave(0);
@@ -3383,7 +3377,7 @@
                   this.persistLocal();
                 }
                 this.setSync("Dữ liệu Firebase đang được đồng bộ realtime.", "ok");
-                this.checkNightReset();
+               
               },
             
               applyRemoteSchedule(payload) {
