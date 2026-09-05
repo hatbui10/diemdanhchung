@@ -152,14 +152,14 @@
             }
             
             .system-lock-row {
-              display: grid;
-              grid-template-columns: repeat(2, minmax(0, 1fr));
+              display: flex;
+              flex-wrap: wrap;
               gap: 9px;
               margin-bottom: 12px;
             }
             
             .system-lock-row .btn {
-              width: 100%;
+              flex: 1 1 160px;
               min-width: 0;
               min-height: 42px;
               padding: 9px 8px;
@@ -765,23 +765,6 @@
               letter-spacing: 1px;
             }
             
-            .schedule-admin {
-              margin-bottom: 14px;
-              padding: 12px;
-              border: 1px solid #40516a;
-              border-radius: 10px;
-              background: #172033;
-              box-shadow: 0 5px 18px rgba(0,0,0,.2);
-            }
-            
-            .schedule-admin-title {
-              margin-bottom: 10px;
-              color: #60a5fa;
-              font-size: .82rem;
-              font-weight: 800;
-              text-transform: uppercase;
-            }
-            
             .schedule-form-grid {
               display: grid;
               grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1144,6 +1127,54 @@
               border-radius: 7px;
             }
             
+            /* ===== SỬA NHANH TRỰC TIẾP TRÊN THẺ LỊCH ===== */
+            .schedule-card.is-draft {
+              border-left-color: var(--yellow);
+            }
+            
+            .schedule-edit-toggle {
+              padding: 4px 7px;
+              color: #86e9ff;
+              font-weight: 800;
+              border: 1px solid #1e6d81;
+              border-radius: 5px;
+              background: #0b2a34;
+            }
+            
+            .schedule-edit-toggle:hover {
+              border-color: var(--cyan);
+              box-shadow: 0 0 8px rgba(0, 233, 255, .35);
+            }
+            
+            .schedule-edit {
+              margin-top: 9px;
+              padding: 10px;
+              border: 1px dashed rgba(0, 233, 255, .55);
+              border-radius: 8px;
+              background: rgba(0, 233, 255, .05);
+            }
+            
+            .schedule-edit-title {
+              margin-bottom: 8px;
+              color: var(--cyan);
+              font-size: .78rem;
+              font-weight: 800;
+            }
+            
+            .add-card-btn {
+              margin-left: auto;
+              color: #171000 !important;
+              border-color: var(--yellow) !important;
+              background: linear-gradient(135deg, #ffd54a, #ff9f1c) !important;
+              box-shadow: 0 0 10px rgba(255, 213, 74, .35);
+            }
+            
+            .clear-day-btn {
+              color: #ff9aa5 !important;
+              border-color: var(--danger) !important;
+              box-shadow: 0 0 10px rgba(255, 77, 95, .2) !important;
+            }
+            
             .all-classes-details {
               margin-top: 20px;
               border-top: 1px solid rgba(255,255,255,.16);
@@ -1230,10 +1261,11 @@
             </div>
         </header>
 
-        <!-- Hai nút khóa được đặt chung một hàng, ngay phía trên ô tìm kiếm. -->
+        <!-- Hàng nút quản trị: khóa xếp lịch, khóa tải Excel và Xóa ngày, ngay phía trên ô tìm kiếm. -->
         <div class="system-lock-row">
             <button type="button" id="scheduleAuthBtn" class="btn btn-outline schedule-admin-control">🔐 Mở khóa xếp lịch</button>
             <button type="button" id="uploadPanelToggleBtn" class="btn btn-outline assistant-only">🔐 Mở khóa tải Excel</button>
+            <button type="button" id="clearScheduleCardDayBtn" class="btn btn-outline clear-day-btn schedule-admin-control">🗑 Xóa ngày</button>
         </div>
 
         <section id="uploadCard" class="card upload-card assistant-only" aria-labelledby="uploadTitle" hidden>
@@ -1282,83 +1314,6 @@
         </section>
 
         <section class="schedule-section" aria-label="Sơ đồ điểm danh lớp học">
-            <div id="scheduleAdminPanel" class="schedule-admin schedule-admin-control" hidden>
-                <div class="schedule-admin-title">🛠 Xếp lịch và phân tầng trực quan</div>
-                <div class="schedule-form-grid">
-                    <div class="schedule-field">
-                        <label for="scheduleDaySelect">Chọn thứ</label>
-                        <select id="scheduleDaySelect">
-                            <option value="thu2">Thứ 2</option>
-                            <option value="thu3">Thứ 3</option>
-                            <option value="thu4">Thứ 4</option>
-                            <option value="thu5">Thứ 5</option>
-                            <option value="thu6">Thứ 6</option>
-                            <option value="thu7">Thứ 7</option>
-                            <option value="cn">Chủ nhật</option>
-                        </select>
-                    </div>
-
-                    <div class="schedule-field">
-                        <label for="scheduleTimeSelect">Ca học</label>
-                        <select id="scheduleTimeSelect">
-                            <option value="8h00 - 9h30">8h00 - 9h30</option>
-                            <option value="8h30 - 10h00">8h30 - 10h00</option>
-                            <option value="9h30 - 11h00">9h30 - 11h00</option>
-                            <option value="16h00 - 17h30">16h00 - 17h30</option>
-                            <option value="16h30 - 18h00">16h30 - 18h00</option>
-                            <option value="17h00 - 18h30">17h00 - 18h30</option>
-                            <option value="18h00 - 19h30">18h00 - 19h30</option>
-                            <option value="18h15 - 19h45">18h15 - 19h45</option>
-                            <option value="18h30 - 20h00">18h30 - 20h00</option>
-                            <option value="18h45 - 20h15">18h45 - 20h15</option>
-                            <option value="19h20 - 21h00">19h20 - 21h00</option>
-                            <option value="19h30 - 21h00">19h30 - 21h00</option>
-                            <option value="20h00 - 21h30">20h00 - 21h30</option>
-                        </select>
-                    </div>
-
-                    <div class="schedule-field">
-                        <label for="scheduleClassSelect">Lớp học</label>
-                        <select id="scheduleClassSelect"></select>
-                    </div>
-
-                    <div class="schedule-field">
-                        <label for="scheduleTeacherSelect">Giáo viên</label>
-                        <select id="scheduleTeacherSelect"></select>
-
-                        <label for="scheduleForeignTeacherSelect" class="foreign-teacher-label">Giáo viên nước ngoài</label>
-                        <select id="scheduleForeignTeacherSelect">
-                            <option value="">-- Không chọn --</option>
-                        </select>
-                    </div>
-
-                    <div class="schedule-field">
-                        <label for="scheduleBuildingSelect">Tòa nhà / Phòng</label>
-                        <select id="scheduleBuildingSelect">
-                            <option value="T1-30">T1-30</option>
-                            <option value="T2-30">T2-30</option>
-                            <option value="T3-30">T3-30</option>
-                            <option value="T1-158">T1-158</option>
-                            <option value="T2-58">T2-58</option>
-                            <option value="T3-58">T3-58</option>
-                            <option value="T2-158">T2-158</option>
-                            <option value="T3-158">T3-158</option>
-                            <option value="T4-158">T4-158</option>
-                            <option value="T2-237">T2-237</option>
-                            <option value="T3-237">T3-237</option>
-                            <option value="T4-237">T4-237</option>
-                            <option value="T5-237">T5-237</option>
-                            <option value="T6-237">T6-237</option>
-                        </select>
-                    </div>
-
-                    <div class="schedule-admin-actions">
-                        <button type="button" id="addScheduleBtn" class="btn btn-primary">➕ Xếp lịch</button>
-                        <button type="button" id="clearScheduleDayBtn" class="btn btn-danger">🗑 Xóa ngày đang xem</button>
-                    </div>
-                </div>
-            </div>
-
             <div id="scheduleDayTabs" class="day-tabs">
                 <button type="button" class="day-tab active" data-schedule-day="thu2">Thứ 2</button>
                 <button type="button" class="day-tab" data-schedule-day="thu3">Thứ 3</button>
@@ -1367,6 +1322,7 @@
                 <button type="button" class="day-tab" data-schedule-day="thu6">Thứ 6</button>
                 <button type="button" class="day-tab" data-schedule-day="thu7">Thứ 7</button>
                 <button type="button" class="day-tab" data-schedule-day="cn">Chủ nhật</button>
+                <button type="button" id="addScheduleCardBtn" class="day-tab add-card-btn schedule-admin-control" hidden>➕ Thêm thẻ lớp</button>
             </div>
 
             <div id="scheduleContainer" class="schedule-grid"></div>
@@ -1396,6 +1352,15 @@
                 thu7: "Thứ 7",
                 cn: "Chủ nhật"
               },
+              TIMES: [
+                "8h00 - 9h30", "8h30 - 10h00", "9h30 - 11h00", "16h00 - 17h30",
+                "16h30 - 18h00", "17h00 - 18h30", "18h00 - 19h30", "18h15 - 19h45",
+                "18h30 - 20h00", "18h45 - 20h15", "19h20 - 21h00", "19h30 - 21h00", "20h00 - 21h30"
+              ],
+              ROOMS: [
+                "T1-30", "T2-30", "T3-30", "T1-158", "T2-58", "T3-58", "T2-158",
+                "T3-158", "T4-158", "T2-237", "T3-237", "T4-237", "T5-237", "T6-237"
+              ],
               TEACHERS: [
                 { name: "Lê Thu Hà", phone: "0396963955" },
                 { name: "Mai Khánh Ly", phone: "0375874325" },
@@ -1444,6 +1409,7 @@
               scheduleAdminUnlocked: false,
               expandedScheduleCards: new Set(),
               openScheduleAddForms: new Set(),
+              openScheduleEditForms: new Set(),
               scheduleSaveTimer: null,
               scheduleSaveQueue: Promise.resolve(),
               meta: { nightResetKey: "" },
@@ -1533,17 +1499,10 @@
                   resultCount: document.getElementById("resultCount"),
                   resultBody: document.getElementById("resultBody"),
                   scheduleAuthBtn: document.getElementById("scheduleAuthBtn"),
-                  scheduleAdminPanel: document.getElementById("scheduleAdminPanel"),
-                  scheduleDaySelect: document.getElementById("scheduleDaySelect"),
-                  scheduleTimeSelect: document.getElementById("scheduleTimeSelect"),
-                  scheduleClassSelect: document.getElementById("scheduleClassSelect"),
-                  scheduleTeacherSelect: document.getElementById("scheduleTeacherSelect"),
-                  scheduleForeignTeacherSelect: document.getElementById("scheduleForeignTeacherSelect"),
-                  scheduleBuildingSelect: document.getElementById("scheduleBuildingSelect"),
-                  addScheduleBtn: document.getElementById("addScheduleBtn"),
-                  clearScheduleDayBtn: document.getElementById("clearScheduleDayBtn"),
                   scheduleDayTabs: document.getElementById("scheduleDayTabs"),
                   scheduleContainer: document.getElementById("scheduleContainer"),
+                  addScheduleCardBtn: document.getElementById("addScheduleCardBtn"),
+                  clearScheduleCardDayBtn: document.getElementById("clearScheduleCardDayBtn"),
                   allClassesDetails: document.getElementById("allClassesDetails"),
                   mainContainer: document.getElementById("mainContainer"),
                   toast: document.getElementById("toast")
@@ -1573,8 +1532,8 @@
                 });
             
                 this.dom.scheduleAuthBtn.addEventListener("click", () => this.toggleScheduleAdmin());
-                this.dom.addScheduleBtn.addEventListener("click", () => this.addSchedule());
-                this.dom.clearScheduleDayBtn.addEventListener("click", () => this.clearCurrentScheduleDay());
+                this.dom.addScheduleCardBtn.addEventListener("click", () => this.addBlankScheduleCard());
+                this.dom.clearScheduleCardDayBtn.addEventListener("click", () => this.clearCurrentScheduleDay());
                 this.dom.scheduleDayTabs.addEventListener("click", event => {
                   const button = event.target.closest("[data-schedule-day]");
                   if (!button) return;
@@ -1594,7 +1553,7 @@
             
                   // Không đóng/mở lớp khi người dùng thao tác với nút, link, form hoặc danh sách học sinh.
                   if (event.target.closest(
-                    "button, a, input, select, textarea, label, .schedule-add-form, .schedule-student-panel"
+                    "button, a, input, select, textarea, label, .schedule-add-form, .schedule-edit, .schedule-student-panel"
                   )) return;
             
                   this.toggleScheduleCard(scheduleCard);
@@ -1613,7 +1572,6 @@
                 if (role !== "assistant") {
                   this.closeUploadPanel();
                   this.scheduleAdminUnlocked = false;
-                  this.dom.scheduleAdminPanel.hidden = true;
                   this.dom.scheduleAuthBtn.textContent = "🔐 Mở khóa xếp lịch";
                 }
                 this.applyRole();
@@ -1718,8 +1676,13 @@
                   const list = Array.isArray(input[day]) ? input[day] : [];
                   output[day] = list.map((raw, index) => {
                     const item = raw && typeof raw === "object" ? raw : {};
-                    const className = String(item.lopName || item.className || "Lớp chưa đặt tên").trim();
-                    const teacherName = String(item.gvName || item.teacherName || "Chưa xếp giáo viên").trim();
+                    const className = String(item.lopName || item.className || "").trim();
+                    const timeValue = String(item.time || "").trim();
+                    const teacherName = String(item.gvName || item.teacherName || "").trim();
+                    // Thẻ trống (isDraft) giữ nguyên các mục để trống;
+                    // khi đã đủ lớp + ca học + giáo viên thì không còn là thẻ trống nữa.
+                    const stillDraft = Boolean(item.isDraft) && !(className && timeValue && teacherName);
+                    const finalClassName = className || (stillDraft ? "" : "Lớp chưa đặt tên");
                     const teacherPhone = this.normalizePhone(item.gvPhone || item.teacherPhone || "");
                     const foreignTeacherName = String(
                       item.foreignTeacherName || item.gvNuocNgoai || ""
@@ -1728,14 +1691,15 @@
                       item.foreignTeacherPhone || item.gvNuocNgoaiPhone || ""
                     );
                     let uid = this.safeUid(item.uid);
-                    if (!uid) uid = `schedule-${this.hash(`${day}\u0000${index}\u0000${className}\u0000${item.time || ""}`)}-${index}`;
+                    if (!uid) uid = `schedule-${this.hash(`${day}\u0000${index}\u0000${finalClassName}\u0000${timeValue}`)}-${index}`;
                     return {
                       ...item,
                       uid,
-                      lopName: className,
-                      lopLink: String(item.lopLink || `https://hatbui10.github.io/diemdanh/?class=${encodeURIComponent(className)}`),
-                      time: String(item.time || "Chưa xếp ca").trim(),
-                      gvName: teacherName,
+                      isDraft: stillDraft,
+                      lopName: finalClassName,
+                      lopLink: String(item.lopLink || (finalClassName ? `https://hatbui10.github.io/diemdanh/?class=${encodeURIComponent(finalClassName)}` : "")),
+                      time: timeValue || (stillDraft ? "" : "Chưa xếp ca"),
+                      gvName: teacherName || (stillDraft ? "" : "Chưa xếp giáo viên"),
                       gvPhone: teacherPhone,
                       foreignTeacherName,
                       foreignTeacherPhone,
@@ -1903,55 +1867,22 @@
               },
             
               initScheduleDropdowns() {
-                const selectedName = this.scheduleClassOptions[
-                  Number(this.dom.scheduleClassSelect.value)
-                ] || "";
-                const oldForeignValue = this.dom.scheduleForeignTeacherSelect.value;
-                const oldForeignIndex = Number(oldForeignValue);
-                const selectedForeignTeacherName = oldForeignValue !== "" && this.FOREIGN_TEACHERS[oldForeignIndex]
-                  ? this.FOREIGN_TEACHERS[oldForeignIndex].name
-                  : "";
-            
                 /*
-                 * Khi đã nạp Excel, dropdown CHỈ dùng tên lớp chính xác từ Excel.
+                 * Danh sách lớp cho dropdown trong thẻ:
+                 * Khi đã nạp Excel, CHỈ dùng tên lớp chính xác từ Excel.
                  * Danh sách cấu hình sẵn chỉ được dùng khi database chưa có lớp nào.
                  */
                 const excelClassNames = this.sortedClassEntries()
                   .map(([classKey, classData]) => String(classData.name || classKey).trim())
                   .filter(Boolean);
                 const sourceNames = excelClassNames.length ? excelClassNames : this.CLASS_CATALOG;
-            
+
                 const seenExactNames = new Set();
                 this.scheduleClassOptions = sourceNames.filter(name => {
                   if (seenExactNames.has(name)) return false;
                   seenExactNames.add(name);
                   return true;
                 });
-            
-                this.dom.scheduleClassSelect.innerHTML = this.scheduleClassOptions
-                  .map((name, index) => `<option value="${index}">${this.esc(name)}</option>`)
-                  .join("");
-            
-                const selectedIndex = this.scheduleClassOptions.indexOf(selectedName);
-                if (selectedIndex >= 0) this.dom.scheduleClassSelect.value = String(selectedIndex);
-            
-                this.dom.scheduleTeacherSelect.innerHTML = this.TEACHERS
-                  .map((teacher, index) => `<option value="${index}">${this.esc(teacher.name)}</option>`)
-                  .join("");
-            
-                this.dom.scheduleForeignTeacherSelect.innerHTML = [
-                  '<option value="">-- Không chọn --</option>',
-                  ...this.FOREIGN_TEACHERS.map((teacher, index) =>
-                    `<option value="${index}">${this.esc(teacher.name)}</option>`
-                  )
-                ].join("");
-            
-                const restoredForeignIndex = this.FOREIGN_TEACHERS.findIndex(
-                  teacher => teacher.name === selectedForeignTeacherName
-                );
-                if (restoredForeignIndex >= 0) {
-                  this.dom.scheduleForeignTeacherSelect.value = String(restoredForeignIndex);
-                }
               },
             
               normalizeClassName(value) {
@@ -2021,7 +1952,6 @@
             
                 if (this.scheduleAdminUnlocked) {
                   this.scheduleAdminUnlocked = false;
-                  this.dom.scheduleAdminPanel.hidden = true;
                   this.dom.scheduleAuthBtn.textContent = "🔐 Mở khóa xếp lịch";
                   this.renderSchedule();
                   return;
@@ -2030,7 +1960,6 @@
                 const password = prompt("Nhập mật khẩu quản lý lịch học:");
                 if (password === this.UPLOAD_UI_PASSWORD) {
                   this.scheduleAdminUnlocked = true;
-                  this.dom.scheduleAdminPanel.hidden = false;
                   this.dom.scheduleAuthBtn.textContent = "🔒 Khóa xếp lịch";
                   this.renderSchedule();
                 } else if (password !== null) {
@@ -2041,72 +1970,18 @@
               changeScheduleDay(day) {
                 if (!Object.prototype.hasOwnProperty.call(this.SCHEDULE_DAYS, day)) return;
                 this.currentScheduleDay = day;
-                this.dom.scheduleDaySelect.value = day;
                 this.dom.scheduleDayTabs.querySelectorAll("[data-schedule-day]").forEach(button => {
                   button.classList.toggle("active", button.dataset.scheduleDay === day);
                 });
                 this.renderSchedule();
               },
             
-              addSchedule() {
-                if (!this.scheduleAdminUnlocked) {
-                  this.showToast("Bạn cần mở khóa chế độ sửa lịch trước.", true);
-                  return;
-                }
-            
-                const day = this.dom.scheduleDaySelect.value;
-                const time = this.dom.scheduleTimeSelect.value;
-                const classIndex = Number(this.dom.scheduleClassSelect.value);
-                const teacherIndex = Number(this.dom.scheduleTeacherSelect.value);
-                const className = this.scheduleClassOptions[classIndex];
-                const teacher = this.TEACHERS[teacherIndex];
-                const foreignTeacherValue = this.dom.scheduleForeignTeacherSelect.value;
-                const foreignTeacher = foreignTeacherValue === ""
-                  ? null
-                  : this.FOREIGN_TEACHERS[Number(foreignTeacherValue)];
-                const foreignTeacherName = foreignTeacher?.name || "";
-                const foreignTeacherPhone = this.normalizePhone(foreignTeacher?.phone || "");
-                const room = String(this.dom.scheduleBuildingSelect.value || "");
-                const [floorPart = "", building = ""] = room.split("-");
-                const floor = floorPart.replace(/^T/i, "");
-            
-                if (!this.schedule[day] || !className || !teacher) {
-                  this.showToast("Thông tin xếp lịch chưa hợp lệ.", true);
-                  return;
-                }
-            
-                if (
-                  foreignTeacherName &&
-                  (foreignTeacherPhone.length < 9 || foreignTeacherPhone.length > 11)
-                ) {
-                  this.showToast("SĐT của GVNN trong FOREIGN_TEACHERS chưa hợp lệ.", true);
-                  return;
-                }
-            
-                const duplicate = this.schedule[day].some(item => item.lopName === className && item.time === time);
-                if (duplicate && !confirm("Lớp này đã có cùng ca học trong ngày. Bạn vẫn muốn thêm?")) return;
-            
-                this.schedule[day].push({
-                  uid: this.newUid(),
-                  time,
-                  lopName: className,
-                  lopLink: `https://hatbui10.github.io/diemdanh/?class=${encodeURIComponent(className)}`,
-                  gvName: teacher.name,
-                  gvPhone: teacher.phone,
-                  foreignTeacherName,
-                  foreignTeacherPhone,
-                  building,
-                  floor,
-                  isChecked: false
-                });
-            
-                this.commitSchedule("Đã xếp lịch thành công.");
-                this.changeScheduleDay(day);
-              },
-            
               clearCurrentScheduleDay() {
-                if (!this.scheduleAdminUnlocked) {
-                  this.showToast("Bạn cần mở khóa chế độ sửa lịch trước.", true);
+                // Nút "Xóa ngày" luôn hiển thị ở chế độ Trợ giảng nhưng bắt buộc nhập mật khẩu quản lý trước khi xóa.
+                const password = prompt("Nhập mật khẩu quản lý lịch học:");
+                if (password === null) return;
+                if (password !== this.UPLOAD_UI_PASSWORD) {
+                  this.showToast("Mật khẩu quản lý lịch học không chính xác.", true);
                   return;
                 }
                 const dayName = this.SCHEDULE_DAYS[this.currentScheduleDay];
@@ -2114,6 +1989,7 @@
                 this.schedule[this.currentScheduleDay] = [];
                 this.expandedScheduleCards.clear();
                 this.openScheduleAddForms.clear();
+                this.openScheduleEditForms.clear();
                 this.commitSchedule(`Đã xóa lịch ${dayName}.`);
               },
             
@@ -2125,15 +2001,19 @@
                 const list = this.schedule[this.currentScheduleDay] || [];
                 const item = list.find(entry => entry.uid === uid);
                 if (!item) return;
-                if (!confirm(`Bạn có chắc muốn xóa lịch lớp “${item.lopName}”?`)) return;
+                if (!confirm(`Bạn có chắc muốn xóa lịch lớp “${item.lopName || "chưa đặt tên"}”?`)) return;
                 this.schedule[this.currentScheduleDay] = list.filter(entry => entry.uid !== uid);
                 this.expandedScheduleCards.delete(uid);
                 this.openScheduleAddForms.delete(uid);
+                this.openScheduleEditForms.delete(uid);
                 this.commitSchedule("Đã xóa thẻ lịch học.");
               },
             
               renderSchedule() {
                 if (!this.dom?.scheduleContainer) return;
+                // Nút "Thêm thẻ lớp" chỉ xuất hiện khi đã mở khóa chế độ sửa lịch.
+                // Nút "Xóa ngày" luôn hiển thị ở chế độ Trợ giảng (bấm vào sẽ yêu cầu nhập mật khẩu quản lý).
+                if (this.dom.addScheduleCardBtn) this.dom.addScheduleCardBtn.hidden = !this.scheduleAdminUnlocked;
                 // Giữ nguyên thứ tự thêm: lớp xếp sau luôn nằm dưới lớp đã xếp trước.
                 const list = [...(this.schedule[this.currentScheduleDay] || [])];
             
@@ -2158,15 +2038,18 @@
                   const present = students.length - absent.length - newStudentsCount;
                   const expanded = this.expandedScheduleCards.has(item.uid);
                   const addOpen = this.openScheduleAddForms.has(item.uid);
+                  const isDraft = Boolean(item.isDraft);
+                  const isEditing = isDraft || this.openScheduleEditForms.has(item.uid);
                   const roomText = item.floor || item.building
                     ? `Tầng ${item.floor || "?"} - Nhà ${item.building || "?"}`
                     : "Chưa xếp phòng";
             
                   return `
-                    <article class="schedule-card${expanded ? " is-expanded" : ""}${newStudentsCount > 0 ? " has-new-students" : ""}" id="schedule-${this.esc(item.uid)}" data-schedule-uid="${this.esc(item.uid)}" aria-expanded="${expanded ? "true" : "false"}" ${classToken ? `data-class-token="${classToken}"` : ""}>
+                    <article class="schedule-card${expanded ? " is-expanded" : ""}${newStudentsCount > 0 ? " has-new-students" : ""}${isDraft ? " is-draft" : ""}" id="schedule-${this.esc(item.uid)}" data-schedule-uid="${this.esc(item.uid)}" aria-expanded="${expanded ? "true" : "false"}" ${classToken ? `data-class-token="${classToken}"` : ""}>
                       <div class="schedule-card-head">
-                        <button type="button" class="schedule-class-button" data-action="schedule-toggle-students">${this.esc(item.lopName)}</button>
+                        <button type="button" class="schedule-class-button" data-action="schedule-toggle-students">${this.esc(item.lopName || "🆕 Thẻ lớp mới")}</button>
                         <div class="schedule-card-tools">
+                          ${this.scheduleAdminUnlocked && !isDraft ? `<button type="button" class="schedule-edit-toggle schedule-admin-control" data-action="schedule-toggle-edit" title="Sửa nhanh: giáo viên, lớp, phòng, thời gian">${isEditing ? "✓ Xong" : "✎ Sửa"}</button>` : ""}
                           ${this.scheduleAdminUnlocked ? '<button type="button" class="schedule-delete schedule-admin-control" data-action="schedule-delete" title="Xóa lịch">✕</button>' : ""}
                         </div>
                       </div>
@@ -2178,13 +2061,16 @@
                         <span>Cập nhật: ${this.esc(classData?.lastUpdateTime || "Chưa cập nhật")}</span>
                       </div>
             
+                      ${isEditing
+                        ? this.renderScheduleEditForm(item)
+                        : `
                       <div class="schedule-info">
                         <span class="schedule-info-label">Phòng học:</span>
                         <span>${this.esc(roomText)}</span>
                       </div>
                       <div class="schedule-info">
                         <span class="schedule-info-label">Giáo viên:</span>
-                        <span>${this.esc(item.gvName)}</span>
+                        <span>${this.esc(item.gvName || "Chưa xếp giáo viên")}</span>
                         ${item.gvPhone ? `<a class="teacher-call" href="tel:${this.esc(item.gvPhone)}">📞 Gọi</a>` : ""}
                       </div>
                       ${item.foreignTeacherName ? `
@@ -2197,9 +2083,10 @@
                         </div>` : ""}
                       <div class="schedule-info">
                         <span class="schedule-info-label">Thời gian:</span>
-                        <span style="color:#ffbd59;font-weight:800">${this.esc(item.time)}</span>
-                      </div>
+                        <span style="color:#ffbd59;font-weight:800">${this.esc(item.time || "Chưa xếp ca")}</span>
+                      </div>`}
             
+                      ${isDraft ? "" : `
                       <div class="schedule-bottom-actions edit-control">
                         <label class="schedule-check">
                           <input type="checkbox" data-change="schedule-checked" ${item.isChecked ? "checked" : ""}>
@@ -2207,22 +2094,215 @@
                         </label>
                         <button type="button" class="btn new-student-action-btn${addOpen ? " is-open" : ""}" data-action="schedule-toggle-add">➕ Có học sinh mới</button>
                       </div>
-            
+
                       <div class="schedule-add-form${addOpen ? " open" : ""} edit-control">
                         <input class="input" data-field="schedule-new-name" type="text" maxlength="120" placeholder="Tên học sinh mới">
                         <input class="input" data-field="schedule-new-phone" type="tel" inputmode="numeric" maxlength="20" placeholder="Số điện thoại (có thể để trống)">
                         <button type="button" class="btn btn-warning" data-action="schedule-add-student">✓ Thêm học sinh</button>
-                      </div>
-            
+                      </div>`}
+
                       <div class="schedule-student-panel" ${expanded ? "" : "hidden"}>
                         ${classData
                           ? this.renderScheduleAttendance(classKey, classToken, classData, item.uid)
-                          : `<div class="schedule-warning">⚠️ Không tìm thấy dữ liệu điểm danh của lớp <b>${this.esc(item.lopName)}</b>. Hãy kiểm tra tên lớp trong file Excel.</div>`}
+                          : `<div class="schedule-warning">⚠️ Không tìm thấy dữ liệu điểm danh của lớp <b>${this.esc(item.lopName || "chưa đặt tên")}</b>. Hãy kiểm tra tên lớp trong file Excel.</div>`}
                       </div>
                     </article>`;
                 }).join("");
               },
             
+              renderScheduleEditForm(item) {
+                const dayOptions = Object.entries(this.SCHEDULE_DAYS).map(([value, label]) => ({ value, label }));
+                const timeOptions = this.TIMES.map(value => ({ value, label: value }));
+                const roomOptions = this.ROOMS.map(value => ({ value, label: value }));
+                const classOptions = this.scheduleClassOptions.map(value => ({ value, label: value }));
+                const teacherOptions = this.TEACHERS.map((teacher, index) => ({ value: String(index), label: teacher.name }));
+                const foreignOptions = this.FOREIGN_TEACHERS.map((teacher, index) => ({ value: String(index), label: teacher.name }));
+                const currentRoom = item.floor && item.building ? `T${item.floor}-${item.building}` : "";
+
+                const field = (label, fieldName, options, current, placeholder = "") => `
+            <div class="schedule-field">
+              <label>${this.esc(label)}</label>
+              <select data-change="schedule-edit" data-edit="${fieldName}">
+                ${this.editSelectOptions(options, current, placeholder)}
+              </select>
+            </div>`;
+
+                return `
+        <div class="schedule-edit">
+          <div class="schedule-edit-title">🔧 Sửa nhanh thẻ lịch – đổi trong ô này là lưu ngay, không cần xếp lại</div>
+          <div class="schedule-form-grid">
+            ${field("Thứ", "day", dayOptions, this.currentScheduleDay)}
+            ${field("Ca học", "time", timeOptions, item.time, "-- Chưa chọn ca --")}
+            ${field("Lớp học", "class", classOptions, item.lopName, "-- Chưa chọn lớp --")}
+            ${field("Giáo viên", "teacher", teacherOptions, this.teacherSelectValue(item), "-- Chưa chọn giáo viên --")}
+            ${field("Giáo viên nước ngoài", "foreignTeacher", foreignOptions, this.foreignTeacherSelectValue(item), "-- Không chọn --")}
+            ${field("Tòa nhà / Phòng", "room", roomOptions, currentRoom, "-- Chưa xếp phòng --")}
+          </div>
+        </div>`;
+              },
+
+              teacherSelectValue(item) {
+                const index = this.TEACHERS.findIndex(teacher => teacher.name === item.gvName);
+                return index >= 0 ? String(index) : String(item.gvName || "");
+              },
+
+              foreignTeacherSelectValue(item) {
+                const index = this.FOREIGN_TEACHERS.findIndex(teacher => teacher.name === item.foreignTeacherName);
+                return index >= 0 ? String(index) : String(item.foreignTeacherName || "");
+              },
+
+              editSelectOptions(options, current, placeholder = "") {
+                const safeCurrent = String(current ?? "");
+                let list = options.slice();
+                if (safeCurrent && !list.some(option => option.value === safeCurrent)) {
+                  list.push({ value: safeCurrent, label: `${safeCurrent} (tùy chỉnh)` });
+                }
+                const placeholderHtml = placeholder
+                  ? `<option value="" ${safeCurrent ? "" : "selected"}>${this.esc(placeholder)}</option>`
+                  : "";
+                return placeholderHtml + list.map(option =>
+                  `<option value="${this.esc(option.value)}" ${option.value === safeCurrent ? "selected" : ""}>${this.esc(option.label)}</option>`
+                ).join("");
+              },
+
+              addBlankScheduleCard() {
+                if (!this.scheduleAdminUnlocked) {
+                  this.showToast("Bạn cần mở khóa chế độ sửa lịch trước.", true);
+                  return;
+                }
+
+                const day = this.currentScheduleDay;
+                const item = {
+                  uid: this.newUid(),
+                  isDraft: true,
+                  time: "",
+                  lopName: "",
+                  lopLink: "",
+                  gvName: "",
+                  gvPhone: "",
+                  foreignTeacherName: "",
+                  foreignTeacherPhone: "",
+                  building: "",
+                  floor: "",
+                  isChecked: false
+                };
+
+                (this.schedule[day] = this.schedule[day] || []).push(item);
+                this.expandedScheduleCards.clear();
+                this.openScheduleEditForms.add(item.uid);
+                this.commitSchedule(`Đã thêm thẻ lớp trống vào ${this.SCHEDULE_DAYS[day]}. Hãy chọn thông tin ngay trong thẻ.`);
+
+                setTimeout(() => {
+                  document.getElementById(`schedule-${item.uid}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+                }, 80);
+              },
+
+              finishDraftIfComplete(item) {
+                if (item.isDraft && item.lopName && item.time && item.gvName) {
+                  item.isDraft = false;
+                  this.openScheduleEditForms.delete(item.uid);
+                }
+              },
+
+              applyScheduleEdit(control) {
+                if (!this.scheduleAdminUnlocked) return;
+
+                const scheduleCard = control.closest(".schedule-card");
+                const uid = scheduleCard ? scheduleCard.dataset.scheduleUid : "";
+                const field = control.dataset.edit;
+                const value = String(control.value ?? "");
+                if (!uid || !field) return;
+
+                const day = this.currentScheduleDay;
+                const list = this.schedule[day] || [];
+                const item = list.find(entry => entry.uid === uid);
+                if (!item) return;
+
+                if (field === "day") {
+                  if (!this.SCHEDULE_DAYS[value] || value === day) return;
+                  const targetList = this.schedule[value] || [];
+                  const conflict = targetList.some(entry =>
+                    entry.uid !== uid && item.lopName && entry.lopName === item.lopName && item.time && entry.time === item.time
+                  );
+                  if (conflict && !confirm(
+                    `Trong ${this.SCHEDULE_DAYS[value]} đã có lớp "${item.lopName}" cùng ca ${item.time}. Bạn vẫn muốn chuyển thẻ này sang?`
+                  )) {
+                    this.renderSchedule();
+                    return;
+                  }
+                  this.schedule[day] = list.filter(entry => entry.uid !== uid);
+                  (this.schedule[value] = this.schedule[value] || []).push(item);
+                  this.expandedScheduleCards.delete(uid);
+                  this.commitSchedule(`Đã chuyển thẻ lớp "${item.lopName || "mới"}" sang ${this.SCHEDULE_DAYS[value]}.`);
+                  return;
+                }
+
+                if (field === "time") {
+                  if (!value) {
+                    this.renderSchedule();
+                    return;
+                  }
+                  const conflict = list.some(entry =>
+                    entry.uid !== uid && item.lopName && entry.lopName === item.lopName && entry.time === value
+                  );
+                  if (conflict && !confirm("Lớp này đã có thẻ khác cùng ca học trong ngày. Bạn vẫn muốn thay đổi?")) {
+                    this.renderSchedule();
+                    return;
+                  }
+                  item.time = value;
+                } else if (field === "class") {
+                  if (!value) {
+                    this.renderSchedule();
+                    return;
+                  }
+                  const conflict = list.some(entry =>
+                    entry.uid !== uid && entry.lopName === value && item.time && entry.time === item.time
+                  );
+                  if (conflict && !confirm("Lớp này đã có thẻ khác cùng ca học trong ngày. Bạn vẫn muốn thay đổi?")) {
+                    this.renderSchedule();
+                    return;
+                  }
+                  item.lopName = value;
+                  item.lopLink = `https://hatbui10.github.io/diemdanh/?class=${encodeURIComponent(value)}`;
+                } else if (field === "teacher") {
+                  const teacher = this.TEACHERS[Number(value)];
+                  if (!teacher) return;
+                  item.gvName = teacher.name;
+                  item.gvPhone = this.normalizePhone(teacher.phone);
+                } else if (field === "foreignTeacher") {
+                  if (value === "") {
+                    item.foreignTeacherName = "";
+                    item.foreignTeacherPhone = "";
+                  } else {
+                    const foreignTeacher = this.FOREIGN_TEACHERS[Number(value)];
+                    if (!foreignTeacher) return;
+                    item.foreignTeacherName = foreignTeacher.name;
+                    item.foreignTeacherPhone = this.normalizePhone(foreignTeacher.phone);
+                  }
+                } else if (field === "room") {
+                  if (value === "") {
+                    item.building = "";
+                    item.floor = "";
+                  } else {
+                    const [floorPart = "", building = ""] = value.split("-");
+                    item.floor = floorPart.replace(/^T/i, "");
+                    item.building = building;
+                  }
+                } else {
+                  return;
+                }
+
+                this.finishDraftIfComplete(item);
+                const messages = {
+                  time: "Đã cập nhật ca học.",
+                  class: "Đã cập nhật tên lớp.",
+                  teacher: "Đã cập nhật giáo viên.",
+                  foreignTeacher: "Đã cập nhật giáo viên nước ngoài.",
+                  room: "Đã cập nhật phòng học."
+                };
+                this.commitSchedule(messages[field] || "Đã cập nhật thẻ lịch học.");
+              },
+
               toggleScheduleCard(scheduleCard) {
                 if (!scheduleCard) return;
                 const scheduleUid = scheduleCard.dataset.scheduleUid;
@@ -2579,6 +2659,18 @@
                   this.addStudentFromSchedule(scheduleUid, scheduleCard);
                   return;
                 }
+
+                if (action === "schedule-toggle-edit") {
+                  if (!this.scheduleAdminUnlocked) {
+                    this.showToast("Bạn cần mở khóa chế độ sửa lịch trước.", true);
+                    return;
+                  }
+                  if (!scheduleUid) return;
+                  if (this.openScheduleEditForms.has(scheduleUid)) this.openScheduleEditForms.delete(scheduleUid);
+                  else this.openScheduleEditForms.add(scheduleUid);
+                  this.renderSchedule();
+                  return;
+                }
             
                 const context = this.getActionContext(control);
                 if (!context) return;
@@ -2655,7 +2747,12 @@
                   this.commitSchedule("Đã cập nhật trạng thái điểm danh của thẻ lịch.");
                   return;
                 }
-            
+
+                if (change === "schedule-edit") {
+                  this.applyScheduleEdit(control);
+                  return;
+                }
+
                 const context = this.getActionContext(control);
                 if (!context || !this.requireEdit()) return;
                 const { classData, student } = context;
@@ -3564,6 +3661,6 @@
         <script>
             (function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a35560b47f3f853b',t:'MTc4ODQ0NTA0Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
         </script>
-    </body>
+    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a36837ca3b9764c8',t:'MTc4ODY0MjU5Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
