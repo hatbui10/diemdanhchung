@@ -1353,7 +1353,7 @@
                 cn: "Chủ nhật"
               },
               TIMES: [
-                "8h00 - 9h30", "8h30 - 10h00", "9h30 - 11h00", "16h00 - 17h30",
+                "8h00 - 9h30", "8h30 - 10h00", "9h30 - 11h00", "10h00 - 11h30","16h00 - 17h30",
                 "16h30 - 18h00", "17h00 - 18h30", "18h00 - 19h30", "18h15 - 19h45",
                 "18h30 - 20h00", "18h45 - 20h15", "19h20 - 21h00", "19h30 - 21h00", "20h00 - 21h30"
               ],
@@ -1876,7 +1876,7 @@
                   .map(([classKey, classData]) => String(classData.name || classKey).trim())
                   .filter(Boolean);
                 const sourceNames = excelClassNames.length ? excelClassNames : this.CLASS_CATALOG;
-
+            
                 const seenExactNames = new Set();
                 this.scheduleClassOptions = sourceNames.filter(name => {
                   if (seenExactNames.has(name)) return false;
@@ -2094,13 +2094,13 @@
                         </label>
                         <button type="button" class="btn new-student-action-btn${addOpen ? " is-open" : ""}" data-action="schedule-toggle-add">➕ Có học sinh mới</button>
                       </div>
-
+            
                       <div class="schedule-add-form${addOpen ? " open" : ""} edit-control">
                         <input class="input" data-field="schedule-new-name" type="text" maxlength="120" placeholder="Tên học sinh mới">
                         <input class="input" data-field="schedule-new-phone" type="tel" inputmode="numeric" maxlength="20" placeholder="Số điện thoại (có thể để trống)">
                         <button type="button" class="btn btn-warning" data-action="schedule-add-student">✓ Thêm học sinh</button>
                       </div>`}
-
+            
                       <div class="schedule-student-panel" ${expanded ? "" : "hidden"}>
                         ${classData
                           ? this.renderScheduleAttendance(classKey, classToken, classData, item.uid)
@@ -2118,7 +2118,7 @@
                 const teacherOptions = this.TEACHERS.map((teacher, index) => ({ value: String(index), label: teacher.name }));
                 const foreignOptions = this.FOREIGN_TEACHERS.map((teacher, index) => ({ value: String(index), label: teacher.name }));
                 const currentRoom = item.floor && item.building ? `T${item.floor}-${item.building}` : "";
-
+            
                 const field = (label, fieldName, options, current, placeholder = "") => `
             <div class="schedule-field">
               <label>${this.esc(label)}</label>
@@ -2126,31 +2126,31 @@
                 ${this.editSelectOptions(options, current, placeholder)}
               </select>
             </div>`;
-
+            
                 return `
-        <div class="schedule-edit">
-          <div class="schedule-edit-title">🔧 Sửa nhanh thẻ lịch – đổi trong ô này là lưu ngay, không cần xếp lại</div>
-          <div class="schedule-form-grid">
+                    <div class="schedule-edit">
+                      <div class="schedule-edit-title">🔧 Sửa nhanh thẻ lịch – đổi trong ô này là lưu ngay, không cần xếp lại</div>
+                      <div class="schedule-form-grid">
             ${field("Thứ", "day", dayOptions, this.currentScheduleDay)}
             ${field("Ca học", "time", timeOptions, item.time, "-- Chưa chọn ca --")}
             ${field("Lớp học", "class", classOptions, item.lopName, "-- Chưa chọn lớp --")}
             ${field("Giáo viên", "teacher", teacherOptions, this.teacherSelectValue(item), "-- Chưa chọn giáo viên --")}
             ${field("Giáo viên nước ngoài", "foreignTeacher", foreignOptions, this.foreignTeacherSelectValue(item), "-- Không chọn --")}
             ${field("Tòa nhà / Phòng", "room", roomOptions, currentRoom, "-- Chưa xếp phòng --")}
-          </div>
-        </div>`;
+                      </div>
+                    </div>`;
               },
-
+            
               teacherSelectValue(item) {
                 const index = this.TEACHERS.findIndex(teacher => teacher.name === item.gvName);
                 return index >= 0 ? String(index) : String(item.gvName || "");
               },
-
+            
               foreignTeacherSelectValue(item) {
                 const index = this.FOREIGN_TEACHERS.findIndex(teacher => teacher.name === item.foreignTeacherName);
                 return index >= 0 ? String(index) : String(item.foreignTeacherName || "");
               },
-
+            
               editSelectOptions(options, current, placeholder = "") {
                 const safeCurrent = String(current ?? "");
                 let list = options.slice();
@@ -2164,13 +2164,13 @@
                   `<option value="${this.esc(option.value)}" ${option.value === safeCurrent ? "selected" : ""}>${this.esc(option.label)}</option>`
                 ).join("");
               },
-
+            
               addBlankScheduleCard() {
                 if (!this.scheduleAdminUnlocked) {
                   this.showToast("Bạn cần mở khóa chế độ sửa lịch trước.", true);
                   return;
                 }
-
+            
                 const day = this.currentScheduleDay;
                 const item = {
                   uid: this.newUid(),
@@ -2186,38 +2186,38 @@
                   floor: "",
                   isChecked: false
                 };
-
+            
                 (this.schedule[day] = this.schedule[day] || []).push(item);
                 this.expandedScheduleCards.clear();
                 this.openScheduleEditForms.add(item.uid);
                 this.commitSchedule(`Đã thêm thẻ lớp trống vào ${this.SCHEDULE_DAYS[day]}. Hãy chọn thông tin ngay trong thẻ.`);
-
+            
                 setTimeout(() => {
                   document.getElementById(`schedule-${item.uid}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
                 }, 80);
               },
-
+            
               finishDraftIfComplete(item) {
                 if (item.isDraft && item.lopName && item.time && item.gvName) {
                   item.isDraft = false;
                   this.openScheduleEditForms.delete(item.uid);
                 }
               },
-
+            
               applyScheduleEdit(control) {
                 if (!this.scheduleAdminUnlocked) return;
-
+            
                 const scheduleCard = control.closest(".schedule-card");
                 const uid = scheduleCard ? scheduleCard.dataset.scheduleUid : "";
                 const field = control.dataset.edit;
                 const value = String(control.value ?? "");
                 if (!uid || !field) return;
-
+            
                 const day = this.currentScheduleDay;
                 const list = this.schedule[day] || [];
                 const item = list.find(entry => entry.uid === uid);
                 if (!item) return;
-
+            
                 if (field === "day") {
                   if (!this.SCHEDULE_DAYS[value] || value === day) return;
                   const targetList = this.schedule[value] || [];
@@ -2236,7 +2236,7 @@
                   this.commitSchedule(`Đã chuyển thẻ lớp "${item.lopName || "mới"}" sang ${this.SCHEDULE_DAYS[value]}.`);
                   return;
                 }
-
+            
                 if (field === "time") {
                   if (!value) {
                     this.renderSchedule();
@@ -2291,7 +2291,7 @@
                 } else {
                   return;
                 }
-
+            
                 this.finishDraftIfComplete(item);
                 const messages = {
                   time: "Đã cập nhật ca học.",
@@ -2302,7 +2302,7 @@
                 };
                 this.commitSchedule(messages[field] || "Đã cập nhật thẻ lịch học.");
               },
-
+            
               toggleScheduleCard(scheduleCard) {
                 if (!scheduleCard) return;
                 const scheduleUid = scheduleCard.dataset.scheduleUid;
@@ -2659,7 +2659,7 @@
                   this.addStudentFromSchedule(scheduleUid, scheduleCard);
                   return;
                 }
-
+            
                 if (action === "schedule-toggle-edit") {
                   if (!this.scheduleAdminUnlocked) {
                     this.showToast("Bạn cần mở khóa chế độ sửa lịch trước.", true);
@@ -2747,12 +2747,12 @@
                   this.commitSchedule("Đã cập nhật trạng thái điểm danh của thẻ lịch.");
                   return;
                 }
-
+            
                 if (change === "schedule-edit") {
                   this.applyScheduleEdit(control);
                   return;
                 }
-
+            
                 const context = this.getActionContext(control);
                 if (!context || !this.requireEdit()) return;
                 const { classData, student } = context;
@@ -3661,6 +3661,9 @@
         <script>
             (function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a35560b47f3f853b',t:'MTc4ODQ0NTA0Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
         </script>
-    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a36837ca3b9764c8',t:'MTc4ODY0MjU5Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+        <script>
+            (function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a36837ca3b9764c8',t:'MTc4ODY0MjU5Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
+        </script>
+    </body>
 
 </html>
