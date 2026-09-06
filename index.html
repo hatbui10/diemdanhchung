@@ -1893,7 +1893,7 @@
                 if (digits.length === 10) return `${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7)}`;
                 return digits;
               },
-
+            
               // SĐT đã ẩn 4 số ở giữa cho thẻ học sinh, vd: 0396 963 955 -> 039 **** 955
               maskedDisplayPhone(phone) {
                 const digits = this.normalizePhone(phone);
@@ -2202,7 +2202,7 @@
                       <div class="schedule-bottom-actions edit-control">
                         <label class="schedule-check">
                           <input type="checkbox" data-change="schedule-checked" ${item.isChecked ? "checked" : ""}>
-                          Đã điểm danh
+                          Lớp đi học đủ
                         </label>
                         <button type="button" class="btn new-student-action-btn${addOpen ? " is-open" : ""}" data-action="schedule-toggle-add">➕ Có học sinh mới</button>
                       </div>
@@ -3491,7 +3491,7 @@
               
             
               /* ===== BẢN LƯU MẶC ĐỊNH (tự lưu mỗi 24h) ===== */
-
+            
               loadDefaultBackup() {
                 try {
                   const raw = this.storageGet("localStorage", this.DEFAULT_BACKUP_KEY);
@@ -3505,7 +3505,7 @@
                   return null;
                 }
               },
-
+            
               saveDefaultBackup() {
                 const hasClasses = Object.keys(this.db).length > 0;
                 const hasSchedule = Object.values(this.schedule || {}).some(list => (list || []).length);
@@ -3521,28 +3521,28 @@
                 this.storageSet("localStorage", this.DEFAULT_BACKUP_KEY, JSON.stringify(snapshot));
                 return true;
               },
-
+            
               maybeSaveDefaultBackup() {
                 const now = Date.now();
                 const existing = this.loadDefaultBackup();
                 if (existing && now - Number(existing.savedAt) < this.DEFAULT_BACKUP_INTERVAL_MS) return;
                 this.saveDefaultBackup();
               },
-
+            
               startDefaultBackupTimer() {
                 if (this.defaultBackupTimer) clearInterval(this.defaultBackupTimer);
                 this.maybeSaveDefaultBackup();
                 // Trang mở liên tục thì cứ 1 giờ kiểm tra lại; đủ 24 giờ là tự lưu bản mặc định mới.
                 this.defaultBackupTimer = setInterval(() => this.maybeSaveDefaultBackup(), 60 * 60 * 1000);
               },
-
+            
               restoreDefaultBackup() {
                 const backup = this.loadDefaultBackup();
                 if (!backup) {
                   this.showToast("Chưa có bản lưu mặc định để khôi phục. Hệ thống sẽ tự lưu bản lưu mỗi 24 giờ khi có dữ liệu.", true);
                   return;
                 }
-
+            
                 const when = this.formatDateTime(new Date(Number(backup.savedAt)));
                 const backupDb = this.normalizeDatabase(backup.database || {});
                 const backupSchedule = this.normalizeSchedule(backup.schedule || null);
@@ -3551,11 +3551,11 @@
                   (sum, classData) => sum + (Array.isArray(classData.students) ? classData.students.length : 0),
                   0
                 );
-
+            
                 if (!confirm(
                   `Khôi phục về bản lưu mặc định lúc ${when} (${classCount} lớp, ${studentCount} học sinh)?\nToàn bộ dữ liệu hiện tại sẽ được thay bằng dữ liệu của bản lưu.`
                 )) return;
-
+            
                 this.db = backupDb;
                 this.filename = String(backup.filename || "");
                 this.meta.nightResetKey = String(backup.nightResetKey || "");
@@ -3573,7 +3573,7 @@
                 this.queueScheduleSave(0);
                 this.showToast(`Đã khôi phục về bản lưu mặc định lúc ${when}.`);
               },
-
+            
               commit(message) {
                 this.persistLocal();
                 this.renderSchedule();
@@ -3642,7 +3642,7 @@
                     this.setSync("Mất kết nối realtime lịch học.", "error");
                   }
                 );
-
+            
                 // Sau khi Firebase đồng bộ xong, kiểm tra lại bản lưu mặc định để không chụp dữ liệu cũ.
                 this.maybeSaveDefaultBackup();
               },
@@ -3857,7 +3857,7 @@
             
             window.AttendanceApp.attachFirebase(firebaseApi);
         </script>
-        
+
     </body>
 
 </html>
