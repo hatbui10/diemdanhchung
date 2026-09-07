@@ -1058,6 +1058,18 @@
               background: rgba(0,0,0,.14);
             }
             
+            .schedule-summary .attendance-breakdown {
+              max-width: 100%;
+              color: var(--green);
+              line-height: 1.6;
+            }
+            
+            .attendance-breakdown .new-student-count {
+              padding: 0 4px;
+              border-radius: 4px;
+              white-space: nowrap;
+            }
+            
             .schedule-info {
               display: grid;
               grid-template-columns: 82px 1fr auto;
@@ -2167,8 +2179,7 @@
                       </div>
             
                       <div class="schedule-summary">
-                        <span style="color:var(--green)">Có mặt: ${present}</span>
-                        <span class="new-student-count${newStudentsCount > 0 ? " is-active" : ""}">HSM: ${newStudentsCount}</span>
+                        <span class="attendance-breakdown" title="HS có sẵn chỉ tính những học sinh đang có mặt, không gồm học sinh vắng.">Có mặt: ${present} = <strong class="new-student-count${newStudentsCount > 0 ? " is-active" : ""}">${newStudentsCount} HSM</strong> + ${present - newStudentsCount} HS có sẵn</span>
                         <span class="absent-count">Vắng: ${absent.length}</span>
                         <span>Cập nhật: ${this.esc(classData?.lastUpdateTime || "Chưa cập nhật")}</span>
                       </div>
@@ -2614,7 +2625,7 @@
                       <span class="chevron">▼</span>
                       <span class="class-schedule">${this.esc(classData.schedule || "Chưa có lịch học")}</span>
                       <span class="class-stats">
-                        Có mặt: ${presentCount} · HSM: ${newStudentsCount} · Vắng: ${absent.length}<br>
+                        Có mặt: ${presentCount} = ${newStudentsCount} HSM + ${presentCount - newStudentsCount} HS có sẵn · Vắng: ${absent.length}<br>
                         Cập nhật: ${this.esc(classData.lastUpdateTime || "Chưa cập nhật")}
                       </span>
                       <span class="badges">
@@ -2973,7 +2984,7 @@
             
                 const lines = [
                   `📋 LỚP: ${classData.name}`,
-                  `Có mặt: ${presentCount} ---- HSM: ${newStudents.length} ---- Vắng: ${absent.length}`,
+                  `Có mặt: ${presentCount} = ${newStudents.length} HSM + ${presentCount - newStudents.length} HS có sẵn ---- Vắng: ${absent.length}`,
                   "",
                   "❌ DANH SÁCH HỌC SINH VẮNG:"
                 ];
