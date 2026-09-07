@@ -2146,8 +2146,8 @@
                   const absent = students.filter(student =>
                     student.status === "absent" && !this.isNewStudent(student)
                   );
-                  // HSM là nhóm riêng: không cộng vào Có mặt và cũng không cộng vào Vắng.
-                  const present = students.length - absent.length - newStudentsCount;
+                  // Có mặt bao gồm học sinh cũ đang có mặt và toàn bộ HSM; HSM không tính vào Vắng.
+                  const present = students.length - absent.length;
                   const expanded = this.expandedScheduleCards.has(item.uid);
                   const addOpen = this.openScheduleAddForms.has(item.uid);
                   const isDraft = Boolean(item.isDraft);
@@ -2602,7 +2602,7 @@
                 const absent = students.filter(student =>
                   student.status === "absent" && !this.isNewStudent(student)
                 );
-                const presentCount = students.length - absent.length - newStudentsCount;
+                const presentCount = students.length - absent.length;
                 const active = openClasses.has(token) ? " active" : "";
                 const hasNew = classData.hasNewStudent ? " has-new" : "";
                 const addOpen = this.openAddForms.has(token) ? " open" : "";
@@ -2969,7 +2969,7 @@
                 const absent = classData.students.filter(student =>
                   student.status === "absent" && !this.isNewStudent(student)
                 );
-                const presentCount = classData.students.length - absent.length - newStudents.length;
+                const presentCount = classData.students.length - absent.length;
             
                 const lines = [
                   `📋 LỚP: ${classData.name}`,
