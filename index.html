@@ -918,6 +918,25 @@
               transform: translateY(-2px);
             }
             
+            /* Đã điểm danh: nền xanh lá và viền sáng thường trực, kể cả khi thu gọn.
+               Ưu tiên màu này hơn màu HSM và màu rê chuột để không nhầm trạng thái. */
+            .schedule-card.is-attended,
+            .schedule-card.is-attended.is-expanded,
+            .schedule-card.is-attended.has-new-students,
+            .schedule-card.is-attended:hover {
+              border-color: #4ade80;
+              background: linear-gradient(135deg, #123e2d, #0b2722);
+              box-shadow:
+                0 0 8px rgba(74, 222, 128, .7),
+                0 0 22px rgba(34, 197, 94, .4),
+                inset 0 0 12px rgba(74, 222, 128, .09);
+            }
+            
+            .schedule-card.is-attended .schedule-class-button {
+              color: #effff5;
+              text-shadow: 0 0 8px rgba(74, 222, 128, .5);
+            }
+            
             .absent-count {
               color: #3b82f6 !important;
               font-weight: 850;
@@ -1777,7 +1796,8 @@
                       foreignTeacherPhone,
                       building: String(item.building || "").trim(),
                       floor: String(item.floor || "").trim(),
-                      isChecked: Boolean(item.isChecked)
+                      isChecked: Boolean(item.isChecked),
+                      lastUpdateTime: String(item.lastUpdateTime || "")
                     };
                   });
                 });
@@ -2174,15 +2194,20 @@
                   const expanded = this.expandedScheduleCards.has(item.uid);
                   const addOpen = this.openScheduleAddForms.has(item.uid);
                   const isDraft = Boolean(item.isDraft);
+                  // HSM không được tính là vắng, nên chỉ thêm HSM sẽ không sáng nhầm là đã điểm danh.
+                  const isAttended = !isDraft && (Boolean(item.isChecked) || absent.length > 0);
+                  const attendanceStatus = isAttended
+                    ? (absent.length > 0 ? `Đã điểm danh: ${absent.length} học sinh vắng.` : "Đã điểm danh: lớp đi học đủ.")
+                    : "Chưa xác nhận điểm danh.";
                   const isEditing = isDraft || this.openScheduleEditForms.has(item.uid);
                   const roomText = item.floor || item.building
                     ? `Tầng ${item.floor || "?"} - Nhà ${item.building || "?"}`
                     : "Chưa xếp phòng";
             
                   return `
-                    <article class="schedule-card${expanded ? " is-expanded" : ""}${newStudentsCount > 0 ? " has-new-students" : ""}${isDraft ? " is-draft" : ""}" id="schedule-${this.esc(item.uid)}" data-schedule-uid="${this.esc(item.uid)}" aria-expanded="${expanded ? "true" : "false"}" ${classToken ? `data-class-token="${classToken}"` : ""}>
+                    <article class="schedule-card${expanded ? " is-expanded" : ""}${newStudentsCount > 0 ? " has-new-students" : ""}${isAttended ? " is-attended" : ""}${isDraft ? " is-draft" : ""}" id="schedule-${this.esc(item.uid)}" data-schedule-uid="${this.esc(item.uid)}" aria-expanded="${expanded ? "true" : "false"}" ${classToken ? `data-class-token="${classToken}"` : ""}>
                       <div class="schedule-card-head">
-                        <button type="button" class="schedule-class-button" id="schedule-title-${this.esc(item.uid)}" data-action="schedule-toggle-students" aria-expanded="${expanded ? "true" : "false"}" aria-controls="schedule-details-${this.esc(item.uid)}">${this.esc(item.lopName || "🆕 Thẻ lớp mới")}</button>
+                        <button type="button" class="schedule-class-button" id="schedule-title-${this.esc(item.uid)}" data-action="schedule-toggle-students" aria-expanded="${expanded ? "true" : "false"}" aria-controls="schedule-details-${this.esc(item.uid)}" title="${this.esc(attendanceStatus)}" aria-label="${this.esc(item.lopName || "Thẻ lớp mới")} — ${this.esc(attendanceStatus)}">${this.esc(item.lopName || "🆕 Thẻ lớp mới")}</button>
                         <div class="schedule-card-tools" ${expanded ? "" : "hidden"}>
                           ${this.scheduleAdminUnlocked && !isDraft ? `<button type="button" class="schedule-edit-toggle schedule-admin-control" data-action="schedule-toggle-edit" title="Sửa nhanh: giáo viên, lớp, phòng, thời gian">${isEditing ? "✓ Xong" : "✎ Sửa"}</button>` : ""}
                           ${this.scheduleAdminUnlocked ? '<button type="button" class="schedule-delete schedule-admin-control" data-action="schedule-delete" title="Xóa lịch">✕</button>' : ""}
@@ -2193,7 +2218,7 @@
                       <div class="schedule-summary">
                         <span class="attendance-breakdown" title="HS có sẵn chỉ tính những học sinh đang có mặt, không gồm học sinh vắng.">Có mặt: ${present} = <strong class="new-student-count${newStudentsCount > 0 ? " is-active" : ""}">${newStudentsCount} HSM</strong> + ${present - newStudentsCount} HS có sẵn</span>
                         <span class="absent-count">Vắng: ${absent.length}</span>
-                        <span>Cập nhật: ${this.esc(classData?.lastUpdateTime || "Chưa cập nhật")}</span>
+                        <span>Cập nhật: ${this.esc(classData?.lastUpdateTime || item.lastUpdateTime || "Chưa cập nhật")}</span>
                       </div>
             
                       ${isEditing
@@ -2872,7 +2897,16 @@
                   const item = (this.schedule[this.currentScheduleDay] || []).find(entry => entry.uid === uid);
                   if (!item) return;
                   item.isChecked = control.checked;
-                  this.commitSchedule("Đã cập nhật trạng thái điểm danh của thẻ lịch.");
+                  item.lastUpdateTime = this.formatDateTime();
+                  const classData = this.findClassEntryByName(item.lopName)?.[1];
+                  // Cập nhật cùng mốc giờ và lưu cả dữ liệu lớp lẫn checkbox của thẻ lịch.
+                  if (classData) {
+                    classData.lastUpdateTime = item.lastUpdateTime;
+                    this.commit("Đã cập nhật trạng thái và thời gian điểm danh.");
+                    this.queueScheduleSave();
+                  } else {
+                    this.commitSchedule("Đã cập nhật trạng thái và thời gian điểm danh.");
+                  }
                   return;
                 }
             
@@ -3491,7 +3525,10 @@
                   classData.lastUpdateTime = this.formatDateTime();
                 });
             
-                
+                // Xóa điểm danh cũ cũng bỏ checkbox, để thẻ không còn báo đã điểm danh.
+                Object.values(this.schedule).forEach(items => {
+                  items.forEach(item => { item.isChecked = false; });
+                });
               },
             
              
@@ -3869,6 +3906,6 @@
             window.AttendanceApp.attachFirebase(firebaseApi);
         </script>
 
-    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a37aee2d2a018065',t:'MTc4ODgzODgxMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    </body>
 
 </html>
