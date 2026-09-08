@@ -892,7 +892,7 @@
               box-shadow: 0 5px 15px rgba(0,0,0,.18);
               align-self: start;
               height: auto;
-              cursor: pointer;
+              cursor: default;
               transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
             }
             
@@ -1013,9 +1013,15 @@
               justify-content: space-between;
               gap: 9px;
               margin-bottom: 8px;
+              cursor: pointer;
+            }
+            
+            .schedule-card:not(.is-expanded) .schedule-card-head {
+              margin-bottom: 0;
             }
             
             .schedule-class-button {
+              flex: 1;
               min-width: 0;
               color: #fff;
               font-size: 1rem;
@@ -1319,7 +1325,7 @@
 
         <section id="uploadCard" class="card upload-card assistant-only" aria-labelledby="uploadTitle" hidden>
             <h2 id="uploadTitle" class="card-title">Tải danh sách từ Excel</h2>
-            <p class="help-text">Đọc toàn bộ sheet 2–12: tên học sinh ở cột B, số điện thoại ở cột Q. Dòng không có SĐT sẽ kết thúc lớp hiện tại.<br>Hệ thống tự lưu bản lưu mặc định mỗi 24 giờ – bấm "🔁 Khôi phục mặc định" để hoàn tác khi thao tác nhầm.</p>
+            <p class="help-text">Đọc sheet SV và toàn bộ sheet 2–12: tên học sinh ở cột B, số điện thoại ở cột Q. Dòng không có SĐT sẽ kết thúc lớp hiện tại.<br>Hệ thống tự lưu bản lưu mặc định mỗi 24 giờ – bấm "🔁 Khôi phục mặc định" để hoàn tác khi thao tác nhầm.</p>
 
             <div class="row">
                 <input id="uploadPassword" class="input" type="password" autocomplete="off" placeholder="Nhập mật khẩu mở chức năng tải file">
@@ -1619,16 +1625,10 @@
                     return;
                   }
             
-                  // Bấm vào vùng trống/thông tin của toàn bộ thẻ lớp để mở hoặc thu danh sách.
-                  const scheduleCard = event.target.closest(".schedule-card");
-                  if (!scheduleCard) return;
-            
-                  // Không đóng/mở lớp khi người dùng thao tác với nút, link, form hoặc danh sách học sinh.
-                  if (event.target.closest(
-                    "button, a, input, select, textarea, label, .schedule-add-form, .schedule-edit, .schedule-student-panel"
-                  )) return;
-            
-                  this.toggleScheduleCard(scheduleCard);
+                  // Chỉ vùng tên lớp mở/thu thẻ; bấm nội dung bên trong không làm đóng thẻ.
+                  const header = event.target.closest(".schedule-card-head");
+                  if (!header || event.target.closest(".schedule-card-tools")) return;
+                  this.toggleScheduleCard(header.closest(".schedule-card"));
                 });
             
                 document.addEventListener("change", event => {
@@ -2050,11 +2050,19 @@
                 }
               },
             
-              changeScheduleDay(day) {
+              changeScheduleDay(day, { openUid = "" } = {}) {
                 if (!Object.prototype.hasOwnProperty.call(this.SCHEDULE_DAYS, day)) return;
                 this.currentScheduleDay = day;
-                // Chủ nhật mặc định mở sẵn buổi sáng; các ngày khác không có lọc buổi.
-                this.sundaySessionFilter = day === "cn" ? "sang" : "";
+                // Bấm Thứ luôn trở về danh sách chỉ có tên lớp, kể cả bấm lại ngày hiện tại.
+                this.expandedScheduleCards.clear();
+                this.openScheduleAddForms.clear();
+                this.openScheduleEditForms.clear();
+                // Tìm kiếm hoặc liên kết trực tiếp vẫn được mở đúng lớp được yêu cầu.
+                const requestedItem = (this.schedule[day] || []).find(item => item.uid === openUid);
+                if (requestedItem) this.expandedScheduleCards.add(requestedItem.uid);
+                this.sundaySessionFilter = day === "cn"
+                  ? (requestedItem && this.parseStartHour(requestedItem.time) >= 12 ? "chieu" : "sang")
+                  : "";
                 this.dom.scheduleDayTabs.querySelectorAll("[data-schedule-day]").forEach(button => {
                   button.classList.toggle("active", button.dataset.scheduleDay === day);
                 });
@@ -2081,6 +2089,9 @@
               setSundaySessionFilter(session) {
                 if (this.currentScheduleDay !== "cn") return;
                 this.sundaySessionFilter = this.sundaySessionFilter === session ? "" : session;
+                this.expandedScheduleCards.clear();
+                this.openScheduleAddForms.clear();
+                this.openScheduleEditForms.clear();
                 this.renderSchedule();
               },
             
@@ -2171,13 +2182,14 @@
                   return `
                     <article class="schedule-card${expanded ? " is-expanded" : ""}${newStudentsCount > 0 ? " has-new-students" : ""}${isDraft ? " is-draft" : ""}" id="schedule-${this.esc(item.uid)}" data-schedule-uid="${this.esc(item.uid)}" aria-expanded="${expanded ? "true" : "false"}" ${classToken ? `data-class-token="${classToken}"` : ""}>
                       <div class="schedule-card-head">
-                        <button type="button" class="schedule-class-button" data-action="schedule-toggle-students">${this.esc(item.lopName || "🆕 Thẻ lớp mới")}</button>
-                        <div class="schedule-card-tools">
+                        <button type="button" class="schedule-class-button" id="schedule-title-${this.esc(item.uid)}" data-action="schedule-toggle-students" aria-expanded="${expanded ? "true" : "false"}" aria-controls="schedule-details-${this.esc(item.uid)}">${this.esc(item.lopName || "🆕 Thẻ lớp mới")}</button>
+                        <div class="schedule-card-tools" ${expanded ? "" : "hidden"}>
                           ${this.scheduleAdminUnlocked && !isDraft ? `<button type="button" class="schedule-edit-toggle schedule-admin-control" data-action="schedule-toggle-edit" title="Sửa nhanh: giáo viên, lớp, phòng, thời gian">${isEditing ? "✓ Xong" : "✎ Sửa"}</button>` : ""}
                           ${this.scheduleAdminUnlocked ? '<button type="button" class="schedule-delete schedule-admin-control" data-action="schedule-delete" title="Xóa lịch">✕</button>' : ""}
                         </div>
                       </div>
             
+                      <div class="schedule-card-details" id="schedule-details-${this.esc(item.uid)}" role="region" aria-labelledby="schedule-title-${this.esc(item.uid)}" ${expanded ? "" : "hidden"}>
                       <div class="schedule-summary">
                         <span class="attendance-breakdown" title="HS có sẵn chỉ tính những học sinh đang có mặt, không gồm học sinh vắng.">Có mặt: ${present} = <strong class="new-student-count${newStudentsCount > 0 ? " is-active" : ""}">${newStudentsCount} HSM</strong> + ${present - newStudentsCount} HS có sẵn</span>
                         <span class="absent-count">Vắng: ${absent.length}</span>
@@ -2224,10 +2236,11 @@
                         <button type="button" class="btn btn-warning" data-action="schedule-add-student">✓ Thêm học sinh</button>
                       </div>`}
             
-                      <div class="schedule-student-panel" ${expanded ? "" : "hidden"}>
+                      <div class="schedule-student-panel">
                         ${classData
                           ? this.renderScheduleAttendance(classKey, classToken, classData, item.uid)
                           : `<div class="schedule-warning">⚠️ Không tìm thấy dữ liệu điểm danh của lớp <b>${this.esc(item.lopName || "chưa đặt tên")}</b>. Hãy kiểm tra tên lớp trong file Excel.</div>`}
+                      </div>
                       </div>
                     </article>`;
                 }).join("");
@@ -2312,6 +2325,7 @@
             
                 (this.schedule[day] = this.schedule[day] || []).push(item);
                 this.expandedScheduleCards.clear();
+                this.expandedScheduleCards.add(item.uid);
                 this.openScheduleEditForms.add(item.uid);
                 this.commitSchedule(`Đã thêm thẻ lớp trống vào ${this.SCHEDULE_DAYS[day]}. Hãy chọn thông tin ngay trong thẻ.`);
             
@@ -2429,31 +2443,22 @@
               toggleScheduleCard(scheduleCard) {
                 if (!scheduleCard) return;
                 const scheduleUid = scheduleCard.dataset.scheduleUid;
-                const panel = scheduleCard.querySelector(".schedule-student-panel");
-                if (!scheduleUid || !panel) return;
+                if (!scheduleUid || !scheduleCard.querySelector(".schedule-card-details")) return;
             
-                const isOpen = this.expandedScheduleCards.has(scheduleUid);
-                if (isOpen) {
-                  this.expandedScheduleCards.clear();
-                  panel.hidden = true;
-                  scheduleCard.classList.remove("is-expanded");
-                  scheduleCard.setAttribute("aria-expanded", "false");
-                  return;
-                }
-            
-                // Chế độ accordion: trước khi mở lớp mới, đóng tất cả lớp đang mở.
+                const shouldOpen = !this.expandedScheduleCards.has(scheduleUid);
+                // Mỗi lần chỉ mở một thẻ đầy đủ; các thẻ còn lại chỉ hiện tên lớp.
                 this.expandedScheduleCards.clear();
-                document.querySelectorAll(".schedule-card").forEach(card => {
-                  card.classList.remove("is-expanded");
-                  card.setAttribute("aria-expanded", "false");
-                  const otherPanel = card.querySelector(".schedule-student-panel");
-                  if (otherPanel) otherPanel.hidden = true;
+                if (shouldOpen) this.expandedScheduleCards.add(scheduleUid);
+                this.dom.scheduleContainer.querySelectorAll(".schedule-card").forEach(card => {
+                  const expanded = this.expandedScheduleCards.has(card.dataset.scheduleUid);
+                  card.classList.toggle("is-expanded", expanded);
+                  card.setAttribute("aria-expanded", String(expanded));
+                  card.querySelector(".schedule-class-button")?.setAttribute("aria-expanded", String(expanded));
+                  const details = card.querySelector(".schedule-card-details");
+                  const tools = card.querySelector(".schedule-card-tools");
+                  if (details) details.hidden = !expanded;
+                  if (tools) tools.hidden = !expanded;
                 });
-            
-                this.expandedScheduleCards.add(scheduleUid);
-                panel.hidden = false;
-                scheduleCard.classList.add("is-expanded");
-                scheduleCard.setAttribute("aria-expanded", "true");
               },
             
               renderScheduleAttendance(classKey, classToken, classData, scheduleUid) {
@@ -3089,9 +3094,7 @@
                   const scheduleItem = items.find(item => this.normalizeClassName(item.lopName) === wanted);
                   if (!scheduleItem) continue;
             
-                  this.expandedScheduleCards.clear();
-                  this.expandedScheduleCards.add(scheduleItem.uid);
-                  this.changeScheduleDay(day);
+                  this.changeScheduleDay(day, { openUid: scheduleItem.uid });
             
                   setTimeout(() => {
                     const studentElement = document.getElementById(`schedule-${scheduleItem.uid}-${classToken}-${uid}`);
@@ -3118,9 +3121,7 @@
                   const scheduleItem = items.find(item => this.normalizeClassName(item.lopName) === wanted);
                   if (scheduleItem) {
                     this.autoOpenApplied = true;
-                    this.expandedScheduleCards.clear();
-                    this.expandedScheduleCards.add(scheduleItem.uid);
-                    this.changeScheduleDay(day);
+                    this.changeScheduleDay(day, { openUid: scheduleItem.uid });
                     setTimeout(() => {
                       document.getElementById(`schedule-${scheduleItem.uid}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
                     }, 100);
@@ -3186,16 +3187,16 @@
                       cellStyles: true
                     });
             
-                    // Luôn xử lý theo đúng thứ tự sheet 2 → sheet 12.
+                    // Xử lý sheet SV trước, sau đó lần lượt các sheet 2 → 12.
                     const sheetsToProcess = app.TARGET_SHEETS
                       .map(targetName => workbook.SheetNames.find(
-                        actualName => String(actualName).trim() === targetName
+                        actualName => String(actualName).trim().toUpperCase() === targetName
                       ))
                       .filter(Boolean);
             
                     if (sheetsToProcess.length === 0) {
                       app.importInProgress = false;
-                      alert("Không tìm thấy sheet nào từ 2 đến 12 trong file Excel!");
+                      alert(`Không tìm thấy sheet hợp lệ trong file Excel. Các sheet được đọc: ${app.TARGET_SHEETS.join(", ")}.`);
                       app.setProgress(0, false);
                       return;
                     }
@@ -3265,14 +3266,14 @@
                           app.importInProgress = false;
                           app.dom.fileStatus.style.color = "var(--green)";
                           const existingSheetNames = new Set(
-                            sheetsToProcess.map(sheetName => String(sheetName).trim())
+                            sheetsToProcess.map(sheetName => String(sheetName).trim().toUpperCase())
                           );
                           const sheetSummary = app.TARGET_SHEETS.map(sheetName => {
                             if (!existingSheetNames.has(sheetName)) return `Sheet ${sheetName}: không có trong file`;
                             return `Sheet ${sheetName}: ${sheetStudentCounts[sheetName]} học sinh / ${sheetClassNames[sheetName].size} lớp`;
                           }).join(" | ");
                           app.dom.fileStatus.textContent =
-                            `✅ Tổng cộng ${totalStudentsCount} học sinh từ sheet 2 đến sheet 12, ` +
+                            `✅ Tổng cộng ${totalStudentsCount} học sinh từ các sheet ${[...existingSheetNames].join(", ")}, ` +
                             `${Object.keys(importedDatabase).length} lớp. ${firebaseMessage}.\n${sheetSummary}`;
                           app.showToast("Nạp và lọc file Excel thành công.");
                           setTimeout(() => app.setProgress(100, false), 1500);
@@ -3283,6 +3284,7 @@
                         app.setProgress(percent, true);
             
                         const sheetName = sheetsToProcess[currentSheetIdx];
+                        const normalizedSheetName = String(sheetName).trim().toUpperCase();
                         const sheet = workbook.Sheets[sheetName];
                         const rows = XLSX.utils.sheet_to_json(sheet, {
                           header: 1,
@@ -3351,18 +3353,17 @@
                               if (currentClassKey) {
                                 if (!importedDatabase[currentClassKey]) {
                                   importedDatabase[currentClassKey] = {
-                                    sheet: sheetName,
+                                    sheet: normalizedSheetName,
                                     schedule: detectedSchedule,
                                     isFull: false,
                                     lastTime: "",
                                     students: []
                                   };
                                 } else {
-                                  importedDatabase[currentClassKey].sheet = sheetName;
+                                  importedDatabase[currentClassKey].sheet = normalizedSheetName;
                                   importedDatabase[currentClassKey].schedule = detectedSchedule;
                                 }
             
-                                const normalizedSheetName = String(sheetName).trim();
                                 if (sheetClassNames[normalizedSheetName]) {
                                   sheetClassNames[normalizedSheetName].add(currentClassKey);
                                 }
@@ -3380,14 +3381,13 @@
                                 const currentClassKey = detectedClassName;
                                 if (!currentClassKey) return;
             
-                                const normalizedSheetName = String(sheetName).trim();
                                 if (sheetClassNames[normalizedSheetName]) {
                                   sheetClassNames[normalizedSheetName].add(currentClassKey);
                                 }
             
                                 if (!importedDatabase[currentClassKey]) {
                                   importedDatabase[currentClassKey] = {
-                                    sheet: sheetName,
+                                    sheet: normalizedSheetName,
                                     schedule: detectedSchedule,
                                     isFull: false,
                                     lastTime: "",
@@ -3869,6 +3869,6 @@
             window.AttendanceApp.attachFirebase(firebaseApi);
         </script>
 
-    </body>
+    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a37aee2d2a018065',t:'MTc4ODgzODgxMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
