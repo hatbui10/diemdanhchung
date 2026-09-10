@@ -4,6 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="attendance-ui-version" content="mobile-pc-v2">
         <title>Sơ đồ điểm danh lớp học</title>
 
         <!-- Thư viện đọc Excel. Nếu không có mạng, chức năng tải Excel sẽ không hoạt động. -->
@@ -906,35 +907,44 @@
               box-shadow: 0 0 17px rgba(255, 213, 74, .22);
             }
             
-            /* Thẻ được rê chuột sẽ phát sáng rõ, không ảnh hưởng các thẻ khác. */
-            .schedule-card:hover,
-            .schedule-card.is-expanded:hover,
-            .schedule-card.has-new-students:hover {
-              border-color: #67e8f9;
-              box-shadow:
-                0 0 7px rgba(255, 255, 255, .45),
-                0 0 19px rgba(0, 233, 255, .62),
-                0 0 34px rgba(37, 99, 235, .38);
-              transform: translateY(-2px);
+            /* Hiệu ứng rê chuột chỉ dành cho thiết bị có chuột, không giữ hover sau khi chạm. */
+            @media (hover: hover) and (pointer: fine) {
+              .schedule-card:hover,
+              .schedule-card.is-expanded:hover,
+              .schedule-card.has-new-students:hover {
+                border-color: #67e8f9;
+                box-shadow:
+                  0 0 7px rgba(255, 255, 255, .45),
+                  0 0 19px rgba(0, 233, 255, .62),
+                  0 0 34px rgba(37, 99, 235, .38);
+                transform: translateY(-2px);
+              }
             }
             
-            /* Đã điểm danh: nền xanh lá và viền sáng thường trực, kể cả khi thu gọn.
-               Ưu tiên màu này hơn màu HSM và màu rê chuột để không nhầm trạng thái. */
-            .schedule-card.is-attended,
-            .schedule-card.is-attended.is-expanded,
-            .schedule-card.is-attended.has-new-students,
-            .schedule-card.is-attended:hover {
-              border-color: #4ade80;
-              background: linear-gradient(135deg, #123e2d, #0b2722);
+            /* Màu trạng thái áp dụng chung trên điện thoại và máy tính.
+               Nền xanh đặc + ưu tiên cao, không phụ thuộc hover, hiệu ứng chuyển màu hoặc kích thước màn hình. */
+            .schedule-card[data-attendance-state="done"],
+            .schedule-card.is-attended {
+              background: #0b5c3c !important;
+              border-color: #86efac !important;
               box-shadow:
-                0 0 8px rgba(74, 222, 128, .7),
-                0 0 22px rgba(34, 197, 94, .4),
-                inset 0 0 12px rgba(74, 222, 128, .09);
+                0 0 9px rgba(134, 239, 172, .75),
+                0 0 22px rgba(34, 197, 94, .48),
+                inset 0 0 10px rgba(134, 239, 172, .12) !important;
             }
             
             .schedule-card.is-attended .schedule-class-button {
-              color: #effff5;
-              text-shadow: 0 0 8px rgba(74, 222, 128, .5);
+              color: #ffffff;
+              text-shadow: 0 0 8px rgba(134, 239, 172, .45);
+            }
+            
+            .schedule-card.is-attended .attendance-breakdown,
+            .schedule-card.is-attended .schedule-info-label {
+              color: #d1fae5;
+            }
+            
+            .schedule-card.is-attended .absent-count {
+              color: #bfdbfe !important;
             }
             
             .absent-count {
@@ -1042,14 +1052,44 @@
             .schedule-class-button {
               flex: 1;
               min-width: 0;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              gap: 10px;
               color: #fff;
               font-size: 1rem;
               font-weight: 850;
               border: 0;
               background: transparent;
               text-align: left;
-              text-decoration: underline;
               overflow-wrap: anywhere;
+              touch-action: manipulation;
+            }
+            
+            .schedule-class-name {
+              min-width: 0;
+              text-decoration: underline;
+            }
+            
+            .attendance-indicator {
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              flex: 0 0 22px;
+              width: 22px;
+              height: 22px;
+              color: #064e3b;
+              background: #dcfce7;
+              border-radius: 50%;
+              font-size: .85rem;
+              line-height: 1;
+              text-shadow: none;
+            }
+            
+            .schedule-check,
+            .schedule-check input,
+            .schedule-student-panel button {
+              touch-action: manipulation;
             }
             
             .schedule-card-tools {
@@ -2205,9 +2245,12 @@
                     : "Chưa xếp phòng";
             
                   return `
-                    <article class="schedule-card${expanded ? " is-expanded" : ""}${newStudentsCount > 0 ? " has-new-students" : ""}${isAttended ? " is-attended" : ""}${isDraft ? " is-draft" : ""}" id="schedule-${this.esc(item.uid)}" data-schedule-uid="${this.esc(item.uid)}" aria-expanded="${expanded ? "true" : "false"}" ${classToken ? `data-class-token="${classToken}"` : ""}>
+                    <article class="schedule-card${expanded ? " is-expanded" : ""}${newStudentsCount > 0 ? " has-new-students" : ""}${isAttended ? " is-attended" : ""}${isDraft ? " is-draft" : ""}" id="schedule-${this.esc(item.uid)}" data-schedule-uid="${this.esc(item.uid)}" data-attendance-state="${isAttended ? "done" : "pending"}" aria-expanded="${expanded ? "true" : "false"}" ${classToken ? `data-class-token="${classToken}"` : ""}>
                       <div class="schedule-card-head">
-                        <button type="button" class="schedule-class-button" id="schedule-title-${this.esc(item.uid)}" data-action="schedule-toggle-students" aria-expanded="${expanded ? "true" : "false"}" aria-controls="schedule-details-${this.esc(item.uid)}" title="${this.esc(attendanceStatus)}" aria-label="${this.esc(item.lopName || "Thẻ lớp mới")} — ${this.esc(attendanceStatus)}">${this.esc(item.lopName || "🆕 Thẻ lớp mới")}</button>
+                        <button type="button" class="schedule-class-button" id="schedule-title-${this.esc(item.uid)}" data-action="schedule-toggle-students" aria-expanded="${expanded ? "true" : "false"}" aria-controls="schedule-details-${this.esc(item.uid)}" title="${this.esc(attendanceStatus)}" aria-label="${this.esc(item.lopName || "Thẻ lớp mới")} — ${this.esc(attendanceStatus)}">
+                          <span class="schedule-class-name">${this.esc(item.lopName || "🆕 Thẻ lớp mới")}</span>
+                          <span class="attendance-indicator" aria-hidden="true" ${isAttended ? "" : "hidden"}>✓</span>
+                        </button>
                         <div class="schedule-card-tools" ${expanded ? "" : "hidden"}>
                           ${this.scheduleAdminUnlocked && !isDraft ? `<button type="button" class="schedule-edit-toggle schedule-admin-control" data-action="schedule-toggle-edit" title="Sửa nhanh: giáo viên, lớp, phòng, thời gian">${isEditing ? "✓ Xong" : "✎ Sửa"}</button>` : ""}
                           ${this.scheduleAdminUnlocked ? '<button type="button" class="schedule-delete schedule-admin-control" data-action="schedule-delete" title="Xóa lịch">✕</button>' : ""}
