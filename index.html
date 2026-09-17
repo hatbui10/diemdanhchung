@@ -4128,48 +4128,7 @@
             window.AttendanceApp.attachFirebase(firebaseApi);
         </script>
 
-        <!-- Tự động reload trang mỗi 2 phút -->
-        <script>
-          (function () {
-            const RELOAD_INTERVAL_MS = 2 * 60 * 1000; // 2 phút
-            let remaining = RELOAD_INTERVAL_MS;
-
-            // Tạo hiển thị đếm ngược ngay cạnh nút "Tải lại trang"
-            const reloadBtn = document.getElementById("reloadBtn");
-            let countdownEl = document.getElementById("autoReloadCountdown");
-            if (!countdownEl && reloadBtn) {
-              countdownEl = document.createElement("span");
-              countdownEl.id = "autoReloadCountdown";
-              countdownEl.style.cssText = "margin-left:6px;font-size:.75rem;color:var(--muted);white-space:nowrap;";
-              reloadBtn.insertAdjacentElement("afterend", countdownEl);
-            }
-
-            function format(ms) {
-              const s = Math.max(0, Math.ceil(ms / 1000));
-              const m = String(Math.floor(s / 60)).padStart(1, "0");
-              const sec = String(s % 60).padStart(2, "0");
-              return m + ":" + sec;
-            }
-
-            function update() {
-              if (countdownEl) countdownEl.textContent = "↻ Tự reload sau " + format(remaining);
-            }
-
-            update();
-            setInterval(function () {
-              remaining -= 1000;
-              if (remaining <= 0) remaining = RELOAD_INTERVAL_MS;
-              update();
-            }, 1000);
-
-            // Reload chính xác mỗi 2 phút
-            setInterval(function () {
-              location.reload();
-            }, RELOAD_INTERVAL_MS);
-
-            console.log("Auto reload đã bật: mỗi 2 phút");
-          })();
-        </script>
+        
 
     </body>
 
