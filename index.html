@@ -2003,6 +2003,40 @@
               ],
               // Ánh xạ giáo viên phụ trách -> lớp tương ứng trong sheet phân nhóm.
               // Có thể bổ sung thêm nếu file dùng tên giáo viên khác.
+              PHAN_NHOM_GROUP_TO_ROOM: {
+                // Map GV (phụ trách) -> phòng mặc định của nhóm đó.
+                // Dùng cho dữ liệu phân nhóm CŨ trong Firebase chỉ có "Phân nhóm - GV"
+                // mà chưa có thông tin phòng từ header Excel.
+                // Áp dụng cho cả 3 lớp (CAN-L11, WONDER, WIN-L10).
+                "WIN-L10": {
+                  "Hà My": "T7-237",
+                  "Ha My": "T7-237",
+                  "Bảo Anh + Trúc Anh": "T1-58",
+                  "Bao Anh + Truc Anh": "T1-58",
+                  "Q Hưng + Trầm Anh": "T1-56",
+                  "Q Hung + Tram Anh": "T1-56"
+                },
+                "CAN-L11": {
+                  "Hưng/QA": "T1-58",
+                  "Hung/QA": "T1-58",
+                  "Hà My/Trầm Anh": "T1-30",
+                  "Ha My/Tram Anh": "T1-30",
+                  "Bảo Anh": "T3-30",
+                  "Bao Anh": "T3-30",
+                  "Mạnh Toàn": "T2-60",
+                  "Manh Toan": "T2-60"
+                },
+                "WONDER": {
+                  "Quỳnh Anh": "T1-30",
+                  "Quynh Anh": "T1-30",
+                  "Trầm Anh": "T2-60",
+                  "Tram Anh": "T2-60",
+                  "Hồng Ngọc": "T6-237",
+                  "Hong Ngoc": "T6-237",
+                  "Bảo Anh + Trúc Anh": "T1-58",
+                  "Bao Anh + Truc Anh": "T1-58"
+                }
+              },
               PHAN_NHOM_TEACHER_TO_CLASS: {
                 // CAN-L11
                 "Hưng/QA": "CAN-L11",
@@ -3852,6 +3886,7 @@
                 if (!container) return;
                 const targets = ["CAN-L11", "WONDER", "WIN-L10"];
                 const defaultSchedule = this.PHAN_NHOM_DEFAULT_SCHEDULE || {};
+                const groupToRoom = this.PHAN_NHOM_GROUP_TO_ROOM || {};
                 let totalAll = 0;
                 const presentClasses = targets.filter(name => this.db[name]);
 
@@ -3866,7 +3901,8 @@
                   const students = classData.students || [];
                   // Gom học sinh theo nhóm (dựa trên ghi chú "Phân nhóm - GV | Nhóm I - T7-237")
                   // Mỗi nhóm có tên + phòng riêng.
-                  const byGroup = new Map(); // key = "GV | Nhóm I - T7-237"
+                  const byGroup = new Map(); // key = "GV || Nhóm I || T7-237"
+                  const classGroupToRoom = groupToRoom[className] || {};
                   students.forEach(s => {
                     const note = String(s.note || "");
                     // Parse: "Phân nhóm - Hưng/QA | Nhóm I - T7-237"
@@ -3890,12 +3926,50 @@
                     // Fallback: lấy từ student.phanNhomRoom nếu có (từ lần import mới)
                     if (!room && s.phanNhomRoom) room = s.phanNhomRoom;
                     if (!groupName && s.phanNhomGroup) groupName = s.phanNhomGroup;
+                    // Fallback cho dữ liệu CŨ (Firebase lưu từ trước, chỉ có GV):
+                    // Tra PHAN_NHOM_GROUP_TO_ROOM để lấy phòng theo GV.
+                    if (!room && classGroupToRoom[teacher]) {
+                      room = classGroupToRoom[teacher];
+                    }
                     // Key để gom nhóm: tên GV + tên nhóm + phòng
                     const key = `${teacher}||${groupName}||${room}`;
                     if (!byGroup.has(key)) {
                       byGroup.set(key, { teacher, groupName, room, students: [] });
                     }
                     byGroup.get(key).students.push(s);
+                  });
+                  // Nếu chưa có tên nhóm (dữ liệu cũ), gán tên nhóm I, II, III theo thứ tự GV.
+                  // Sắp xếp các key theo alphabet tên GV để đảm bảo thứ tự ổn định.
+                  const groupEntries = Array.from(byGroup.values());
+                  let romanCounter = 0;
+                  const romanMap = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+                  // Gom theo GV trước (cùng GV -> dù có nhiều nhóm cũng gộp lại 1 nhóm)
+                  const byTeacher = new Map();
+                  groupEntries.forEach(g => {
+                    if (!byTeacher.has(g.teacher)) byTeacher.set(g.teacher, []);
+                    byTeacher.get(g.teacher).push(g);
+                  });
+                  // Duyệt GV theo alphabet, gán tên nhóm I, II, III
+                  const teacherNames = Array.from(byTeacher.keys()).sort();
+                  const rebuiltGroups = [];
+                  teacherNames.forEach((teacherName, tIdx) => {
+                    const teacherGroups = byTeacher.get(teacherName);
+                    // Gộp tất cả HS của cùng GV vào 1 nhóm (kể cả khi có nhiều key trùng GV)
+                    const allStudents = [];
+                    let existingRoom = "";
+                    let existingName = "";
+                    teacherGroups.forEach(g => {
+                      allStudents.push(...g.students);
+                      if (!existingRoom && g.room) existingRoom = g.room;
+                      if (!existingName && g.groupName) existingName = g.groupName;
+                    });
+                    const roman = romanMap[tIdx] || `Nhóm ${tIdx + 1}`;
+                    rebuiltGroups.push({
+                      teacher: teacherName,
+                      groupName: existingName || `Nhóm ${roman}`,
+                      room: existingRoom,
+                      students: allStudents
+                    });
                   });
                   const def = defaultSchedule[className] || {};
                   // Tiêu đề lớp (header lớn phía trên các thẻ nhóm).
@@ -3904,20 +3978,18 @@
                       <header class="phan-nhom-class-header">
                         <h2 class="phan-nhom-class-title">📚 ${this.esc(className)}</h2>
                         <div class="phan-nhom-class-meta">
-                          <span>👥 ${students.length} HS · ${byGroup.size} nhóm</span>
+                          <span>👥 ${students.length} HS · ${rebuiltGroups.length} nhóm</span>
                         </div>
                       </header>
                       <div class="phan-nhom-cards">`;
-                  if (byGroup.size === 0) {
+                  if (rebuiltGroups.length === 0) {
                     html += '<div class="empty">Chưa có học sinh.</div>';
                   } else {
-                    // Duyệt từng nhóm (key đã bao gồm phòng riêng)
-                    const groupEntries = Array.from(byGroup.values());
-                    groupEntries.forEach((group, idx) => {
+                    rebuiltGroups.forEach((group, idx) => {
                       // Hiển thị tên nhóm - phòng (nếu có)
                       const displayName = group.room
-                        ? `${group.groupName || "Nhóm " + (idx + 1)} - ${group.room}`
-                        : (group.groupName || "Nhóm " + (idx + 1));
+                        ? `${group.groupName} - ${group.room}`
+                        : group.groupName;
                       html += `
                         <article class="phan-nhom-group-card" id="pn-group-${this.esc(className)}-${idx}">
                           <header class="phan-nhom-group-head">
@@ -6171,6 +6243,6 @@
             window.AttendanceApp.attachFirebase(firebaseApi);
         </script>
 
-    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a480c7d0b8bba0b0',t:'MTc5MTU4NDUwOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a480cc5468de0945',t:'MTc5MTU4NDY5NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
