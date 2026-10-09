@@ -6,7 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="attendance-ui-version" content="mobile-pc-v4-soft-purple">
         <title>Sơ đồ điểm danh lớp học</title>
-        <meta http-equiv="refresh" content="120">
+
+        <!-- ĐÃ BỎ HOÀN TOÀN cơ chế tự tải lại trang sau mỗi 120 giây (cả thẻ meta refresh
+             lẫn bộ hẹn giờ trong JS). Trang chỉ tải lại khi bạn bấm nút "↻ Tải lại trang",
+             và lúc đó dữ liệu được lưu lại trước khi tải lại. -->
 
         <!-- Thư viện đọc Excel. Nếu không có mạng, chức năng tải Excel sẽ không hoạt động. -->
         <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -886,7 +889,24 @@
               border-radius: 9px;
               background: rgba(5, 5, 14, .96);
               box-shadow: 0 0 24px rgba(0, 233, 255, .25);
-              transform: translateX(-50%);
+              transform: translate(-50%, 20px);
+              opacity: 0;
+              transition: opacity .25s ease, transform .25s ease;
+              cursor: pointer;
+              user-select: none;
+            }
+            .toast.show {
+              opacity: 1;
+              transform: translate(-50%, 0);
+            }
+            .toast:hover {
+              box-shadow: 0 0 32px rgba(0, 233, 255, .5);
+            }
+            .toast::after {
+              content: " ✕";
+              color: var(--muted);
+              font-weight: 700;
+              margin-left: 8px;
             }
             
             .toast.error { border-color: var(--danger); }
@@ -980,6 +1000,35 @@
               border-color: #3b82f6;
               background: #2563eb;
               box-shadow: 0 0 11px rgba(59,130,246,.35);
+            }
+
+            /* Nhãn "Hôm nay" ghim ở góc trên bên phải của tab ngày hiện tại. */
+            .day-tabs {
+              padding: 13px 1px 8px;
+            }
+
+            .day-tab {
+              position: relative;
+            }
+
+            .day-tab .today-badge {
+              position: absolute;
+              top: -8px;
+              right: 3px;
+              padding: 1px 6px;
+              color: #1a0b2e;
+              font-size: .5rem;
+              font-weight: 900;
+              letter-spacing: .02em;
+              white-space: nowrap;
+              border-radius: 999px;
+              background: linear-gradient(135deg, var(--yellow), #ffb700);
+              box-shadow: 0 0 8px rgba(255, 213, 74, .55);
+            }
+
+            .day-tab.active .today-badge {
+              background: linear-gradient(135deg, #ffffff, var(--cyan));
+              box-shadow: 0 0 9px rgba(0, 233, 255, .6);
             }
             
             /* Sub-tab Buổi sáng / Buổi chiều – chỉ hiện ở Chủ nhật. */
@@ -1419,6 +1468,137 @@
               background: linear-gradient(135deg, #ffd54a, #ff9f1c) !important;
               box-shadow: 0 0 10px rgba(255, 213, 74, .35);
             }
+
+            .phan-nhom-tab {
+              color: #00e9ff !important;
+              border-color: var(--cyan) !important;
+              background: linear-gradient(135deg, rgba(0, 233, 255, .15), rgba(255, 38, 136, .15)) !important;
+              box-shadow: 0 0 10px rgba(0, 233, 255, .25);
+            }
+            .phan-nhom-tab.active {
+              color: #fff !important;
+              background: linear-gradient(135deg, #00e9ff, #ff2688) !important;
+            }
+            #phanNhomPanel {
+              padding: 6px 4px 18px;
+              display: flex;
+              flex-direction: column;
+              gap: 18px;
+            }
+            .phan-nhom-class-block {
+              background: rgba(7, 7, 18, .55);
+              border: 1px solid var(--line);
+              border-radius: 16px;
+              padding: 14px 16px 18px;
+            }
+            .phan-nhom-class-header {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              flex-wrap: wrap;
+              gap: 10px;
+              padding-bottom: 10px;
+              margin-bottom: 12px;
+              border-bottom: 1px solid var(--line);
+            }
+            .phan-nhom-class-title {
+              color: var(--cyan);
+              font-size: 1.2rem;
+              margin: 0;
+              font-weight: 800;
+              letter-spacing: .5px;
+            }
+            .phan-nhom-class-meta {
+              display: flex;
+              gap: 14px;
+              color: var(--muted);
+              font-size: .88rem;
+              flex-wrap: wrap;
+            }
+            .phan-nhom-class-meta span {
+              display: inline-flex;
+              align-items: center;
+              gap: 4px;
+            }
+            .phan-nhom-cards {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+              gap: 12px;
+            }
+            .phan-nhom-group-card {
+              background: linear-gradient(160deg, rgba(0, 233, 255, .08), rgba(255, 38, 136, .06));
+              border: 1px solid var(--cyan);
+              border-radius: 12px;
+              padding: 10px 12px 12px;
+              display: flex;
+              flex-direction: column;
+              gap: 8px;
+              box-shadow: 0 0 8px rgba(0, 233, 255, .12);
+            }
+            .phan-nhom-group-head {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              gap: 6px;
+              padding-bottom: 6px;
+              border-bottom: 1px dashed rgba(0, 233, 255, .35);
+            }
+            .phan-nhom-group-name {
+              color: var(--yellow);
+              font-size: 1rem;
+              margin: 0;
+              font-weight: 800;
+            }
+            .phan-nhom-group-count {
+              color: var(--pink);
+              font-size: .82rem;
+              font-weight: 700;
+              background: rgba(255, 38, 136, .15);
+              padding: 2px 8px;
+              border-radius: 999px;
+            }
+            .phan-nhom-group-teacher {
+              color: var(--green);
+              font-size: .88rem;
+              font-weight: 700;
+            }
+            .phan-nhom-students {
+              list-style: none;
+              padding: 0;
+              margin: 0;
+              display: grid;
+              gap: 4px;
+              counter-reset: pn-counter;
+            }
+            .phan-nhom-students li {
+              display: flex;
+              gap: 8px;
+              padding: 4px 8px;
+              background: rgba(255, 255, 255, .04);
+              border-radius: 6px;
+              font-size: .92rem;
+              align-items: center;
+            }
+            .phan-nhom-students li::before {
+              counter-increment: pn-counter;
+              content: counter(pn-counter) ".";
+              color: var(--muted);
+              min-width: 22px;
+              font-weight: 700;
+              text-align: right;
+            }
+            .phan-nhom-students li .pn-name {
+              color: var(--text);
+              flex: 1;
+            }
+            .phan-nhom-students li.is-new {
+              background: rgba(255, 213, 74, .18);
+              border-left: 3px solid var(--yellow);
+            }
+            .phan-nhom-students li.is-highlight {
+              background: rgba(37, 232, 121, .15);
+              border-left: 3px solid var(--green);
+            }
             
             .clear-day-btn {
               color: #ff9aa5 !important;
@@ -1487,10 +1667,45 @@
               .upload-actions { grid-template-columns: 1fr; }
               th:nth-child(2), td:nth-child(2) { display: none; }
             }
+        
+            /* ===== Cảnh báo khi trình duyệt KHÔNG lưu được dữ liệu ===== */
+            .storage-warn {
+              margin: 0 0 14px;
+              padding: 12px 14px;
+              color: #ffe9ec;
+              font-size: .92rem;
+              line-height: 1.5;
+              border: 1px solid var(--danger);
+              border-left: 6px solid var(--danger);
+              border-radius: 12px;
+              background: rgba(255, 77, 95, .16);
+              box-shadow: 0 0 16px rgba(255, 77, 95, .28);
+            }
+
+            .storage-warn b { display: block; margin-bottom: 5px; color: var(--danger); font-size: .98rem; }
+            .storage-warn code { color: var(--yellow); }
+
+            .backup-btn {
+              padding: 9px 15px;
+              color: var(--cyan);
+              font-weight: 700;
+              border: 1px solid var(--cyan);
+              border-radius: 999px;
+              background: rgba(0, 233, 255, .12);
+              box-shadow: 0 0 12px rgba(0, 233, 255, .22);
+            }
+
+            .backup-btn.warn { color: var(--yellow); border-color: var(--yellow); background: rgba(255, 213, 74, .14); }
         </style>
     </head>
 
     <body class="role-teacher">
+        <div id="storageWarn" class="storage-warn" role="alert" hidden>
+            <b>⚠ Không lưu được dữ liệu trên thiết bị này — điểm danh sẽ mất nếu trang được tải lại</b>
+            <span>Trình duyệt hiện tại đang chặn hoặc không giữ được <code>localStorage</code> (bản xem trước trong khung sandbox, chế độ ẩn danh/riêng tư, chặn cookie trang web, hết dung lượng…).
+            Vì vậy mỗi khi trang được tải lại (bấm ↻ Tải lại trang, đóng rồi mở lại tab, hoặc trình duyệt tự nạp lại) là toàn bộ điểm danh sẽ biến mất.</span><br>
+            <span>Cách xử lý: mở file bằng trình duyệt thật (Chrome / Edge / Cốc Cốc) ở chế độ thường, không ẩn danh. Trong lúc còn băng cảnh báo này, đừng tải lại trang hay đóng tab khi chưa đồng bộ xong lên Firebase (xem dòng trạng thái phía trên).</span>
+        </div>
         <header>
             <div class="top-bar">
                 <div class="role-box">
@@ -1502,6 +1717,10 @@
                     </select>
                 </div>
                 <button type="button" id="reloadBtn" class="reload-btn">↻ Tải lại trang</button>
+                <!-- Ẩn 2 nút sao lưu theo yêu cầu. Muốn hiện lại: xoá chữ "hidden" ở 2 thẻ button dưới đây. -->
+                <button type="button" id="exportBackupBtn" class="backup-btn" title="Lưu điểm danh + lịch học ra file JSON" hidden>💾 Xuất bản lưu</button>
+                <button type="button" id="importBackupBtn" class="backup-btn warn" title="Khôi phục điểm danh + lịch học từ file JSON" hidden>📥 Nạp bản lưu</button>
+                <input id="importBackupInput" type="file" accept=".json,application/json" hidden>
             </div>
 
             <h1>Sơ đồ điểm danh lớp học</h1>
@@ -1521,7 +1740,7 @@
 
         <section id="uploadCard" class="card upload-card assistant-only" aria-labelledby="uploadTitle" hidden>
             <h2 id="uploadTitle" class="card-title">Tải danh sách từ Excel</h2>
-            <p class="help-text">Đọc sheet SV và toàn bộ sheet 2–12: tên học sinh ở cột B, số điện thoại ở cột Q. Dòng không có SĐT sẽ kết thúc lớp hiện tại.<br>Hệ thống tự lưu bản lưu mặc định mỗi 24 giờ – bấm "🔁 Khôi phục mặc định" để hoàn tác khi thao tác nhầm.</p>
+            <p class="help-text">Đọc sheet SV và toàn bộ sheet 2–12: tên học sinh ở cột B, số điện thoại ở cột Q. Dòng không có SĐT sẽ kết thúc lớp hiện tại.<br>Hệ thống tự lưu bản lưu mặc định mỗi 24 giờ, và tự chụp thêm một bản ngay trước khi đặt lại điểm danh đầu tuần – bấm "🔁 Khôi phục mặc định" để lấy lại bản MỚI NHẤT trong hai bản đó.</p>
 
             <div class="row">
                 <input id="uploadPassword" class="input" type="password" autocomplete="off" placeholder="Nhập mật khẩu mở chức năng tải file">
@@ -1574,6 +1793,7 @@
                 <button type="button" class="day-tab" data-schedule-day="thu6">Thứ 6</button>
                 <button type="button" class="day-tab" data-schedule-day="thu7">Thứ 7</button>
                 <button type="button" class="day-tab" data-schedule-day="cn">Chủ nhật</button>
+                <button type="button" id="phanNhomTabBtn" class="day-tab phan-nhom-tab" data-schedule-day="phanNhom" hidden>📋 Phân nhóm</button>
                 <button type="button" id="addScheduleCardBtn" class="day-tab add-card-btn schedule-admin-control" hidden>➕ Thêm thẻ lớp</button>
             </div>
 
@@ -1599,6 +1819,49 @@
             
             const AttendanceApp = {
               TARGET_SHEETS: ["SV", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+              // Tên sheet "phân nhóm" - hệ thống tự tìm theo các biến thể có dấu và không dấu.
+              PHAN_NHOM_SHEET_NAMES: [
+                "Phan nhom", "Phân nhóm", "phan nhom", "phân nhóm",
+                "Phan_Nhom", "PhanNhom", "PHAN NHOM", "PHÂN NHÓM"
+              ],
+              // Ánh xạ giáo viên phụ trách -> lớp tương ứng trong sheet phân nhóm.
+              // Có thể bổ sung thêm nếu file dùng tên giáo viên khác.
+              PHAN_NHOM_TEACHER_TO_CLASS: {
+                // CAN-L11
+                "Hưng/QA": "CAN-L11",
+                "Hung/QA": "CAN-L11",
+                "Mạnh Toàn": "CAN-L11",
+                "Manh Toan": "CAN-L11",
+                "Hà My/Trầm Anh": "CAN-L11",
+                "Ha My/Tram Anh": "CAN-L11",
+                "Bảo Anh": "CAN-L11",
+                "Bao Anh": "CAN-L11",
+                // WONDER
+                "Quỳnh Anh": "WONDER",
+                "Quynh Anh": "WONDER",
+                "Trầm Anh": "WONDER",
+                "Tram Anh": "WONDER",
+                "Hồng Ngọc": "WONDER",
+                "Hong Ngoc": "WONDER",
+                "Bảo Anh + Trúc Anh": "WONDER",
+                "Bao Anh + Truc Anh": "WONDER",
+                // WIN-L10
+                "Hà My": "WIN-L10",
+                "Ha My": "WIN-L10",
+                "Q Hưng + Trầm Anh": "WIN-L10",
+                "Q Hung + Tram Anh": "WIN-L10"
+              },
+              /*
+               * Bảng phòng học/giờ học gợi ý cho từng lớp phân nhóm.
+               * Lấy từ ảnh sheet "Phan nhom" do người dùng cung cấp.
+               * Dùng để tự động tạo thẻ lịch cho Chủ nhật sau khi nạp phân nhóm.
+               * Cấu trúc: PHAN_NHOM_DEFAULT_SCHEDULE[className] = { room, time, teacher }
+               */
+              PHAN_NHOM_DEFAULT_SCHEDULE: {
+                "CAN-L11": { room: "T1-58", time: "8h00 - 9h30", teacher: "Hưng/QA" },
+                "WONDER": { room: "T1-30", time: "8h00 - 9h30", teacher: "Quỳnh Anh" },
+                "WIN-L10": { room: "T7-237", time: "8h00 - 9h30", teacher: "Hà My" }
+              },
               SCHEDULE_LOCAL_KEY: "lichHocTang_V4",
               SCHEDULE_DAYS: {
                 thu2: "Thứ 2",
@@ -1655,9 +1918,17 @@
               LOCAL_DB_KEY: "big_classes_database",
               LOCAL_FILENAME_KEY: "big_classes_filename",
               LOCAL_RESET_KEY: "attendance_night_reset_key",
+              // Tuần (thứ 2 đầu tuần) mà dữ liệu điểm danh hiện tại đang thuộc về.
+              LOCAL_WEEK_KEY: "attendance_week_key",
+              // Phiên bản mô hình dữ liệu: "card-attendance" = điểm danh riêng từng thẻ lịch.
+              DATA_MODEL_KEY: "attendance_data_model",
+              DATA_MODEL_VERSION: "card-attendance-v1",
               // Bản lưu mặc định: tự chụp phiên làm việc mỗi 24 giờ, dùng cho nút "Khôi phục mặc định".
               DEFAULT_BACKUP_KEY: "big_classes_default_backup",
               DEFAULT_BACKUP_INTERVAL_MS: 24 * 60 * 60 * 1000,
+              STORAGE_PROBE_KEY: "attendance_storage_probe",
+              // Bản chụp tự động ngay TRƯỚC khi hệ thống đặt lại điểm danh đầu tuần (để hoàn tác được).
+              PRE_RESET_BACKUP_KEY: "attendance_pre_reset_snapshot",
               UPLOAD_UI_PASSWORD: "123456",
               NOTE_OPTIONS: ["", "Đi muộn cần kiểm tra lại ", "Đi muộn","Nghỉ thứ 6","Chỉ học thứ 3","Chỉ học thứ 4","Chưa có nhu cầu đi học", "Không nghe máy", "Nghỉ hôm nay", "Nghỉ tuần này", "Phản ánh chất lượng", "Xin nghỉ hẳn", "Ốm đau", "Học sinh mới"],
             
@@ -1665,6 +1936,8 @@
               memoryStorage: {},
               schedule: { thu2: [], thu3: [], thu4: [], thu5: [], thu6: [], thu7: [], cn: [] },
               currentScheduleDay: "thu2",
+              // Ngày (dạng yyyy-mm-dd) mà tab đang xem đang theo, dùng để phát hiện sang ngày mới.
+              todayDayStamp: "",
               sundaySessionFilter: "",
               scheduleClassOptions: [],
               scheduleAdminUnlocked: false,
@@ -1673,9 +1946,10 @@
               openScheduleEditForms: new Set(),
               scheduleSaveTimer: null,
               scheduleSaveQueue: Promise.resolve(),
-              meta: { nightResetKey: "" },
+              meta: { nightResetKey: "", attendanceWeekKey: "" },
               pendingResetKey: "",
               pendingScheduleReset: false,
+              pendingModelMigration: false,
               attendanceRetryTimer: null,
               scheduleRetryTimer: null,
               defaultBackupTimer: null,
@@ -1693,6 +1967,25 @@
               toastTimer: null,
               autoOpenApplied: false,
               nightTimer: null,
+              // Bộ nhớ cục bộ có thực sự hoạt động không?
+              storageOk: true,
+              storageWarned: false,
+              // Có thay đổi cục bộ đang chờ đẩy lên Firebase không?
+              pendingAttendanceSave: false,
+              pendingScheduleSave: false,
+              // Bộ nhớ đệm cho setSync - tránh cập nhật DOM liên tục khi text trùng.
+              _lastSyncText: "",
+              _lastSyncState: "",
+              _lastSyncTime: 0,
+              // Rate limit cho renderAll - tránh re-render liên tục.
+              _lastRenderAll: 0,
+              _lastRenderSchedule: 0,
+              _lastApplyRemote: 0,
+              _lastApplyRemoteSchedule: 0,
+              // Lưu lại payload đã gửi lên Firebase lần trước để so sánh,
+              // tránh gửi lặp lại khi không có thay đổi thực sự.
+              _lastSavedPayload: "",
+              _lastSavedSchedule: "",
             
               storageGet(storageName, key) {
                 try {
@@ -1709,6 +2002,8 @@
                 } catch (error) {
                   // Bản xem trước sandbox không cho dùng Storage; tạm lưu trong bộ nhớ.
                   this.memoryStorage[`${storageName}:${key}`] = stringValue;
+                  // Ghi được vào bộ nhớ tạm nhưng KHÔNG vào ổ đĩa: dữ liệu sẽ mất khi tải lại.
+                  if (storageName === "localStorage") this.markStorageBroken();
                 }
               },
             
@@ -1723,6 +2018,9 @@
               init() {
                 this.cacheDom();
                 this.bindEvents();
+                // Kiểm tra ngay: trình duyệt này có giữ được dữ liệu sau khi tải lại không?
+                this.checkStorageHealth();
+                this.updateStorageWarning();
                 this.loadLocal();
                 this.startDefaultBackupTimer();
                 this.syncScheduleClassNamesWithDatabase();
@@ -1731,8 +2029,15 @@
                 if (!["guest", "teacher", "assistant"].includes(this.role)) this.role = "teacher";
                 this.dom.roleSelect.value = this.role;
                 this.applyRole();
+                // Luôn mở đúng thứ của ngày hôm đó, khỏi phải tự chọn.
+                this.syncScheduleDayWithToday({ silent: true });
+                // Điểm danh của từng thứ được giữ nguyên trong tuần;
+                // chỉ đặt lại toàn bộ khi hết Chủ nhật sang tuần mới.
+                this.startNewAttendanceWeek();
+                this.startDayWatcher();
                 this.renderSchedule();
                 this.renderAll(false);
+                // Cảnh báo rõ nếu nơi đang mở trang không lưu được dữ liệu.
                 this.initialized = true;
             
                
@@ -1744,6 +2049,10 @@
                 this.dom = {
                   roleSelect: document.getElementById("roleSelect"),
                   reloadBtn: document.getElementById("reloadBtn"),
+                  exportBackupBtn: document.getElementById("exportBackupBtn"),
+                  importBackupBtn: document.getElementById("importBackupBtn"),
+                  importBackupInput: document.getElementById("importBackupInput"),
+                  storageWarn: document.getElementById("storageWarn"),
                   syncLine: document.getElementById("syncLine"),
                   syncText: document.getElementById("syncText"),
                   uploadPanelToggleBtn: document.getElementById("uploadPanelToggleBtn"),
@@ -1767,6 +2076,7 @@
                   sundaySessionTabs: document.getElementById("sundaySessionTabs"),
                   scheduleContainer: document.getElementById("scheduleContainer"),
                   addScheduleCardBtn: document.getElementById("addScheduleCardBtn"),
+                  phanNhomTabBtn: document.getElementById("phanNhomTabBtn"),
                   clearScheduleCardDayBtn: document.getElementById("clearScheduleCardDayBtn"),
                   allClassesDetails: document.getElementById("allClassesDetails"),
                   mainContainer: document.getElementById("mainContainer"),
@@ -1776,7 +2086,14 @@
             
               bindEvents() {
                 this.dom.roleSelect.addEventListener("change", event => this.setRole(event.target.value));
-                this.dom.reloadBtn.addEventListener("click", () => location.reload());
+                // Tải lại trang theo cách an toàn: lưu cục bộ rồi chờ đẩy Firebase xong mới reload.
+                this.dom.reloadBtn.addEventListener("click", () => this.reloadSafely());
+                this.dom.exportBackupBtn.addEventListener("click", () => this.exportBackup());
+                this.dom.importBackupBtn.addEventListener("click", () => this.dom.importBackupInput.click());
+                this.dom.importBackupInput.addEventListener("change", event => {
+                  this.importBackup(event.target.files && event.target.files[0]);
+                  event.target.value = "";
+                });
                 this.dom.uploadPanelToggleBtn.addEventListener("click", () => this.toggleUploadPanel());
                 this.dom.uploadPassword.addEventListener("input", () => this.updateUploadLock());
                 this.dom.chooseExcelBtn.addEventListener("click", () => {
@@ -1806,7 +2123,12 @@
                 this.dom.scheduleDayTabs.addEventListener("click", event => {
                   const button = event.target.closest("[data-schedule-day]");
                   if (!button) return;
-                  this.changeScheduleDay(button.dataset.scheduleDay);
+                  const day = button.dataset.scheduleDay;
+                  if (day === "phanNhom") {
+                    this.showPhanNhomPanel();
+                  } else {
+                    this.changeScheduleDay(day);
+                  }
                 });
                 this.dom.sundaySessionTabs.addEventListener("click", event => {
                   const button = event.target.closest("[data-session]");
@@ -1914,8 +2236,10 @@
                   this.db = raw ? this.normalizeDatabase(JSON.parse(raw)) : {};
                   this.filename = this.storageGet("localStorage", this.LOCAL_FILENAME_KEY) || "";
                   this.meta.nightResetKey = this.storageGet("localStorage", this.LOCAL_RESET_KEY) || "";
+                  this.meta.attendanceWeekKey = this.storageGet("localStorage", this.LOCAL_WEEK_KEY) || "";
                   const rawSchedule = this.storageGet("localStorage", this.SCHEDULE_LOCAL_KEY);
                   this.schedule = this.normalizeSchedule(rawSchedule ? JSON.parse(rawSchedule) : null);
+                  this.migrateToCardAttendance();
                   this.setSync(raw ? "Đã tải dữ liệu tạm trên thiết bị." : "Chưa có dữ liệu điểm danh cục bộ.", "busy");
                 } catch (error) {
                   console.error("Lỗi đọc dữ liệu cục bộ:", error);
@@ -1929,6 +2253,7 @@
                   this.storageSet("localStorage", this.LOCAL_DB_KEY, JSON.stringify(this.db));
                   this.storageSet("localStorage", this.LOCAL_FILENAME_KEY, this.filename || "");
                   this.storageSet("localStorage", this.LOCAL_RESET_KEY, this.meta.nightResetKey || "");
+                  this.storageSet("localStorage", this.LOCAL_WEEK_KEY, this.meta.attendanceWeekKey || "");
                   this.storageSet("localStorage", this.SCHEDULE_LOCAL_KEY, JSON.stringify(this.schedule));
                 } catch (error) {
                   console.error("Không thể lưu localStorage:", error);
@@ -1936,6 +2261,114 @@
                 }
               },
             
+              // Làm sạch trạng thái điểm danh lưu trên 1 thẻ lịch.
+              // Lần đầu chuyển sang mô hình "điểm danh riêng từng thẻ".
+              // Trạng thái "đã điểm danh" của từng thẻ (tick "Lớp đi học đủ") vốn đã riêng
+              // theo từng thứ nên được giữ nguyên; phần vắng/ghi chú lưu chung theo lớp
+              // ở bản cũ được gắn vào Thứ 3 (thứ điểm danh gần nhất) để khỏi mất.
+              // KHÔNG đẩy dữ liệu lên Firebase ở đây: phải đợi Firebase tải xong,
+              // nếu không sẽ đẩy nhầm bản trống của máy lên và xóa dữ liệu chung.
+              migrateToCardAttendance() {
+                const current = this.storageGet("localStorage", this.DATA_MODEL_KEY);
+                if (current === this.DATA_MODEL_VERSION) return;
+                this.storageSet("localStorage", this.DATA_MODEL_KEY, this.DATA_MODEL_VERSION);
+                this.importLegacyAttendance("thu3");
+                this.persistLocal();
+                this.pendingModelMigration = true;
+              },
+
+              // Sau khi Firebase đã tải/ghép dữ liệu xong mới đẩy bản đã chuyển đổi lên.
+              finishModelMigration() {
+                this.pendingModelMigration = false;
+                // Dữ liệu Firebase có thể vừa thay thế dữ liệu máy -> gắn lại nếu cần.
+                this.importLegacyAttendance("thu3");
+                this.persistLocal();
+                // Không bao giờ đẩy bản trống lên Firebase.
+                if (!this.hasAnyLocalData()) return;
+                this.queueScheduleSave(0);
+                this.queueAttendanceSave(0);
+              },
+
+              // Máy này có dữ liệu để đẩy lên Firebase không?
+              hasAnyLocalData() {
+                return Object.keys(this.db).length > 0 ||
+                  Object.values(this.schedule).some(list => (list || []).length);
+              },
+
+              // Gắn điểm danh bản cũ (lưu chung theo lớp) vào các thẻ của 1 thứ được chọn.
+              importLegacyAttendance(dayKey) {
+                if (!this.SCHEDULE_DAYS[dayKey]) return 0;
+                let migrated = 0;
+                Object.values(this.db).forEach(classData => {
+                  const students = Array.isArray(classData.students) ? classData.students : [];
+                  const classMarked = classData.isFull || classData.hasNewStudent ||
+                    students.some(student =>
+                      student.status === "absent" || student.note || student.isExcused ||
+                      student.isNewStudentFlag || this.isNewStudent(student));
+                  if (!classMarked) return;
+
+                  (this.schedule[dayKey] || []).forEach(item => {
+                    const match = this.findClassEntryByName(item.lopName);
+                    if (!match || match[1] !== classData) return;
+                    if (!item.att || typeof item.att !== "object") item.att = {};
+                    students.forEach(student => {
+                      const legacyNew = this.isNewStudent(student) || Boolean(student.isNewStudentFlag);
+                      const state = {
+                        status: student.status === "absent" ? "absent" : "present",
+                        note: String(student.note || ""),
+                        isExcused: Boolean(student.isExcused),
+                        isNew: legacyNew,
+                        absentAt: Number(student.absentAt) > 0 ? Number(student.absentAt) : null
+                      };
+                      if (state.status === "present" && !state.note && !state.isExcused && !state.isNew) return;
+                      item.att[student.uid] = state;
+                      migrated += 1;
+                    });
+                    if (classData.isFull) item.isChecked = true;
+                    if (classData.lastUpdateTime) item.attTime = classData.lastUpdateTime;
+                  });
+                });
+
+                // Dọn dữ liệu điểm danh cũ trong danh sách lớp để chỉ còn một nguồn duy nhất.
+                Object.values(this.db).forEach(classData => {
+                  (classData.students || []).forEach(student => {
+                    student.status = "present";
+                    student.note = "";
+                    student.isExcused = false;
+                    student.isNewStudentFlag = false;
+                    student.absentAt = null;
+                    delete student.absentTimestamp;
+                  });
+                  classData.isFull = false;
+                  classData.hasNewStudent = false;
+                });
+                return migrated;
+              },
+
+              normalizeCardAttendance(input) {
+                const output = {};
+                if (!input || typeof input !== "object" || Array.isArray(input)) return output;
+                Object.entries(input).forEach(([uid, raw]) => {
+                  if (!uid || !raw || typeof raw !== "object") return;
+                  const status = raw.status === "absent" ? "absent" : "present";
+                  const note = this.stripHtml(String(raw.note || "")).trim();
+                  const isExcused = Boolean(raw.isExcused);
+                  const isNew = Boolean(raw.isNew);
+                  const absentAt = Number(raw.absentAt);
+                  const finalAbsentAt = Number.isFinite(absentAt) && absentAt > 0 ? absentAt : Date.now();
+                  // Trạng thái mặc định là "present" nên chỉ giữ lại các trạng thái có nghĩa.
+                  if (status === "present" && !note && !isExcused && !isNew) return;
+                  output[uid] = {
+                    status,
+                    note,
+                    isExcused,
+                    isNew,
+                    absentAt: status === "absent" ? finalAbsentAt : null
+                  };
+                });
+                return output;
+              },
+
               normalizeSchedule(input) {
                 const output = { thu2: [], thu3: [], thu4: [], thu5: [], thu6: [], thu7: [], cn: [] };
                 if (!input || typeof input !== "object" || Array.isArray(input)) return output;
@@ -1974,7 +2407,10 @@
                       building: String(item.building || "").trim(),
                       floor: String(item.floor || "").trim(),
                       isChecked: Boolean(item.isChecked),
-                      lastUpdateTime: String(item.lastUpdateTime || "")
+                      lastUpdateTime: String(item.lastUpdateTime || ""),
+                      // Điểm danh riêng của thẻ: mỗi thứ độc lập, không dùng chung với thứ khác.
+                      att: this.normalizeCardAttendance(item.att),
+                      attTime: String(item.attTime || "")
                     };
                   });
                 });
@@ -2036,7 +2472,224 @@
             
                 return output;
               },
-            
+
+              /*
+               * Đọc sheet "Phan nhom" (Phân nhóm) có cấu trúc 3 KHỐI CỘT DỌC đặt cạnh nhau:
+               *
+               *  ┌──────────────┬──────────────┬──────────────┐
+               *  │  CAN-L11     │  WONDER      │  WIN-L10     │  ← Tên lớp (hàng đầu)
+               *  ├──────────────┼──────────────┼──────────────┤
+               *  │  Nhóm I...   │  Nhóm I...   │  Nhóm I...   │  ← Tiêu đề nhóm
+               *  │  Tên GV | TT | HS | ...                          │
+               *  │  ...                                            │
+               *  └──────────────────────────────────────────────────┘
+               *
+               * Mỗi khối có 3 cột nội bộ: [GV] | [TT] | [Tên HS]
+               * Hệ thống dựa vào tên lớp ở hàng đầu để biết cột nào thuộc lớp nào,
+               * rồi dựa vào tên giáo viên ở cột 1 để biết học sinh đó thuộc nhóm nào.
+               *
+               * Lưu ý: Tên lớp và giáo viên phụ trách đều được dùng để gom học sinh.
+               */
+              parsePhanNhomSheet(worksheet, importedDatabase, sheetDisplayName) {
+                if (!worksheet) {
+                  throw new Error("Sheet rỗng hoặc không tồn tại");
+                }
+                const rows = XLSX.utils.sheet_to_json(worksheet, {
+                  header: 1,
+                  raw: false,
+                  defval: ""
+                });
+                if (!rows || !rows.length) {
+                  throw new Error("Sheet không có dữ liệu");
+                }
+
+                // Hàm bỏ dấu + lowercase để so sánh không phân biệt dấu.
+                const fold = (value) => String(value || "")
+                  .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                  .replace(/đ/g, "d").replace(/Đ/g, "D")
+                  .toLowerCase().trim();
+
+                // Bước 1: Tìm các khối cột (column blocks) dựa trên tên lớp ở hàng đầu.
+                // Tên lớp có thể ở 1 ô hoặc gộp ô. Quét hàng 0..5 để tìm.
+                const classNamesToFind = ["CAN-L11", "WONDER", "WIN-L10"];
+                const classNameFolds = classNamesToFind.map(c => ({
+                  name: c,
+                  folded: fold(c)
+                }));
+
+                let classBlocks = []; // [{ className, teacherCol, ttCol, nameCol, startRow }]
+
+                // Tìm hàng có chứa tên lớp.
+                for (let headerRow = 0; headerRow < Math.min(rows.length, 8); headerRow++) {
+                  const row = rows[headerRow] || [];
+                  const cells = row.map(c => String(c || "").trim());
+                  for (let c = 0; c < cells.length; c++) {
+                    const cellFolded = fold(cells[c]);
+                    if (!cellFolded) continue;
+                    const match = classNameFolds.find(t =>
+                      cellFolded === t.folded ||
+                      cellFolded.includes(t.folded) ||
+                      t.folded.includes(cellFolded)
+                    );
+                    if (match) {
+                      // Tìm thấy tên lớp tại (headerRow, c).
+                      // Khối lớp thường có 3 cột: GV, TT, Tên HS
+                      // Cột GV = c, cột TT = c+1, cột HS = c+2
+                      // Lưu ý: nếu cột GV ở c, thì cột bắt đầu khối = c.
+                      // Nhưng thực tế trong ảnh, cột "Nhóm I - T1/58" chiếm 2 cột nên:
+                      //   [c] = "Nhóm I - T1/58" (header nhóm)
+                      //   [c+1] = "TT"
+                      //   [c+2] = "Học sinh"
+                      // và GV nằm ở cùng cột [c] trong các hàng bên dưới.
+                      classBlocks.push({
+                        className: match.name,
+                        // Cột bắt đầu khối = cột có tên lớp
+                        blockStartCol: c,
+                        // Cột giáo viên: nằm ở đầu khối (cùng cột với tên lớp)
+                        teacherCol: c,
+                        // Cột TT: ngay sau (hoặc cùng cột nếu khối đặc biệt)
+                        // Sẽ tự động phát hiện khi quét
+                        ttCol: c + 1,
+                        nameCol: c + 2,
+                        headerRow
+                      });
+                    }
+                  }
+                  if (classBlocks.length >= 3) break; // Đã tìm đủ 3 lớp
+                }
+
+                // Sắp xếp classBlocks theo blockStartCol tăng dần.
+                classBlocks.sort((a, b) => a.blockStartCol - b.blockStartCol);
+
+                if (classBlocks.length === 0) {
+                  throw new Error(
+                    "Không tìm thấy tên lớp CAN-L11, WONDER, WIN-L10 trong sheet. " +
+                    "Hãy đảm bảo hàng đầu của sheet có tên các lớp này."
+                  );
+                }
+
+                const teacherToClass = this.PHAN_NHOM_TEACHER_TO_CLASS || {};
+                const teacherKeys = Object.keys(teacherToClass);
+                const teacherFolds = teacherKeys.map(name => ({
+                  name,
+                  folded: fold(name)
+                }));
+
+                let totalStudents = 0;
+                const usedClasses = new Set();
+                const skipped = [];
+
+                // Bước 2: Duyệt từng khối lớp.
+                classBlocks.forEach((block, blockIdx) => {
+                  // Xác định giới hạn cột của khối này.
+                  const nextBlock = classBlocks[blockIdx + 1];
+                  const blockEndCol = nextBlock
+                    ? nextBlock.blockStartCol - 1
+                    : (rows[block.headerRow] || []).length;
+
+                  // Bước 3: Trong khối, tìm header "Nhóm X" và bắt đầu đọc từ sau đó.
+                  for (let r = block.headerRow + 1; r < rows.length; r++) {
+                    const row = rows[r] || [];
+                    if (!row || row.every(c => !c || !String(c).trim())) continue;
+
+                    const cells = row.map(c => String(c || "").trim());
+
+                    // Lấy tên giáo viên từ cột teacherCol.
+                    const teacherText = cells[block.teacherCol] || "";
+                    const teacherFolded = fold(teacherText);
+                    if (!teacherFolded) continue;
+                    // Bỏ qua hàng "Tổng".
+                    if (teacherFolded === "tong") continue;
+                    // Bỏ qua hàng tiêu đề "Nhóm X..." (ví dụ: "Nhóm I - T1/58", "Nhóm I+II - T1/58").
+                    if (/^nhom\s*[+\-iv0-9\s]/i.test(teacherFolded)) continue;
+                    // Bỏ qua hàng header "TT" / "Học sinh".
+                    if (teacherFolded === "tt" || teacherFolded === "hoc sinh") continue;
+
+                    // Tìm tên giáo viên khớp. Ưu tiên match exact trước,
+                    // rồi mới match theo "includes" để tránh map nhầm
+                    // (ví dụ: "Hà My" khớp exact, nhưng "Hà My/Trầm Anh" mới khớp includes).
+                    // Bỏ qua các dòng metadata ("Sĩ số tổng lớp", "Số nhóm") trước khi match.
+                    const isMetadata = /^(si so|so nhom|so luong|sĩ số|số nhóm|số lượng)/i.test(teacherText);
+                    if (isMetadata) continue;
+                    const teacherMatch = teacherFolds.find(t => teacherFolded === t.folded)
+                      || teacherFolds.find(t => teacherFolded.includes(t.folded) && t.folded.length >= 4)
+                      || teacherFolds.find(t => t.folded.includes(teacherFolded) && teacherFolded.length >= 4);
+                    if (!teacherMatch) {
+                      // Có thể là tên GV mới chưa map -> bỏ qua nhưng log.
+                      if (teacherText.length >= 2) {
+                        skipped.push(`GV "${teacherText}" (hàng ${r + 1}, lớp ${block.className}): chưa map sang lớp`);
+                      }
+                      continue;
+                    }
+
+                    // Tên học sinh ở cột nameCol.
+                    // Nếu nameCol trống, thử các cột tiếp theo trong khối.
+                    let studentName = "";
+                    for (let c = block.ttCol; c <= blockEndCol; c++) {
+                      const txt = String(row[c] || "").trim();
+                      if (!txt) continue;
+                      // Bỏ qua cột TT (chỉ chứa số).
+                      if (/^\d+$/.test(txt)) continue;
+                      // Bỏ qua header.
+                      if (fold(txt) === "tt" || fold(txt) === "hoc sinh") continue;
+                      // Bỏ qua tên GV khác (tránh lấy nhầm cột GV kế tiếp).
+                      if (teacherFolds.some(t => fold(txt) === t.folded || fold(txt).includes(t.folded))) continue;
+                      if (txt.length >= 2 && /[a-zA-ZÀ-ỹ]/.test(txt)) {
+                        studentName = txt;
+                        break;
+                      }
+                    }
+
+                    if (!studentName) continue;
+
+                    // Tạo/lấy class entry.
+                    const classKey = block.className;
+                    if (!importedDatabase[classKey]) {
+                      // Xác định sheet (cấp lớp) dựa trên tên lớp.
+                      let sheet = "11";
+                      if (/L10|L-10/i.test(classKey)) sheet = "10";
+                      else if (/L11|L-11/i.test(classKey)) sheet = "11";
+                      else if (/L12|L-12/i.test(classKey)) sheet = "12";
+                      else if (/WONDER/i.test(classKey)) sheet = "11";
+                      importedDatabase[classKey] = {
+                        sheet,
+                        schedule: "",
+                        isFull: false,
+                        lastTime: "",
+                        students: []
+                      };
+                    }
+
+                    // Tạo SĐT giả để định danh nội bộ.
+                    const pseudoPhone = `PN${String(totalStudents + 1).padStart(6, "0")}`;
+                    importedDatabase[classKey].students.push({
+                      id: importedDatabase[classKey].students.length + 1,
+                      name: studentName,
+                      phone: pseudoPhone,
+                      uniqueKey: `pn_${fold(studentName).replace(/\s+/g, "_")}_${pseudoPhone}`,
+                      status: "present",
+                      note: `Phân nhóm - ${teacherMatch.name}`,
+                      absentTime: "",
+                      history: [],
+                      evaluations: {},
+                      lastEditor: "Phân nhóm",
+                      lastEditTime: "",
+                      sourceRowLabel: `${block.className}-${r + 1}`,
+                      sourceSheet: String(sheetDisplayName || "Phan nhom")
+                    });
+                    totalStudents += 1;
+                    usedClasses.add(classKey);
+                  }
+                });
+
+                return {
+                  totalStudents,
+                  totalClasses: usedClasses.size,
+                  classes: Array.from(usedClasses),
+                  skipped: skipped.slice(0, 20)
+                };
+              },
+
               normalizePhone(value) {
                 if (!value || value === "Chưa có" || value === "undefined") return "";
                 let digits = String(value).replace(/\D/g, "");
@@ -2265,6 +2918,206 @@
                 });
                 this.renderSchedule();
               },
+
+              // Đồng hồ máy -> khóa lịch tương ứng (0 = Chủ nhật, 1 = Thứ 2, ... 6 = Thứ 7).
+              todayScheduleDayKey(date = new Date()) {
+                const map = { 0: "cn", 1: "thu2", 2: "thu3", 3: "thu4", 4: "thu5", 5: "thu6", 6: "thu7" };
+                return map[date.getDay()] || "thu2";
+              },
+
+              // Mốc "ngày hiện tại" dạng yyyy-mm-dd để biết khi nào thực sự sang ngày mới.
+              todayDayStampValue(date = new Date()) {
+                const pad = value => String(value).padStart(2, "0");
+                return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+              },
+
+              // Tự nhảy về thứ của ngày hôm đó. Trả về true nếu có chuyển tab.
+              syncScheduleDayWithToday({ silent = false } = {}) {
+                const today = this.todayScheduleDayKey();
+                this.todayDayStamp = this.todayDayStampValue();
+                if (this.currentScheduleDay === today) return false;
+                this.changeScheduleDay(today);
+                if (!silent) this.showToast(`Đã chuyển sang ${this.SCHEDULE_DAYS[today]} (hôm nay).`);
+                return true;
+              },
+
+              // Theo dõi sang ngày mới: kiểm mỗi phút và mỗi khi quay lại tab.
+              // Chỉ tự nhảy khi NGÀY thay đổi, không cướp quyền khi bạn cố ý xem ngày khác.
+              startDayWatcher() {
+                const check = () => {
+                  if (document.hidden) return;
+                  const newDay = this.todayDayStampValue() !== this.todayDayStamp;
+                  const newWeek = this.weekStampValue() !== this.meta.attendanceWeekKey;
+                  if (!newDay && !newWeek) return;
+                  // Sang ngày mới: nhảy sang thứ của ngày hôm đó (điểm danh các thứ vẫn được giữ).
+                  this.syncScheduleDayWithToday();
+                  // Hết Chủ nhật: đặt lại toàn bộ điểm danh của cả tuần.
+                  this.startNewAttendanceWeek();
+                  if (this.initialized) {
+                    this.renderSchedule();
+                    // Chỉ re-render danh sách lớp khi thực sự cần (qua tuần mới).
+                    // Tránh gọi khi đang trong phiên thao tác ghi chú/điểm danh.
+                    this.renderAll(true);
+                  }
+                };
+                setInterval(check, 60 * 1000);
+                document.addEventListener("visibilitychange", check);
+              },
+
+              // Nhãn "Hôm nay" mini ở trên đầu tab ngày hiện tại.
+              renderTodayBadge() {
+                if (!this.dom?.scheduleDayTabs) return;
+                const today = this.todayScheduleDayKey();
+                this.dom.scheduleDayTabs.querySelectorAll("[data-schedule-day]").forEach(button => {
+                  const isToday = button.dataset.scheduleDay === today;
+                  button.classList.toggle("is-today", isToday);
+                  if (isToday) button.title = "Hôm nay";
+                  const badge = button.querySelector(".today-badge");
+                  if (isToday && !badge) {
+                    const label = document.createElement("span");
+                    label.className = "today-badge";
+                    label.textContent = "Hôm nay";
+                    button.insertBefore(label, button.firstChild);
+                  } else if (!isToday && badge) {
+                    badge.remove();
+                  }
+                });
+              },
+
+              // ===== ĐIỂM DANH RIÊNG CHO TỪNG THẺ LỊCH (mỗi thứ hoạt động độc lập) =====
+              // Trạng thái điểm danh của 1 học sinh trên 1 thẻ lịch; mặc định là "present".
+              cardStudentState(item, uid) {
+                const state = item?.att?.[uid];
+                if (!state) return { status: "present", note: "", isExcused: false, isNew: false, absentAt: null };
+                const absentAt = Number(state.absentAt);
+                return {
+                  status: state.status === "absent" ? "absent" : "present",
+                  note: String(state.note || ""),
+                  isExcused: Boolean(state.isExcused),
+                  isNew: Boolean(state.isNew),
+                  absentAt: Number.isFinite(absentAt) && absentAt > 0 ? absentAt : null
+                };
+              },
+
+              // Ghi trạng thái điểm danh của 1 học sinh vào đúng thẻ lịch đang xem.
+              setCardStudentState(item, uid, patch = {}) {
+                if (!item || !uid) return null;
+                if (!item.att || typeof item.att !== "object") item.att = {};
+                const current = this.cardStudentState(item, uid);
+                const next = { ...current, ...patch };
+                next.status = next.status === "absent" ? "absent" : "present";
+                if (next.status === "present") next.absentAt = null;
+                else if (!next.absentAt) next.absentAt = Date.now();
+                item.att[uid] = next;
+                item.attTime = this.formatDateTime();
+                return next;
+              },
+
+              // Gom dữ liệu hiển thị của 1 thẻ: học sinh chính thức, học sinh mới, danh sách vắng.
+              cardAttendance(item, classData) {
+                const roster = Array.isArray(classData?.students) ? classData.students : [];
+                const rows = roster.map(student => ({
+                  student,
+                  state: this.cardStudentState(item, student.uid)
+                }));
+                const newStudents = rows.filter(row => row.state.isNew);
+                const regular = rows.filter(row => !row.state.isNew);
+                const absent = regular.filter(row => row.state.status === "absent");
+                return {
+                  rows,
+                  newStudents,
+                  regular,
+                  absent,
+                  total: rows.length,
+                  present: rows.length - absent.length,
+                  lastUpdateTime: item?.attTime || classData?.lastUpdateTime || item?.lastUpdateTime || ""
+                };
+              },
+
+              // Thẻ này có dấu vết điểm danh chưa? (tick "lớp đủ" hoặc có học sinh bị đánh dấu)
+              cardHasMarks(item) {
+                if (!item) return false;
+                if (item.isChecked) return true;
+                const att = item.att || {};
+                return Object.values(att).some(state =>
+                  state && (state.status === "absent" || state.note || state.isExcused || state.isNew));
+              },
+
+              // ===== TUẦN / NGÀY: mốc tuần và đặt lại điểm danh =====
+              weekStampValue(date = new Date()) {
+                const day = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                const weekday = day.getDay(); // 0 = Chủ nhật
+                day.setDate(day.getDate() + (weekday === 0 ? -6 : 1 - weekday));
+                const pad = value => String(value).padStart(2, "0");
+                return `${day.getFullYear()}-${pad(day.getMonth() + 1)}-${pad(day.getDate())}`;
+              },
+
+              /* Bản chụp dữ liệu ngay trước khi hệ thống tự đặt lại điểm danh đầu tuần.
+                 Nhờ nó mà "tuần mới" vẫn có đường lùi: bấm "🔁 Khôi phục mặc định" là lấy lại được. */
+              savePreResetSnapshot() {
+                try {
+                  const snapshot = {
+                    savedAt: Date.now(),
+                    reason: "đầu tuần mới",
+                    database: JSON.parse(JSON.stringify(this.db)),
+                    schedule: JSON.parse(JSON.stringify(this.schedule)),
+                    filename: this.filename || "",
+                    nightResetKey: this.meta.nightResetKey || "",
+                    attendanceWeekKey: String(this.meta.attendanceWeekKey || "")
+                  };
+                  this.storageSet("localStorage", this.PRE_RESET_BACKUP_KEY, JSON.stringify(snapshot));
+                } catch (error) {
+                  console.error("Không chụp được bản trước khi đặt lại:", error);
+                }
+              },
+
+              loadPreResetSnapshot() {
+                try {
+                  const raw = this.storageGet("localStorage", this.PRE_RESET_BACKUP_KEY);
+                  if (!raw) return null;
+                  const parsed = JSON.parse(raw);
+                  const savedAt = Number(parsed?.savedAt);
+                  if (!parsed || typeof parsed !== "object" || !Number.isFinite(savedAt) || savedAt <= 0) return null;
+                  return parsed;
+                } catch (error) {
+                  console.error("Lỗi đọc bản chụp trước khi đặt lại:", error);
+                  return null;
+                }
+              },
+
+              // Hết tuần (qua ngày Chủ nhật): toàn bộ các thứ trong tuần về trạng thái chưa điểm danh.
+              // LƯU Ý QUAN TRỌNG: chỉ xoá khi BIẾT CHẮC mốc tuần cũ (khác tuần này).
+              // Nếu mốc tuần cũ trống (máy mới mở bản này lần đầu, mở bằng trình duyệt khác,
+              // hoặc mốc cũ không ghi được vào localStorage) thì CHỈ ghi nhận tuần hiện tại,
+              // KHÔNG xoá gì — chính chỗ này trước đây làm mất sạch điểm danh sau mỗi lần tải lại.
+              startNewAttendanceWeek({ silent = false } = {}) {
+                const week = this.weekStampValue();
+                const storedWeek = String(this.meta.attendanceWeekKey || "");
+                if (storedWeek === week) return false;
+                this.meta.attendanceWeekKey = week;
+                if (!storedWeek) {
+                  this.persistLocal();
+                  return false;
+                }
+                const hadMarks = this.hasAttendanceMarks();
+                const hadChecked = this.hasScheduleCheckedMarks();
+                if (!hadMarks && !hadChecked) {
+                  this.persistLocal();
+                  return false;
+                }
+                // Chụp lại toàn bộ dữ liệu trước khi xoá để luôn có đường hoàn tác.
+                this.savePreResetSnapshot();
+                const dayKey = this.todayDayStampValue();
+                this.meta.nightResetKey = dayKey;
+                this.pendingResetKey = dayKey;
+                this.pendingScheduleReset = true;
+                this.resetAttendanceData();
+                this.persistLocal();
+                this.queueAttendanceSave(0);
+                this.queueScheduleSave(0);
+                if (!silent) this.showToast("Tuần mới: toàn bộ các thứ đã về trạng thái chưa điểm danh. (Đã chụp bản cũ — bấm 🔁 Khôi phục mặc định để lấy lại.)");
+                return true;
+              },
             
               // Giờ bắt đầu của ca học (vd "8h30 - 10h00" -> 8). Trả về null nếu không đọc được.
               parseStartHour(time) {
@@ -2327,9 +3180,22 @@
             
               renderSchedule() {
                 if (!this.dom?.scheduleContainer) return;
+                // Rate limit: bỏ qua nếu được gọi quá nhiều lần trong thời gian ngắn.
+                const now = Date.now();
+                if (this._lastRenderSchedule && (now - this._lastRenderSchedule) < 200) return;
+                this._lastRenderSchedule = now;
                 // Nút "Thêm thẻ lớp" chỉ xuất hiện khi đã mở khóa chế độ sửa lịch.
                 // Nút "Xóa ngày" luôn hiển thị ở chế độ Trợ giảng (bấm vào sẽ yêu cầu nhập mật khẩu quản lý).
                 if (this.dom.addScheduleCardBtn) this.dom.addScheduleCardBtn.hidden = !this.scheduleAdminUnlocked;
+                // Nút "Phân nhóm" chỉ hiện khi database có ít nhất 1 lớp phân nhóm.
+                if (this.dom.phanNhomTabBtn) {
+                  this.dom.phanNhomTabBtn.hidden = !this.hasPhanNhomData();
+                }
+                // Nếu đang ở tab "Phân nhóm" thì render panel riêng.
+                if (this.currentScheduleDay === "phanNhom") {
+                  this.renderPhanNhomPanel();
+                  return;
+                }
                 // Sub-tab Buổi sáng / Buổi chiều chỉ hiện khi đang xem Chủ nhật.
                 if (this.dom.sundaySessionTabs) {
                   this.dom.sundaySessionTabs.hidden = this.currentScheduleDay !== "cn";
@@ -2337,6 +3203,8 @@
                     button.classList.toggle("active", button.dataset.session === this.sundaySessionFilter);
                   });
                 }
+                // Nhãn "Hôm nay" luôn gắn đúng tab ngày hiện tại.
+                this.renderTodayBadge();
                 // Giữ nguyên thứ tự thêm: lớp xếp sau luôn nằm dưới lớp đã xếp trước.
                 let list = [...(this.schedule[this.currentScheduleDay] || [])];
             
@@ -2359,15 +3227,12 @@
                   const classKey = match?.[0] || "";
                   const classData = match?.[1] || null;
                   const classToken = classKey ? this.token(classKey) : "";
-                  const students = classData?.students || [];
-                  const newStudentsCount = students.filter(student =>
-                    this.isNewStudent(student)
-                  ).length;
-                  const absent = students.filter(student =>
-                    student.status === "absent" && !this.isNewStudent(student)
-                  );
+                  // Điểm danh của thẻ này độc lập với các thứ khác.
+                  const view = this.cardAttendance(item, classData);
+                  const newStudentsCount = view.newStudents.length;
+                  const absent = view.absent.map(row => row.student);
                   // Có mặt bao gồm học sinh cũ đang có mặt và toàn bộ HSM; HSM không tính vào Vắng.
-                  const present = students.length - absent.length;
+                  const present = view.present;
                   const expanded = this.expandedScheduleCards.has(item.uid);
                   const addOpen = this.openScheduleAddForms.has(item.uid);
                   const isDraft = Boolean(item.isDraft);
@@ -2398,7 +3263,7 @@
                       <div class="schedule-summary">
                         <span class="attendance-breakdown" title="HS có sẵn chỉ tính những học sinh đang có mặt, không gồm học sinh vắng.">Có mặt: ${present} = <strong class="new-student-count${newStudentsCount > 0 ? " is-active" : ""}">${newStudentsCount} HSM</strong> + ${present - newStudentsCount} HS có sẵn</span>
                         <span class="absent-count">Vắng: ${absent.length}</span>
-                        <span>Cập nhật: ${this.esc(classData?.lastUpdateTime || item.lastUpdateTime || "Chưa cập nhật")}</span>
+                        <span>Cập nhật: ${this.esc(view.lastUpdateTime || "Chưa cập nhật")}</span>
                       </div>
             
                       ${isEditing
@@ -2443,7 +3308,7 @@
             
                       <div class="schedule-student-panel">
                         ${classData
-                          ? this.renderScheduleAttendance(classKey, classToken, classData, item.uid)
+                          ? this.renderScheduleAttendance(classKey, classToken, classData, item)
                           : `<div class="schedule-warning">⚠️ Không tìm thấy dữ liệu điểm danh của lớp <b>${this.esc(item.lopName || "chưa đặt tên")}</b>. Hãy kiểm tra tên lớp trong file Excel.</div>`}
                       </div>
                       </div>
@@ -2538,7 +3403,210 @@
                   document.getElementById(`schedule-${item.uid}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
                 }, 80);
               },
-            
+
+              /*
+               * Tự động tạo thẻ lịch cho các lớp phân nhóm (CAN-L11, WONDER, WIN-L10)
+               * vào ngày Chủ nhật sau khi nạp sheet "Phan nhom" thành công.
+               * Mỗi lớp tạo 1 thẻ lịch, gán phòng học + giờ học + giáo viên mặc định.
+               * Nếu thẻ lịch cho lớp đó đã tồn tại ở Chủ nhật thì bỏ qua (không tạo trùng).
+               */
+              createPhanNhomScheduleCards(classNames) {
+                if (!Array.isArray(classNames) || !classNames.length) return [];
+                if (!this.schedule || !this.schedule.cn) this.schedule.cn = [];
+
+                const defaultSchedule = this.PHAN_NHOM_DEFAULT_SCHEDULE || {};
+                const created = [];
+                const skipped = [];
+
+                classNames.forEach(className => {
+                  // Bỏ qua nếu lớp không có trong db.
+                  if (!this.db[className]) {
+                    skipped.push(`${className}: chưa có trong database`);
+                    return;
+                  }
+                  // Bỏ qua nếu đã có thẻ lịch cho lớp này ở Chủ nhật.
+                  const alreadyExists = (this.schedule.cn || []).some(item =>
+                    String(item.lopName || "").trim().toLowerCase() === className.toLowerCase()
+                  );
+                  if (alreadyExists) {
+                    skipped.push(`${className}: đã có thẻ lịch ở Chủ nhật`);
+                    return;
+                  }
+                  // Lấy thông tin mặc định từ bảng PHAN_NHOM_DEFAULT_SCHEDULE.
+                  const def = defaultSchedule[className] || {};
+                  const room = def.room || "Chưa xếp phòng";
+                  // Parse room thành building + floor.
+                  let building = "", floor = "";
+                  const roomMatch = room.match(/T(\d+)-?(\d+)/);
+                  if (roomMatch) {
+                    building = roomMatch[1];
+                    floor = roomMatch[2];
+                  } else if (room) {
+                    floor = room;
+                  }
+                  const teacher = def.teacher || "";
+                  // Tìm SĐT giáo viên.
+                  let teacherPhone = "";
+                  if (teacher) {
+                    const found = (this.TEACHERS || []).find(t => t.name === teacher);
+                    if (found) teacherPhone = found.phone || "";
+                  }
+                  const item = {
+                    uid: this.newUid(),
+                    lopName: className,
+                    lopLink: "",
+                    gvName: teacher,
+                    gvPhone: teacherPhone,
+                    foreignTeacherName: "",
+                    foreignTeacherPhone: "",
+                    time: def.time || "8h00 - 9h30",
+                    building,
+                    floor,
+                    isChecked: false
+                  };
+                  this.schedule.cn.push(item);
+                  this.expandedScheduleCards.add(item.uid);
+                  created.push({ className, uid: item.uid });
+                });
+
+                if (created.length) {
+                  this.commitSchedule(
+                    `Đã tạo ${created.length} thẻ lịch phân nhóm ở Chủ nhật: ${created.map(c => c.className).join(", ")}.`
+                  );
+                }
+                return { created, skipped };
+              },
+
+              /*
+               * Kiểm tra xem database có chứa lớp phân nhóm nào không.
+               * Trả về true nếu có ít nhất 1 lớp trong PHAN_NHOM_TEACHER_TO_CLASS đã được tạo.
+               */
+              hasPhanNhomData() {
+                const targets = ["CAN-L11", "WONDER", "WIN-L10"];
+                return targets.some(name => this.db && this.db[name]);
+              },
+
+              /*
+               * Chuyển sang tab "Phân nhóm" và render panel hiển thị 3 lớp.
+               */
+              showPhanNhomPanel() {
+                if (!this.hasPhanNhomData()) {
+                  this.showToast(
+                    "Chưa có dữ liệu phân nhóm. Hãy tải file Excel có sheet \"Phan nhom\".",
+                    true
+                  );
+                  return;
+                }
+                this.currentScheduleDay = "phanNhom";
+                // Ẩn sub-tab buổi sáng/chiều vì không liên quan.
+                if (this.dom.sundaySessionTabs) this.dom.sundaySessionTabs.hidden = true;
+                // Cập nhật visual tab đang active.
+                if (this.dom.scheduleDayTabs) {
+                  this.dom.scheduleDayTabs.querySelectorAll("[data-schedule-day]").forEach(btn => {
+                    btn.classList.toggle("active", btn.dataset.scheduleDay === "phanNhom");
+                  });
+                }
+                this.renderSchedule();
+                setTimeout(() => {
+                  document.getElementById("phanNhomPanel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }, 80);
+              },
+
+              /*
+               * Render panel hiển thị 3 lớp phân nhóm với danh sách học sinh theo nhóm/giáo viên.
+               * Gom học sinh theo tên giáo viên trong ghi chú ("Phân nhóm - Hưng/QA")
+               * rồi nhóm theo tên nhóm trong schedule (nếu có).
+               */
+              renderPhanNhomPanel() {
+                const container = this.dom.scheduleContainer;
+                if (!container) return;
+                const targets = ["CAN-L11", "WONDER", "WIN-L10"];
+                const defaultSchedule = this.PHAN_NHOM_DEFAULT_SCHEDULE || {};
+                let totalAll = 0;
+                const presentClasses = targets.filter(name => this.db[name]);
+
+                if (!presentClasses.length) {
+                  container.innerHTML = '<div id="phanNhomPanel" class="empty">Chưa có dữ liệu phân nhóm. Hãy tải file Excel có sheet "Phan nhom".</div>';
+                  return;
+                }
+
+                let html = '<div id="phanNhomPanel">';
+                presentClasses.forEach(className => {
+                  const classData = this.db[className];
+                  const students = classData.students || [];
+                  // Gom học sinh theo giáo viên phụ trách (lấy từ ghi chú "Phân nhóm - X").
+                  const byTeacher = new Map();
+                  students.forEach(s => {
+                    const note = String(s.note || "");
+                    const match = note.match(/Phân nhóm\s*-\s*(.+)$/i);
+                    const teacher = match ? match[1].trim() : "(Chưa rõ GV)";
+                    if (!byTeacher.has(teacher)) byTeacher.set(teacher, []);
+                    byTeacher.get(teacher).push(s);
+                  });
+                  const def = defaultSchedule[className] || {};
+                  // Tiêu đề lớp (header lớn phía trên các thẻ nhóm).
+                  html += `
+                    <section class="phan-nhom-class-block" id="pn-class-${this.esc(className)}">
+                      <header class="phan-nhom-class-header">
+                        <h2 class="phan-nhom-class-title">📚 ${this.esc(className)}</h2>
+                        <div class="phan-nhom-class-meta">
+                          <span>📍 ${this.esc(def.room || "Chưa xếp")}</span>
+                          <span>⏰ ${this.esc(def.time || "Chưa xếp")}</span>
+                          <span>👥 ${students.length} HS · ${byTeacher.size} nhóm</span>
+                        </div>
+                      </header>
+                      <div class="phan-nhom-cards">`;
+                  if (byTeacher.size === 0) {
+                    html += '<div class="empty">Chưa có học sinh.</div>';
+                  } else {
+                    // Đánh số nhóm theo thứ tự I, II, III, IV, V...
+                    const teacherEntries = Array.from(byTeacher.entries());
+                    teacherEntries.forEach(([teacher, list], idx) => {
+                      // Đoán tên nhóm I, II, III dựa trên thứ tự.
+                      const groupName = `Nhóm ${toRoman(idx + 1)}`;
+                      html += `
+                        <article class="phan-nhom-group-card" id="pn-group-${this.esc(className)}-${idx}">
+                          <header class="phan-nhom-group-head">
+                            <h3 class="phan-nhom-group-name">${this.esc(groupName)}</h3>
+                            <span class="phan-nhom-group-count">${list.length} HS</span>
+                          </header>
+                          <div class="phan-nhom-group-teacher">
+                            <span>👨‍🏫 ${this.esc(teacher)}</span>
+                          </div>
+                          <ol class="phan-nhom-students">
+                            ${list.map((s) => `
+                              <li>
+                                <span class="pn-name">${this.esc(s.name || "")}</span>
+                              </li>
+                            `).join("")}
+                          </ol>
+                        </article>`;
+                    });
+                  }
+                  html += `</div></section>`;
+                  totalAll += students.length;
+                });
+                html += `</div>`;
+                container.innerHTML = html;
+
+                // Hàm chuyển số sang La Mã.
+                function toRoman(num) {
+                  const map = [
+                    ["M", 1000], ["CM", 900], ["D", 500], ["CD", 400],
+                    ["C", 100], ["XC", 90], ["L", 50], ["XL", 40],
+                    ["X", 10], ["IX", 9], ["V", 5], ["IV", 4], ["I", 1]
+                  ];
+                  let result = "";
+                  for (const [letter, value] of map) {
+                    while (num >= value) {
+                      result += letter;
+                      num -= value;
+                    }
+                  }
+                  return result;
+                }
+              },
+
               finishDraftIfComplete(item) {
                 if (item.isDraft && item.lopName && item.time && item.gvName) {
                   item.isDraft = false;
@@ -2606,6 +3674,10 @@
                   }
                   item.lopName = value;
                   item.lopLink = `https://hatbui10.github.io/diemdanh/?class=${encodeURIComponent(value)}`;
+                  // Đổi lớp thì bỏ điểm danh cũ của thẻ: lớp khác, học sinh khác.
+                  item.att = {};
+                  item.attTime = "";
+                  item.isChecked = false;
                 } else if (field === "teacher") {
                   const teacher = this.TEACHERS[Number(value)];
                   if (!teacher) return;
@@ -2666,40 +3738,45 @@
                 });
               },
             
-              renderScheduleAttendance(classKey, classToken, classData, scheduleUid) {
-                const students = classData.students || [];
-                const newStudents = students.filter(student => this.isNewStudent(student));
-                const regularStudents = students.filter(student => !this.isNewStudent(student));
-                const absent = regularStudents.filter(student => student.status === "absent");
-            
+              renderScheduleAttendance(classKey, classToken, classData, item) {
+                const scheduleUid = item?.uid || "";
+                // Mỗi thẻ lịch có bộ điểm danh riêng: học sinh mới, vắng, có mặt đều tính theo thẻ.
+                const view = this.cardAttendance(item, classData);
+                const absentRows = view.absent.map(row => ({
+                  ...row.student,
+                  note: row.state.note,
+                  isExcused: row.state.isExcused,
+                  absentAt: row.state.absentAt
+                }));
+
                 return `
                   <section class="absent-box">
                     <div class="absent-head">
                       <h3 class="section-title">Danh sách vắng hôm nay</h3>
                       <button type="button" class="small-btn attendance-action-btn" data-action="copy-absent" title="Copy danh sách vắng, kèm học sinh mới nếu có">Copy</button>
                     </div>
-                    ${this.renderAbsentList(classKey, absent)}
+                    ${this.renderAbsentList(classKey, absentRows)}
                   </section>
-            
+
                   <section class="new-students-box">
                     <div class="new-students-head">
                       <h3 class="new-students-title">Học sinh mới</h3>
-                      <span class="new-students-total">${newStudents.length}</span>
+                      <span class="new-students-total">${view.newStudents.length}</span>
                     </div>
                     <div class="new-students-list student-list">
-                      ${newStudents.length
-                        ? newStudents.map((student, index) =>
-                            this.renderStudent(classKey, classToken, student, index, `schedule-${scheduleUid}`)
+                      ${view.newStudents.length
+                        ? view.newStudents.map((row, index) =>
+                            this.renderStudent(classKey, classToken, row.student, index, `schedule-${scheduleUid}`, row.state)
                           ).join("")
                         : '<div class="new-students-empty">Chưa có học sinh mới.</div>'}
                     </div>
                   </section>
-            
+
                   <div class="regular-students-title">Danh sách học sinh</div>
                   <div class="student-list">
-                    ${regularStudents.length
-                      ? regularStudents.map((student, index) =>
-                          this.renderStudent(classKey, classToken, student, index, `schedule-${scheduleUid}`)
+                    ${view.regular.length
+                      ? view.regular.map((row, index) =>
+                          this.renderStudent(classKey, classToken, row.student, index, `schedule-${scheduleUid}`, row.state)
                         ).join("")
                       : '<div class="empty">Chưa có học sinh chính thức.</div>'}
                   </div>`;
@@ -2737,23 +3814,30 @@
                 );
                 if (duplicate && !confirm("Học sinh có cùng tên và số điện thoại đã tồn tại. Bạn vẫn muốn thêm?")) return;
             
+                const newStudentUid = this.newUid();
                 classData.students.push({
-                  uid: this.newUid(),
+                  uid: newStudentUid,
                   name,
                   phone,
-                  status: "absent",
-                  note: "Học sinh mới",
+                  status: "present",
+                  note: "",
                   isExcused: false,
-                  absentAt: Date.now(),
-                  isNewStudentFlag: true
+                  absentAt: null
                 });
-                classData.hasNewStudent = true;
-                classData.isFull = false;
+                // "Học sinh mới" chỉ thuộc về thẻ lịch đang mở, không lem sang các thứ khác.
+                this.setCardStudentState(item, newStudentUid, {
+                  status: "absent",
+                  isNew: true,
+                  note: "Học sinh mới",
+                  absentAt: Date.now()
+                });
+                item.isChecked = false;
                 this.touchClass(classData);
                 this.expandedScheduleCards.clear();
                 this.expandedScheduleCards.add(scheduleUid);
                 this.openScheduleAddForms.delete(scheduleUid);
                 this.commit("Đã thêm học sinh mới vào lớp.");
+                this.queueScheduleSave();
               },
             
               commitSchedule(message) {
@@ -2771,10 +3855,18 @@
               },
             
               renderAll(preserve = true) {
+                // Rate limit: nếu renderAll được gọi quá nhiều lần trong thời gian ngắn
+                // (do lỗi lặp vô tận), bỏ qua các lần gọi dư thừa.
+                const now = Date.now();
+                if (this._lastRenderAll && (now - this._lastRenderAll) < 200) {
+                  return;
+                }
+                this._lastRenderAll = now;
+
                 const open = preserve ? this.captureOpenState() : { groups: new Set(), classes: new Set() };
                 const scrollY = window.scrollY;
                 const entries = this.sortedClassEntries();
-            
+
                 if (!entries.length) {
                   this.dom.mainContainer.innerHTML = '<div class="empty">Danh sách đang trống. Hãy chuyển sang chế độ Trợ giảng, mở khóa và tải file Excel.</div>';
                   this.applyAutoOpen();
@@ -2889,16 +3981,21 @@
                 }).join("");
               },
             
-              renderStudent(classKey, classToken, student, index, idPrefix = "student") {
-                const isNew = this.isNewStudent(student);
-                const absent = student.status === "absent" && !isNew;
+              renderStudent(classKey, classToken, student, index, idPrefix = "student", cardState = null) {
+                // cardState = trạng thái điểm danh riêng của thẻ lịch (nếu đang vẽ trong thẻ lịch).
+                const isNew = cardState ? cardState.isNew : this.isNewStudent(student);
+                const absent = cardState
+                  ? (cardState.status === "absent" && !isNew)
+                  : (student.status === "absent" && !isNew);
+                const note = cardState ? cardState.note : student.note;
+                const excused = cardState ? cardState.isExcused : student.isExcused;
                 const options = [...this.NOTE_OPTIONS];
-                if (student.note && !options.includes(student.note)) options.push(student.note);
-                const selectOptions = options.map(note => {
-                  const label = note || "-- Ghi chú --";
-                  return `<option value="${this.esc(note)}" ${student.note === note ? "selected" : ""}>${this.esc(label)}</option>`;
+                if (note && !options.includes(note)) options.push(note);
+                const selectOptions = options.map(option => {
+                  const label = option || "-- Ghi chú --";
+                  return `<option value="${this.esc(option)}" ${note === option ? "selected" : ""}>${this.esc(label)}</option>`;
                 }).join("");
-            
+
                 return `
                   <article class="student status-${isNew ? "new" : (absent ? "absent" : "present")}" id="${this.esc(idPrefix)}-${classToken}-${this.esc(student.uid)}" data-uid="${this.esc(student.uid)}">
                     <div class="student-top">
@@ -2908,7 +4005,7 @@
                     <div class="student-controls edit-control">
                       ${isNew ? "" : `
                         <label class="check-label">
-                          <input type="checkbox" data-change="excused" ${student.isExcused ? "checked" : ""}>
+                          <input type="checkbox" data-change="excused" ${excused ? "checked" : ""}>
                           Có phép
                         </label>
                         <button type="button" class="small-btn absent-btn${absent ? " active" : ""}" data-action="toggle-absent">
@@ -2931,7 +4028,16 @@
                 const studentCard = control.closest(".student");
                 const uid = studentCard ? studentCard.dataset.uid : control.dataset.uid;
                 const student = uid ? classData.students.find(item => item.uid === uid) : null;
-                return { classCard, classToken, classKey, classData, studentCard, student };
+                // Nút nằm trong thẻ lịch thì điểm danh thuộc về chính thẻ đó (mỗi thứ độc lập).
+                const scheduleCard = control.closest(".schedule-card");
+                const scheduleUid = scheduleCard?.dataset.scheduleUid || "";
+                const scheduleItem = scheduleUid
+                  ? Object.values(this.schedule).flat().find(item => item.uid === scheduleUid)
+                  : null;
+                return {
+                  classCard, classToken, classKey, classData, studentCard, student,
+                  scheduleCard, scheduleUid, scheduleItem
+                };
               },
             
               handleAction(control) {
@@ -3010,7 +4116,7 @@
                 const { classCard, classToken, classKey, classData, student } = context;
             
                 if (action === "copy-absent") {
-                  this.copyAbsentReport(classKey, control);
+                  this.copyAbsentReport(classKey, control, context.scheduleItem);
                   return;
                 }
             
@@ -3031,6 +4137,15 @@
                 if (!student) return;
             
                 if (action === "toggle-absent") {
+                  // Trong thẻ lịch: ghi vào thẻ đang xem, không ảnh hưởng các thứ khác.
+                  if (context.scheduleItem && student) {
+                    const current = this.cardStudentState(context.scheduleItem, student.uid);
+                    const nextStatus = current.status === "absent" ? "present" : "absent";
+                    this.setCardStudentState(context.scheduleItem, student.uid, { status: nextStatus });
+                    if (nextStatus === "absent") context.scheduleItem.isChecked = false;
+                    this.commitSchedule("Đã cập nhật trạng thái điểm danh.");
+                    return;
+                  }
                   student.status = student.status === "absent" ? "present" : "absent";
                   student.absentAt = student.status === "absent" ? Date.now() : null;
                   if (student.status === "absent" && !this.isNewStudent(student)) {
@@ -3042,6 +4157,11 @@
                 }
             
                 if (action === "mark-present") {
+                  if (context.scheduleItem && student) {
+                    this.setCardStudentState(context.scheduleItem, student.uid, { status: "present" });
+                    this.commitSchedule(`✓ Đã xác nhận ${student.name} đã đến.`);
+                    return;
+                  }
                   student.status = "present";
                   student.absentAt = null;
                   this.touchClass(classData);
@@ -3062,6 +4182,12 @@
                   classData.hasNewStudent = classData.students.some(item =>
                     this.isNewStudent(item)
                   );
+                  // Bỏ luôn trạng thái điểm danh của học sinh này trên mọi thẻ lịch.
+                  Object.values(this.schedule).forEach(items => {
+                    (items || []).forEach(item => {
+                      if (item.att) delete item.att[student.uid];
+                    });
+                  });
                   this.touchClass(classData);
                   this.commit("Đã xóa học sinh khỏi lớp.");
                 }
@@ -3118,24 +4244,75 @@
                 if (!student) return;
             
                 if (change === "excused") {
+                  // Trong thẻ lịch: nghỉ có phép chỉ áp dụng cho thẻ đang xem.
+                  if (context.scheduleItem && student) {
+                    this.setCardStudentState(context.scheduleItem, student.uid, { isExcused: control.checked });
+                    this.commitSchedule("Đã cập nhật trạng thái nghỉ có phép.");
+                    return;
+                  }
                   student.isExcused = control.checked;
                   this.touchClass(classData);
-                  this.commit("Đã cập nhật trạng thái nghỉ có phép.");
+                  // Lưu im lặng - không re-render để giữ focus.
+                  try {
+                    localStorage.setItem("big_classes_database", JSON.stringify(this.db));
+                  } catch (e) { /* bỏ qua lỗi storage */ }
+                  this.queueAttendanceSave(0);
                   return;
                 }
             
                 if (change === "student-note") {
-                  student.note = String(control.value || "");
+                  const noteValue = String(control.value || "");
+                  if (context.scheduleItem && student) {
+                    // Chọn "Học sinh mới" thì học sinh đó chuyển sang mục HSM của thẻ này.
+                    const asNewStudent = this.fold(this.stripHtml(noteValue)) === "hoc sinh moi";
+                    this.setCardStudentState(context.scheduleItem, student.uid, {
+                      note: noteValue,
+                      isNew: asNewStudent,
+                      status: asNewStudent ? "absent" : this.cardStudentState(context.scheduleItem, student.uid).status
+                    });
+                    this.commitSchedule("Đã lưu ghi chú học sinh.");
+                    return;
+                  }
+                  student.note = noteValue;
                   classData.hasNewStudent = classData.students.some(item =>
                     this.isNewStudent(item)
                   );
                   this.touchClass(classData);
-                  this.commit("Đã lưu ghi chú học sinh.");
+                  // Lưu im lặng - KHÔNG gọi bất kỳ hàm nào có thể re-render hay hiển thị toast,
+                  // để tránh mất focus dropdown ghi chú khi đang chọn cho nhiều HS.
+                  try {
+                    localStorage.setItem("big_classes_database", JSON.stringify(this.db));
+                  } catch (e) { /* bỏ qua lỗi storage */ }
+                  this.queueAttendanceSave(0);
                 }
               },
             
               touchClass(classData) {
                 classData.lastUpdateTime = this.formatDateTime();
+              },
+
+              /*
+               * Cập nhật badge HSM/ĐỦ trên thẻ lớp mà không cần re-render toàn bộ
+               * (tránh mất focus dropdown ghi chú).
+               */
+              updateClassNewStudentBadge(classKey, classData) {
+                const token = this.token(classKey);
+                const card = document.getElementById(`class-${token}`);
+                if (!card) return;
+                if (classData.hasNewStudent) {
+                  card.classList.add("has-new");
+                } else {
+                  card.classList.remove("has-new");
+                }
+                // Cập nhật nội dung badge đếm HSM ở header lớp.
+                const newCount = (classData.students || []).filter(s => this.isNewStudent(s)).length;
+                const badgeEls = card.querySelectorAll(".new-student-count");
+                badgeEls.forEach(el => { el.textContent = String(newCount); });
+                if (classData.isFull) {
+                  card.classList.add("is-full");
+                } else {
+                  card.classList.remove("is-full");
+                }
               },
             
               addStudent(classKey, classCard) {
@@ -3209,17 +4386,33 @@
                 }
               },
             
-              async copyAbsentReport(classKey, control = null) {
+              async copyAbsentReport(classKey, control = null, scheduleItem = null) {
                 const classData = this.db[classKey];
                 if (!classData || control?.disabled) return false;
-            
-                const newStudents = classData.students.filter(student =>
-                  this.isNewStudent(student)
-                );
-                const absent = classData.students.filter(student =>
-                  student.status === "absent" && !this.isNewStudent(student)
-                );
-                const presentCount = classData.students.length - absent.length;
+
+                let className = classData.name;
+                let newStudents = [];
+                let absent = [];
+                let presentCount = 0;
+
+                if (scheduleItem) {
+                  // Copy theo đúng trạng thái điểm danh của thẻ lịch đang mở.
+                  const view = this.cardAttendance(scheduleItem, classData);
+                  className = scheduleItem.lopName || classData.name;
+                  newStudents = view.newStudents.map(row => ({ ...row.student, note: row.state.note }));
+                  absent = view.absent.map(row => ({
+                    ...row.student,
+                    note: row.state.note,
+                    isExcused: row.state.isExcused
+                  }));
+                  presentCount = view.present;
+                } else {
+                  newStudents = classData.students.filter(student => this.isNewStudent(student));
+                  absent = classData.students.filter(student =>
+                    student.status === "absent" && !this.isNewStudent(student)
+                  );
+                  presentCount = classData.students.length - absent.length;
+                }
                 // Không có HSM: chỉ copy phần vắng, không chèn HSM: 0 hay mục HSM trống.
                 const summary = newStudents.length
                   ? `Có mặt: ${presentCount} = ${newStudents.length} HSM + ${presentCount - newStudents.length} HS có sẵn ---- Vắng: ${absent.length}`
@@ -3449,8 +4642,17 @@
                         actualName => String(actualName).trim().toUpperCase() === targetName
                       ))
                       .filter(Boolean);
-            
-                    if (sheetsToProcess.length === 0) {
+
+                    // Tìm sheet "Phan nhom" (phân nhóm) nếu có.
+                    // Sheet này có cấu trúc 3 cột dọc: [Giáo viên phụ trách] | [Nhóm] | [Tên học sinh]
+                    // Hệ thống sẽ gom học sinh từng nhóm vào lớp tương ứng với giáo viên phụ trách.
+                    const phanNhomSheetName = workbook.SheetNames.find(name => {
+                      const normalized = app.fold(String(name || "").trim());
+                      return app.PHAN_NHOM_SHEET_NAMES.some(target => app.fold(target) === normalized);
+                    });
+                    const hasPhanNhom = Boolean(phanNhomSheetName);
+
+                    if (sheetsToProcess.length === 0 && !hasPhanNhom) {
                       app.importInProgress = false;
                       alert(`Không tìm thấy sheet hợp lệ trong file Excel. Các sheet được đọc: ${app.TARGET_SHEETS.join(", ")}.`);
                       app.setProgress(0, false);
@@ -3472,18 +4674,57 @@
                       try {
                         if (currentSheetIdx >= totalSheets) {
                           app.setProgress(100, true);
-            
+
                           let totalStudentsCount = 0;
                           Object.keys(importedDatabase).forEach(classKey => {
                             totalStudentsCount += importedDatabase[classKey].students.length;
                           });
-            
+
+                          /*
+                           * Nếu có sheet "Phan nhom" trong file, xử lý nó để gom học sinh
+                           * từng nhóm vào các lớp tương ứng (CAN-L11, WONDER, WIN-L10...).
+                           * Hàm này có thể tạo lớp mới nếu chưa có trong importedDatabase.
+                           */
+                          let phanNhomSummary = "";
+                          let phanNhomClassKeys = [];
+                          if (hasPhanNhom) {
+                            try {
+                              const phanNhomResult = app.parsePhanNhomSheet(
+                                workbook.Sheets[phanNhomSheetName],
+                                importedDatabase,
+                                phanNhomSheetName
+                              );
+                              // Cập nhật bộ đếm sheet phân nhóm để hiển thị trong status.
+                              const pnSheetKey = String(phanNhomSheetName).trim().toUpperCase();
+                              if (!sheetStudentCounts[pnSheetKey]) {
+                                sheetStudentCounts[pnSheetKey] = 0;
+                              }
+                              sheetStudentCounts[pnSheetKey] += phanNhomResult.totalStudents;
+                              if (!sheetClassNames[pnSheetKey]) {
+                                sheetClassNames[pnSheetKey] = new Set();
+                              }
+                              phanNhomResult.classes.forEach(c => sheetClassNames[pnSheetKey].add(c));
+                              // Tính lại tổng số học sinh sau khi thêm từ sheet phân nhóm.
+                              totalStudentsCount = 0;
+                              Object.keys(importedDatabase).forEach(classKey => {
+                                totalStudentsCount += importedDatabase[classKey].students.length;
+                              });
+                              phanNhomSummary = ` | Phân nhóm (${phanNhomSheetName}): ${phanNhomResult.totalStudents} HS / ${phanNhomResult.totalClasses} lớp`;
+                              if (phanNhomResult.skipped && phanNhomResult.skipped.length) {
+                                console.warn("Sheet phân nhóm bỏ qua:", phanNhomResult.skipped);
+                              }
+                            } catch (pnError) {
+                              console.error("Lỗi xử lý sheet phân nhóm:", pnError);
+                              phanNhomSummary = ` | Sheet "${phanNhomSheetName}" lỗi: ${pnError.message || "không rõ"}`;
+                            }
+                          }
+
                           if (Object.keys(importedDatabase).length === 0 || totalStudentsCount === 0) {
                             throw new Error(
                               "Không lọc được học sinh. Kiểm tra tên lớp ở B, lịch học ở B và số điện thoại ở Q."
                             );
                           }
-            
+
                           /*
                            * Chỉ chuyển sang cấu trúc nội bộ SAU KHI code gốc đã lọc xong.
                            * normalizeDatabase chỉ bổ sung uid an toàn, không thay đổi danh sách đã lọc.
@@ -3495,7 +4736,53 @@
                           app.initScheduleDropdowns();
                           app.persistLocal();
                           app.renderSchedule();
+
+                          // Nếu vừa nạp từ sheet phân nhóm, tự động mở nhóm THPT
+                          // và mở sẵn các lớp phân nhóm để người dùng thấy ngay kết quả.
+                          if (hasPhanNhom) {
+                            phanNhomClassKeys = ["CAN-L11", "WONDER", "WIN-L10"]
+                              .filter(name => app.db[name]);
+                            // Mở nhóm THPT (chứa sheet 10/11/12).
+                            const thptGroup = document.getElementById("group-THPT");
+                            if (thptGroup && !thptGroup.classList.contains("active")) {
+                              thptGroup.classList.add("active");
+                            }
+                            // Mở sẵn các thẻ lớp phân nhóm.
+                            phanNhomClassKeys.forEach(name => {
+                              const token = app.token(name);
+                              const classEl = document.getElementById(`class-${token}`);
+                              if (classEl) classEl.classList.add("active");
+                            });
+                          }
                           app.renderAll(false);
+
+                          // Nếu có phân nhóm, tự động tạo thẻ lịch cho các lớp phân nhóm
+                          // ở ngày Chủ nhật (cạnh nút Chủ nhật trên thanh lịch).
+                          if (hasPhanNhom && phanNhomClassKeys.length) {
+                            const scheduleResult = app.createPhanNhomScheduleCards(phanNhomClassKeys);
+                            if (scheduleResult.created && scheduleResult.created.length) {
+                              // Vẫn giữ tab "Chủ nhật" để thấy thẻ lịch vừa tạo.
+                              app.currentScheduleDay = "cn";
+                              app.sundaySessionFilter = "sang";
+                              app.renderSchedule();
+                            }
+                            // Tự động chuyển sang tab "Phân nhóm" để người dùng thấy ngay danh sách.
+                            setTimeout(() => app.showPhanNhomPanel(), 600);
+                          }
+
+                          // Nếu có phân nhóm, cuộn xuống lớp phân nhóm đầu tiên và toast thông báo.
+                          if (hasPhanNhom && phanNhomClassKeys.length) {
+                            setTimeout(() => {
+                              const firstToken = app.token(phanNhomClassKeys[0]);
+                              const firstEl = document.getElementById(`class-${firstToken}`);
+                              if (firstEl) {
+                                firstEl.scrollIntoView({ behavior: "smooth", block: "center" });
+                              }
+                            }, 300);
+                            app.showToast(
+                              `Đã nạp ${phanNhomClassKeys.length} lớp phân nhóm: ${phanNhomClassKeys.join(", ")}`
+                            );
+                          }
             
                           // Lưu trực tiếp và chờ Firebase hoàn thành để snapshot cũ không ghi đè file vừa nạp.
                           let firebaseMessage = "Đã lưu trên thiết bị";
@@ -3530,7 +4817,7 @@
                           }).join(" | ");
                           app.dom.fileStatus.textContent =
                             `✅ Tổng cộng ${totalStudentsCount} học sinh từ các sheet ${[...existingSheetNames].join(", ")}, ` +
-                            `${Object.keys(importedDatabase).length} lớp. ${firebaseMessage}.\n${sheetSummary}`;
+                            `${Object.keys(importedDatabase).length} lớp. ${firebaseMessage}.${phanNhomSummary}\n${sheetSummary}`;
                           app.showToast("Nạp và lọc file Excel thành công.");
                           setTimeout(() => app.setProgress(100, false), 1500);
                           return;
@@ -3733,8 +5020,17 @@
               },
             
               resetAttendanceData() {
+                // Điểm danh giờ nằm riêng trên từng thẻ lịch -> xóa sạch của mọi thẻ, mọi thứ.
+                Object.values(this.schedule).forEach(items => {
+                  (items || []).forEach(item => {
+                    item.isChecked = false;
+                    item.att = {};
+                    item.attTime = "";
+                  });
+                });
+                // Dọn luôn phần điểm danh cũ còn trong danh sách lớp (dữ liệu bản trước).
                 Object.values(this.db).forEach(classData => {
-                  classData.students.forEach(student => {
+                  (classData.students || []).forEach(student => {
                     student.status = "present";
                     student.note = "";
                     student.isExcused = false;
@@ -3746,12 +5042,22 @@
                   classData.hasNewStudent = false;
                   classData.lastUpdateTime = this.formatDateTime();
                 });
-            
-                // Xóa điểm danh cũ cũng bỏ checkbox, để thẻ không còn báo đã điểm danh.
-                Object.values(this.schedule).forEach(items => {
-                  items.forEach(item => { item.isChecked = false; });
-                });
               },
+
+              // Còn dấu vết điểm danh nào trên các thẻ lịch không?
+              hasAttendanceMarks() {
+                return Object.values(this.schedule).some(items =>
+                  (items || []).some(item => this.cardHasMarks(item)));
+              },
+
+              // Còn thẻ lịch nào đang bật "Đã điểm danh" không?
+              hasScheduleCheckedMarks() {
+                return Object.values(this.schedule).some(items =>
+                  (items || []).some(item => item?.isChecked));
+              },
+
+              // Sang ngày mới: điểm danh của các thứ vẫn được GIỮ NGUYÊN.
+              // Mỗi thẻ lịch giữ điểm danh riêng của mình, chỉ mất khi hết Chủ nhật.
             
              
             
@@ -3786,6 +5092,7 @@
                   database: JSON.parse(JSON.stringify(this.db)),
                   filename: this.filename || "",
                   nightResetKey: this.meta.nightResetKey || "",
+                  attendanceWeekKey: this.meta.attendanceWeekKey || "",
                   schedule: JSON.parse(JSON.stringify(this.schedule))
                 };
                 this.storageSet("localStorage", this.DEFAULT_BACKUP_KEY, JSON.stringify(snapshot));
@@ -3807,11 +5114,17 @@
               },
             
               restoreDefaultBackup() {
-                const backup = this.loadDefaultBackup();
+                // Chọn bản MỚI NHẤT trong 2 loại: bản lưu mặc định 24 giờ và bản chụp
+                // ngay trước khi hệ thống tự đặt lại đầu tuần.
+                const candidates = [this.loadDefaultBackup(), this.loadPreResetSnapshot()].filter(Boolean);
+                const backup = candidates.sort((a, b) => Number(b.savedAt) - Number(a.savedAt))[0] || null;
                 if (!backup) {
                   this.showToast("Chưa có bản lưu mặc định để khôi phục. Hệ thống sẽ tự lưu bản lưu mỗi 24 giờ khi có dữ liệu.", true);
                   return;
                 }
+                const sourceLabel = backup.reason
+                  ? `bản chụp tự động trước khi đặt lại (${backup.reason})`
+                  : "bản lưu mặc định 24 giờ";
             
                 const when = this.formatDateTime(new Date(Number(backup.savedAt)));
                 const backupDb = this.normalizeDatabase(backup.database || {});
@@ -3823,12 +5136,13 @@
                 );
             
                 if (!confirm(
-                  `Khôi phục về bản lưu mặc định lúc ${when} (${classCount} lớp, ${studentCount} học sinh)?\nToàn bộ dữ liệu hiện tại sẽ được thay bằng dữ liệu của bản lưu.`
+                  `Khôi phục về ${sourceLabel}, lúc ${when}\n(${classCount} lớp, ${studentCount} học sinh).\nToàn bộ dữ liệu hiện tại sẽ được thay bằng dữ liệu của bản lưu. Tiếp tục?`
                 )) return;
             
                 this.db = backupDb;
                 this.filename = String(backup.filename || "");
                 this.meta.nightResetKey = String(backup.nightResetKey || "");
+                this.meta.attendanceWeekKey = this.weekStampValue();
                 this.schedule = backupSchedule;
                 this.expandedScheduleCards.clear();
                 this.openScheduleAddForms.clear();
@@ -3869,15 +5183,27 @@
                   ]);
             
                   if (attendanceResult.status === "fulfilled") {
-                    if (attendanceResult.value) this.applyRemote(attendanceResult.value);
-                    else if (Object.keys(this.db).length) this.queueAttendanceSave(0);
+                    const remoteDb = this.normalizeDatabase(attendanceResult.value?.database || {});
+                    if (Object.keys(remoteDb).length) {
+                      this.applyRemote(attendanceResult.value);
+                    } else if (Object.keys(this.db).length) {
+                      // Firebase trống nhưng máy có dữ liệu: giữ dữ liệu máy và đẩy lên lại.
+                      this.queueAttendanceSave(0);
+                    }
                   } else {
                     console.error("Lỗi tải điểm danh Firebase:", attendanceResult.reason);
                   }
             
                   if (scheduleResult.status === "fulfilled") {
-                    if (scheduleResult.value) this.applyRemoteSchedule(scheduleResult.value);
-                    else if (Object.values(this.schedule).some(list => list.length)) this.queueScheduleSave(0);
+                    const remoteSchedule = this.normalizeSchedule(
+                      scheduleResult.value?.content || scheduleResult.value || null
+                    );
+                    if (Object.values(remoteSchedule).some(list => list.length)) {
+                      this.applyRemoteSchedule(scheduleResult.value);
+                    } else if (Object.values(this.schedule).some(list => list.length)) {
+                      // Firebase trống nhưng máy có lịch: giữ lịch của máy và đẩy lên lại.
+                      this.queueScheduleSave(0);
+                    }
                   } else {
                     console.error("Lỗi tải lịch học Firebase:", scheduleResult.reason);
                   }
@@ -3891,7 +5217,9 @@
                   this.setSync("Không tải được Firebase; đang dùng dữ liệu cục bộ.", "error");
                 } finally {
                   this.firebaseLoadFinished = true;
-                 
+
+                  // Chuyển đổi mô hình dữ liệu: đẩy lên sau khi đã ghép dữ liệu Firebase.
+                  if (this.pendingModelMigration) this.finishModelMigration();
                   // Nếu đã reset khi Firebase chưa sẵn sàng, đẩy lại ngay sau khi kết nối.
                   if (this.pendingResetKey) this.queueAttendanceSave(0);
                   if (this.pendingScheduleReset) this.queueScheduleSave(0);
@@ -3921,42 +5249,115 @@
                 // Không cho snapshot Firebase cũ ghi đè dữ liệu trong lúc đang nạp Excel.
                 if (this.importInProgress) return;
                 if (!payload || typeof payload !== "object") return;
-            
+                // Chống vòng lặp re-render: bỏ qua nếu vừa xử lý applyRemote trong 500ms.
+                const now = Date.now();
+                if (this._lastApplyRemote && (now - this._lastApplyRemote) < 500) return;
+                this._lastApplyRemote = now;
+
+                // Bản rỗng từ máy khác không được xóa danh sách lớp đang có trên máy này.
+                const incomingDb = this.normalizeDatabase(payload.database || {});
+                if (!Object.keys(incomingDb).length && Object.keys(this.db).length) {
+                  this.queueAttendanceSave(0);
+                  return;
+                }
+
+                // Máy này còn thay đổi CHƯA đẩy xong lên Firebase: không để bản cũ trên
+                // Firebase ghi đè (đây cũng là một nguyên nhân điểm danh "biến mất" sau khi tải lại).
+                if (this.firebaseLoadFinished && this.pendingAttendanceSave) return;
+
                 const remoteResetKey = String(payload.nightResetKey || "");
                 // Khi bản reset đang chờ đẩy lên Firebase, bỏ qua snapshot cũ hơn.
                 if (this.pendingResetKey && remoteResetKey < this.pendingResetKey) return;
                 if (this.pendingResetKey && remoteResetKey >= this.pendingResetKey) {
                   this.pendingResetKey = "";
                 }
-            
-                const remoteDb = this.normalizeDatabase(payload.database || {});
-                const remoteString = JSON.stringify(remoteDb);
+
+                const remoteString = JSON.stringify(incomingDb);
                 const localString = JSON.stringify(this.db);
                 const resetKeyChanged = String(payload.nightResetKey || "") !== String(this.meta.nightResetKey || "");
-            
+
                 this.filename = String(payload.filename || "");
                 this.meta.nightResetKey = String(payload.nightResetKey || "");
-            
+
                 if (remoteString !== localString) {
-                  this.db = remoteDb;
+                  // So sánh "cấu trúc" - chỉ tính thay đổi khi:
+                  // - Thêm/xóa lớp
+                  // - Thêm/xóa học sinh
+                  // - SĐT/tên thay đổi
+                  // BỎ QUA thay đổi ghi chú/excused/HSM để tránh mất focus.
+                  const structuralDiff = this.hasStructuralDiff(this.db, incomingDb);
+                  // Đồng bộ dữ liệu vào this.db.
+                  this.db = incomingDb;
+                  // Cập nhật cache đã lưu để không re-save dữ liệu vừa nhận.
+                  this._lastSavedPayload = JSON.stringify({
+                    database: this.db,
+                    filename: this.filename || "",
+                    nightResetKey: this.meta.nightResetKey || ""
+                  });
+                  if (!structuralDiff) {
+                    // Không có thay đổi cấu trúc - chỉ lặng lẽ persist, KHÔNG re-render DOM,
+                    // KHÔNG gọi setSync, KHÔNG queue save (tránh vòng lặp save liên tục).
+                    this.persistLocal();
+                    return;
+                  }
+                  // Có thay đổi cấu trúc thực sự -> re-render.
                   const scheduleNamesChanged = this.syncScheduleClassNamesWithDatabase();
                   this.initScheduleDropdowns();
                   this.persistLocal();
                   this.renderSchedule();
                   this.renderAll(true);
+                  this.setSync("Dữ liệu Firebase đang được đồng bộ realtime.", "ok");
                   if (scheduleNamesChanged) this.queueScheduleSave(100);
                 } else if (resetKeyChanged) {
                   this.persistLocal();
                 }
-                this.setSync("Dữ liệu Firebase đang được đồng bộ realtime.", "ok");
-               
+
+              },
+
+              /*
+               * So sánh 2 database xem có khác nhau về CẤU TRÚC hay không
+               * (bỏ qua các thay đổi nhỏ như note, excused, isNew).
+               * Trả về true nếu cấu trúc khác.
+               */
+              hasStructuralDiff(local, remote) {
+                const localKeys = Object.keys(local || {});
+                const remoteKeys = Object.keys(remote || {});
+                if (localKeys.length !== remoteKeys.length) return true;
+                for (const key of localKeys) {
+                  if (!remote[key]) return true;
+                  const lStudents = local[key].students || [];
+                  const rStudents = remote[key].students || [];
+                  if (lStudents.length !== rStudents.length) return true;
+                  for (let i = 0; i < lStudents.length; i++) {
+                    const ls = lStudents[i];
+                    const rs = rStudents[i];
+                    if (!rs) return true;
+                    if ((ls.name || "") !== (rs.name || "")) return true;
+                    if ((ls.phone || "") !== (rs.phone || "")) return true;
+                  }
+                }
+                return false;
               },
             
               applyRemoteSchedule(payload) {
-                // Không cho lịch cũ khôi phục lại checkbox “Đã điểm danh” trong lúc reset đang lưu.
+                // Không cho lịch cũ khôi phục lại điểm danh trong lúc reset đang lưu.
                 if (this.pendingScheduleReset) return;
+                // Điểm danh nằm trong lịch học: đang có thay đổi chưa lưu xong thì giữ bản của máy này.
+                if (this.firebaseLoadFinished && this.pendingScheduleSave) return;
+                // Chống vòng lặp re-render: bỏ qua nếu vừa xử lý trong 500ms.
+                const now = Date.now();
+                if (this._lastApplyRemoteSchedule && (now - this._lastApplyRemoteSchedule) < 500) return;
+                this._lastApplyRemoteSchedule = now;
                 const remoteSchedule = this.normalizeSchedule(payload?.content || payload || null);
+                // Bản rỗng từ máy khác không được xóa lịch học đang có trên máy này.
+                if (!Object.values(remoteSchedule).some(list => list.length) &&
+                    Object.values(this.schedule).some(list => (list || []).length)) {
+                  this.queueScheduleSave(0);
+                  return;
+                }
                 this.schedule = remoteSchedule;
+                // Cập nhật cache đã lưu để không re-save lịch vừa nhận.
+                this._lastSavedSchedule = JSON.stringify(this.schedule);
                 const namesChanged = this.syncScheduleClassNamesWithDatabase();
                 this.persistLocal();
                 this.renderSchedule();
@@ -3965,22 +5366,36 @@
               },
             
               queueScheduleSave(delay = 300) {
+                this.pendingScheduleSave = true;
                 clearTimeout(this.scheduleSaveTimer);
                 this.scheduleSaveTimer = setTimeout(() => this.flushScheduleSave(), delay);
               },
             
               flushScheduleSave() {
                 if (!this.firebase) {
+                  // Không đẩy được thì bỏ cờ chờ, tránh chặn lịch học realtime của máy khác.
+                  this.pendingScheduleReset = false;
+                  this.pendingScheduleSave = false;
                   this.setSync("Đã lưu lịch trên thiết bị; chưa kết nối Firebase.", "error");
                   return;
                 }
                 const content = JSON.parse(JSON.stringify(this.schedule));
+                // KIỂM TRA: nếu lịch không thay đổi so với lần lưu trước, BỎ QUA.
+                const contentString = JSON.stringify(content);
+                if (this._lastSavedSchedule === contentString) {
+                  this.pendingScheduleReset = false;
+                  this.pendingScheduleSave = false;
+                  this.setSync("Lịch không thay đổi, bỏ qua lưu Firebase.", "ok");
+                  return;
+                }
                 this.scheduleSaveQueue = this.scheduleSaveQueue
                   .catch(() => undefined)
                   .then(async () => {
                     this.setSync("Đang lưu lịch học lên Firebase…", "busy");
                     await this.firebase.saveSchedule(content);
                     this.pendingScheduleReset = false;
+                    this.pendingScheduleSave = false;
+                    this._lastSavedSchedule = contentString;
                     clearTimeout(this.scheduleRetryTimer);
                     this.setSync("Đã lưu lịch học lên Firebase.", "ok");
                   })
@@ -3994,27 +5409,46 @@
               },
             
               queueAttendanceSave(delay = 300) {
+                // Debug: log stack trace để biết ai gọi queueAttendanceSave
+                if (window.__DEBUG_SYNC) {
+                  console.log("[queueAttendanceSave] called from:", new Error().stack);
+                }
+                this.pendingAttendanceSave = true;
                 clearTimeout(this.saveTimer);
                 this.saveTimer = setTimeout(() => this.flushRemoteSave(), delay);
               },
             
               flushRemoteSave() {
                 if (!this.firebase) {
+                  // Không đẩy được thì bỏ cờ chờ, tránh bỏ qua dữ liệu realtime của máy khác.
+                  this.pendingResetKey = "";
+                  this.pendingAttendanceSave = false;
                   this.setSync("Đã lưu trên thiết bị; chưa kết nối Firebase.", "error");
                   return;
                 }
-            
+
                 const payload = {
                   database: JSON.parse(JSON.stringify(this.db)),
                   filename: this.filename || "",
                   nightResetKey: this.meta.nightResetKey || ""
                 };
-            
+
+                // KIỂM TRA: nếu dữ liệu không có thay đổi thực sự so với lần lưu trước,
+                // BỎ QUA - không gửi lên Firebase. Tránh spam "Đang lưu/Đã lưu" liên tục.
+                const payloadString = JSON.stringify(payload);
+                if (this._lastSavedPayload === payloadString) {
+                  this.pendingAttendanceSave = false;
+                  this.setSync("Không có thay đổi mới, bỏ qua lưu Firebase.", "ok");
+                  return;
+                }
+
                 this.saveQueue = this.saveQueue
                   .catch(() => undefined)
                   .then(async () => {
                     this.setSync("Đang lưu dữ liệu lên Firebase…", "busy");
                     await this.firebase.save(payload);
+                    this.pendingAttendanceSave = false;
+                    this._lastSavedPayload = payloadString;
                     if (this.pendingResetKey && payload.nightResetKey >= this.pendingResetKey) {
                       this.pendingResetKey = "";
                     }
@@ -4030,8 +5464,156 @@
                   });
               },
             
+              /* ===== AN TOÀN DỮ LIỆU: lưu trữ – tự tải lại – sao lưu ra file ===== */
+
+              // Trình duyệt có THỰC SỰ ghi nhớ dữ liệu sau khi tải lại trang không?
+              // (khung xem trước sandbox, chế độ ẩn danh, chặn cookie trang web, hết dung lượng… đều không)
+              checkStorageHealth() {
+                try {
+                  const probe = `probe-${Date.now()}`;
+                  window.localStorage.setItem(this.STORAGE_PROBE_KEY, probe);
+                  const readBack = window.localStorage.getItem(this.STORAGE_PROBE_KEY);
+                  window.localStorage.removeItem(this.STORAGE_PROBE_KEY);
+                  this.storageOk = readBack === probe;
+                } catch (error) {
+                  console.error("Không dùng được localStorage:", error);
+                  this.storageOk = false;
+                }
+                return this.storageOk;
+              },
+
+              markStorageBroken() {
+                if (this.storageOk === false && this.storageWarned) return;
+                this.storageOk = false;
+                this.updateStorageWarning();
+                if (!this.storageWarned) {
+                  this.storageWarned = true;
+                  this.setSync("⚠ Không lưu được dữ liệu trên thiết bị: đừng tải lại trang hay đóng tab.", "error");
+                  this.showToast("Không lưu được dữ liệu trên thiết bị này. Đừng tải lại trang để tránh mất điểm danh.", true);
+                }
+              },
+
+              updateStorageWarning() {
+                if (!this.dom || !this.dom.storageWarn) return;
+                this.dom.storageWarn.hidden = this.storageOk;
+              },
+
+              // Có thay đổi cục bộ nào chưa đẩy xong lên Firebase không?
+              hasUnsavedChanges() {
+                return Boolean(this.pendingAttendanceSave || this.pendingScheduleSave);
+              },
+
+              // Lưu cục bộ trước, chờ đẩy Firebase xong (tối đa 6 giây) rồi mới tải lại trang.
+              reloadSafely() {
+                this.persistLocal();
+                // Không lưu được dữ liệu mà vẫn tải lại = mất sạch điểm danh -> hỏi trước cho chắc.
+                if (!this.storageOk && (this.hasAttendanceMarks() || Object.keys(this.db).length)) {
+                  const ok = confirm(
+                    "Trình duyệt này KHÔNG lưu được dữ liệu trên thiết bị.\n\n" +
+                    "Nếu tải lại trang bây giờ, toàn bộ điểm danh đang có sẽ mất hết.\n" +
+                    "Hãy chắc chắn dòng trạng thái đã báo \"Đã lưu dữ liệu lên Firebase\" trước khi tải lại.\n\n" +
+                    "Vẫn muốn tải lại trang?"
+                  );
+                  if (!ok) {
+                    this.showToast("Đã hủy tải lại để giữ điểm danh.", true);
+                    return;
+                  }
+                }
+                if (!this.hasUnsavedChanges()) {
+                  location.reload();
+                  return;
+                }
+                this.queueAttendanceSave(0);
+                this.queueScheduleSave(0);
+                this.setSync("Đang lưu nốt dữ liệu trước khi tải lại trang…", "busy");
+                let waited = 0;
+                const timer = setInterval(() => {
+                  waited += 400;
+                  if (!this.hasUnsavedChanges() || waited >= 6000) {
+                    clearInterval(timer);
+                    location.reload();
+                  }
+                }, 400);
+              },
+
+              /* ===== SAO LƯU RA FILE (dùng được cả khi trình duyệt không lưu được dữ liệu) ===== */
+
+              exportBackup() {
+                const payload = {
+                  app: "so-do-diem-danh",
+                  version: 1,
+                  exportedAt: new Date().toISOString(),
+                  filename: this.filename || "",
+                  nightResetKey: this.meta.nightResetKey || "",
+                  attendanceWeekKey: this.meta.attendanceWeekKey || "",
+                  database: this.db,
+                  schedule: this.schedule
+                };
+                const stamp = `${this.todayDayStampValue()}_${String(new Date().getHours()).padStart(2, "0")}h${String(new Date().getMinutes()).padStart(2, "0")}`;
+                const json = JSON.stringify(payload, null, 2);
+                let url = "";
+                let isBlobUrl = true;
+                try {
+                  url = URL.createObjectURL(new Blob([json], { type: "application/json" }));
+                } catch (error) {
+                  // Một số trình duyệt/webview chặn Blob URL: dùng tạm data URI.
+                  isBlobUrl = false;
+                  url = `data:application/json;charset=utf-8,${encodeURIComponent(json)}`;
+                }
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = `diem-danh_${stamp}.json`;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                if (isBlobUrl) setTimeout(() => URL.revokeObjectURL(url), 5000);
+                this.showToast("Đã xuất bản lưu. Hãy giữ file này để khôi phục khi cần.");
+              },
+
+              async importBackup(file) {
+                if (!file) return;
+                try {
+                  const parsed = JSON.parse(await file.text());
+                  const db = this.normalizeDatabase(parsed?.database || {});
+                  const schedule = this.normalizeSchedule(parsed?.schedule || parsed?.content || null);
+                  const hasSchedule = Object.values(schedule).some(list => (list || []).length);
+                  if (!Object.keys(db).length && !hasSchedule) {
+                    this.showToast("File này không có dữ liệu điểm danh/lịch học hợp lệ.", true);
+                    return;
+                  }
+                  if (!confirm("Nạp bản lưu từ file sẽ THAY THẾ điểm danh và lịch học hiện tại. Tiếp tục?")) return;
+                  this.importInProgress = true;
+                  this.db = db;
+                  this.schedule = schedule;
+                  if (parsed.filename) this.filename = String(parsed.filename);
+                  this.meta.nightResetKey = String(parsed.nightResetKey || this.meta.nightResetKey || "");
+                  this.meta.attendanceWeekKey = String(parsed.attendanceWeekKey || this.meta.attendanceWeekKey || "");
+                  this.persistLocal();
+                  this.renderSchedule();
+                  this.renderAll(true);
+                  this.queueAttendanceSave(0);
+                  this.queueScheduleSave(0);
+                  this.showToast("Đã nạp bản lưu từ file.");
+                } catch (error) {
+                  console.error("Lỗi nạp bản lưu:", error);
+                  this.showToast("Không đọc được file bản lưu.", true);
+                } finally {
+                  this.importInProgress = false;
+                }
+              },
+
               setSync(text, state = "busy") {
                 if (!this.dom) return;
+                // Bỏ qua nếu text và state giống hệt lần trước, tránh
+                // thông báo "đang đồng bộ" chạy liên tục mỗi lần Firebase gửi snapshot về.
+                if (this._lastSyncText === text && this._lastSyncState === state) return;
+                // Rate limit 1.5s: nếu vừa cập nhật text trong vòng 1.5s, bỏ qua
+                // (trừ thông báo lỗi - luôn hiển thị ngay).
+                const now = Date.now();
+                if (state !== "error" && this._lastSyncTime && (now - this._lastSyncTime) < 1500) return;
+                this._lastSyncText = text;
+                this._lastSyncState = state;
+                this._lastSyncTime = now;
                 this.dom.syncText.textContent = text;
                 this.dom.syncLine.className = `sync-line ${state}`;
               },
@@ -4041,10 +5623,19 @@
                 clearTimeout(this.toastTimer);
                 this.dom.toast.textContent = message;
                 this.dom.toast.classList.toggle("error", isError);
+                this.dom.toast.classList.add("show");
                 this.dom.toast.hidden = false;
+                // Cho phép click để đóng toast ngay.
+                this.dom.toast.onclick = () => {
+                  clearTimeout(this.toastTimer);
+                  this.dom.toast.classList.remove("show");
+                  setTimeout(() => { this.dom.toast.hidden = true; }, 200);
+                };
+                // Tăng thời gian hiển thị lên 8 giây để người dùng kịp đọc.
                 this.toastTimer = setTimeout(() => {
-                  this.dom.toast.hidden = true;
-                }, 3300);
+                  this.dom.toast.classList.remove("show");
+                  setTimeout(() => { this.dom.toast.hidden = true; }, 200);
+                }, 8000);
               }
             };
             
@@ -4128,6 +5719,6 @@
             window.AttendanceApp.attachFirebase(firebaseApi);
         </script>
 
-    </body>
+    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a47d70eb48a309d0',t:'MTc5MTU0OTQ5Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
