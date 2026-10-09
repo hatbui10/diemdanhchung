@@ -2030,9 +2030,11 @@
               },
               /*
                * Bảng phòng học/giờ học gợi ý cho từng lớp phân nhóm.
-               * Lấy từ ảnh sheet "Phan nhom" do người dùng cung cấp.
+               * Mỗi lớp có thể có NHIỀU NHÓM với phòng/giờ khác nhau.
+               * Key "default" áp dụng cho nhóm chưa có config cụ thể.
                * Dùng để tự động tạo thẻ lịch cho Chủ nhật sau khi nạp phân nhóm.
-               * Cấu trúc: PHAN_NHOM_DEFAULT_SCHEDULE[className] = { room, time, teacher }
+               * Cấu trúc: PHAN_NHOM_DEFAULT_SCHEDULE[className] = { default: {room, time, teacher}, groups: { 1: {...}, 2: {...} } }
+               * Hoặc dạng cũ: PHAN_NHOM_DEFAULT_SCHEDULE[className] = { room, time, teacher } (áp dụng cho tất cả nhóm)
                */
               PHAN_NHOM_DEFAULT_SCHEDULE: {
                 "CAN-L11": { room: "T1-58", time: "8h00 - 9h30", teacher: "Hưng/QA" },
@@ -2773,6 +2775,12 @@
                     ? nextBlock.blockStartCol - 1
                     : (rows[block.headerRow] || []).length;
 
+                  // Track phòng của nhóm hiện tại trong khối này.
+                  // Khi gặp header "Nhóm I - T7/237", lưu lại "T7/237" làm phòng cho nhóm này.
+                  // Áp dụng cho tất cả HS bên dưới cho đến khi gặp header "Nhóm" tiếp theo.
+                  let currentGroupRoom = "";
+                  let currentGroupName = "";
+
                   // Bước 3: Trong khối, tìm header "Nhóm X" và bắt đầu đọc từ sau đó.
                   for (let r = block.headerRow + 1; r < rows.length; r++) {
                     const row = rows[r] || [];
@@ -2786,7 +2794,16 @@
                     if (!teacherFolded) continue;
                     // Bỏ qua hàng "Tổng".
                     if (teacherFolded === "tong") continue;
-                    // Bỏ qua hàng tiêu đề "Nhóm X..." (ví dụ: "Nhóm I - T1/58", "Nhóm I+II - T1/58").
+                    // PHÁT HIỆN header "Nhóm X - T1/58" để lưu phòng cho nhóm này.
+                    // Ví dụ: "Nhóm I - T7/237" -> currentGroupRoom = "T7-237", currentGroupName = "Nhóm I"
+                    const groupHeaderMatch = teacherText.match(/^(Nhóm\s+[IVX0-9+\-]+)\s*[-–]\s*(T[\d\-\/]+)/i);
+                    if (groupHeaderMatch) {
+                      currentGroupName = groupHeaderMatch[1].trim();
+                      // Chuẩn hóa room: "T7/237" -> "T7-237"
+                      currentGroupRoom = groupHeaderMatch[2].replace(/\//g, "-");
+                      continue; // Bỏ qua hàng header này
+                    }
+                    // Bỏ qua hàng tiêu đề "Nhóm X..." không có phòng (ví dụ: "Nhóm I").
                     if (/^nhom\s*[+\-iv0-9\s]/i.test(teacherFolded)) continue;
                     // Bỏ qua hàng header "TT" / "Học sinh".
                     if (teacherFolded === "tt" || teacherFolded === "hoc sinh") continue;
@@ -2848,18 +2865,30 @@
 
                     // Tạo SĐT giả để định danh nội bộ.
                     const pseudoPhone = `PN${String(totalStudents + 1).padStart(6, "0")}`;
+                    // Lưu thông tin phòng và nhóm vào note để hiển thị đúng trong tab "Phân nhóm".
+                    // Format: "Phân nhóm - Hưng/QA | Nhóm I - T7-237"
+                    let phanNhomNote = `Phân nhóm - ${teacherMatch.name}`;
+                    if (currentGroupName) {
+                      phanNhomNote += ` | ${currentGroupName}`;
+                      if (currentGroupRoom) {
+                        phanNhomNote += ` - ${currentGroupRoom}`;
+                      }
+                    }
                     importedDatabase[classKey].students.push({
                       id: importedDatabase[classKey].students.length + 1,
                       name: studentName,
                       phone: pseudoPhone,
                       uniqueKey: `pn_${fold(studentName).replace(/\s+/g, "_")}_${pseudoPhone}`,
                       status: "present",
-                      note: `Phân nhóm - ${teacherMatch.name}`,
+                      note: phanNhomNote,
                       absentTime: "",
                       history: [],
                       evaluations: {},
                       lastEditor: "Phân nhóm",
                       lastEditTime: "",
+                      // Lưu thêm phòng riêng của nhóm để dùng cho các module khác
+                      phanNhomRoom: currentGroupRoom || "",
+                      phanNhomGroup: currentGroupName || "",
                       sourceRowLabel: `${block.className}-${r + 1}`,
                       sourceSheet: String(sheetDisplayName || "Phan nhom")
                     });
@@ -3835,14 +3864,38 @@
                 presentClasses.forEach(className => {
                   const classData = this.db[className];
                   const students = classData.students || [];
-                  // Gom học sinh theo giáo viên phụ trách (lấy từ ghi chú "Phân nhóm - X").
-                  const byTeacher = new Map();
+                  // Gom học sinh theo nhóm (dựa trên ghi chú "Phân nhóm - GV | Nhóm I - T7-237")
+                  // Mỗi nhóm có tên + phòng riêng.
+                  const byGroup = new Map(); // key = "GV | Nhóm I - T7-237"
                   students.forEach(s => {
                     const note = String(s.note || "");
-                    const match = note.match(/Phân nhóm\s*-\s*(.+)$/i);
-                    const teacher = match ? match[1].trim() : "(Chưa rõ GV)";
-                    if (!byTeacher.has(teacher)) byTeacher.set(teacher, []);
-                    byTeacher.get(teacher).push(s);
+                    // Parse: "Phân nhóm - Hưng/QA | Nhóm I - T7-237"
+                    // hoặc cũ: "Phân nhóm - Hưng/QA"
+                    const parts = note.split("|").map(p => p.trim());
+                    let teacher = "(Chưa rõ GV)";
+                    let groupName = "";
+                    let room = "";
+                    const teacherMatch = parts[0] ? parts[0].match(/Phân nhóm\s*-\s*(.+)$/i) : null;
+                    if (teacherMatch) teacher = teacherMatch[1].trim();
+                    if (parts[1]) {
+                      // parts[1] có thể là "Nhóm I - T7-237" hoặc chỉ "Nhóm I"
+                      const groupRoomMatch = parts[1].match(/^(Nhóm\s+[IVX0-9+\-]+)\s*[-–]\s*(T[\d\-\/]+)/i);
+                      if (groupRoomMatch) {
+                        groupName = groupRoomMatch[1].trim();
+                        room = groupRoomMatch[2].replace(/\//g, "-");
+                      } else if (/nhóm/i.test(parts[1])) {
+                        groupName = parts[1];
+                      }
+                    }
+                    // Fallback: lấy từ student.phanNhomRoom nếu có (từ lần import mới)
+                    if (!room && s.phanNhomRoom) room = s.phanNhomRoom;
+                    if (!groupName && s.phanNhomGroup) groupName = s.phanNhomGroup;
+                    // Key để gom nhóm: tên GV + tên nhóm + phòng
+                    const key = `${teacher}||${groupName}||${room}`;
+                    if (!byGroup.has(key)) {
+                      byGroup.set(key, { teacher, groupName, room, students: [] });
+                    }
+                    byGroup.get(key).students.push(s);
                   });
                   const def = defaultSchedule[className] || {};
                   // Tiêu đề lớp (header lớn phía trên các thẻ nhóm).
@@ -3851,31 +3904,31 @@
                       <header class="phan-nhom-class-header">
                         <h2 class="phan-nhom-class-title">📚 ${this.esc(className)}</h2>
                         <div class="phan-nhom-class-meta">
-                          <span>📍 ${this.esc(def.room || "Chưa xếp")}</span>
-                          <span>⏰ ${this.esc(def.time || "Chưa xếp")}</span>
-                          <span>👥 ${students.length} HS · ${byTeacher.size} nhóm</span>
+                          <span>👥 ${students.length} HS · ${byGroup.size} nhóm</span>
                         </div>
                       </header>
                       <div class="phan-nhom-cards">`;
-                  if (byTeacher.size === 0) {
+                  if (byGroup.size === 0) {
                     html += '<div class="empty">Chưa có học sinh.</div>';
                   } else {
-                    // Đánh số nhóm theo thứ tự I, II, III, IV, V...
-                    const teacherEntries = Array.from(byTeacher.entries());
-                    teacherEntries.forEach(([teacher, list], idx) => {
-                      // Đoán tên nhóm I, II, III dựa trên thứ tự.
-                      const groupName = `Nhóm ${toRoman(idx + 1)}`;
+                    // Duyệt từng nhóm (key đã bao gồm phòng riêng)
+                    const groupEntries = Array.from(byGroup.values());
+                    groupEntries.forEach((group, idx) => {
+                      // Hiển thị tên nhóm - phòng (nếu có)
+                      const displayName = group.room
+                        ? `${group.groupName || "Nhóm " + (idx + 1)} - ${group.room}`
+                        : (group.groupName || "Nhóm " + (idx + 1));
                       html += `
                         <article class="phan-nhom-group-card" id="pn-group-${this.esc(className)}-${idx}">
                           <header class="phan-nhom-group-head">
-                            <h3 class="phan-nhom-group-name">${this.esc(groupName)}</h3>
-                            <span class="phan-nhom-group-count">${list.length} HS</span>
+                            <h3 class="phan-nhom-group-name">${this.esc(displayName)}</h3>
+                            <span class="phan-nhom-group-count">${group.students.length} HS</span>
                           </header>
                           <div class="phan-nhom-group-teacher">
-                            <span>👨‍🏫 ${this.esc(teacher)}</span>
+                            <span>👨‍🏫 ${this.esc(group.teacher)}</span>
                           </div>
                           <ol class="phan-nhom-students">
-                            ${list.map((s) => `
+                            ${group.students.map((s) => `
                               <li>
                                 <span class="pn-name">${this.esc(s.name || "")}</span>
                               </li>
@@ -6118,6 +6171,6 @@
             window.AttendanceApp.attachFirebase(firebaseApi);
         </script>
 
-    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a480b8980e3884fd',t:'MTc5MTU4Mzg4Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a480c7d0b8bba0b0',t:'MTc5MTU4NDUwOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
