@@ -306,30 +306,126 @@
             
             .search-card .input { flex: 1; }
             .search-card .btn { flex: 0 0 105px; }
-            
-            .search-results {
-              margin-bottom: 14px;
-              padding: 10px;
-              overflow-x: auto;
-              border: 1px dashed var(--pink);
-              border-radius: 9px;
-              background: #190912;
-            }
-            
-            .result-head {
-              display: flex;
-              justify-content: space-between;
-              gap: 12px;
-              margin-bottom: 8px;
-              color: var(--pink);
-              font-size: .82rem;
-              font-weight: 800;
-            }
 
-            /* Card kết quả tìm kiếm mới - hiện thông tin chi tiết HS */
-            .result-cards {
+            /* ════════════════════════════════════════════════════════════════
+               POPUP KẾT QUẢ TÌM KIẾM NỔI - tự ẩn sau 15s
+               ════════════════════════════════════════════════════════════════ */
+            .search-popup {
+              position: fixed;
+              right: 16px;
+              bottom: 16px;
+              width: min(420px, calc(100vw - 32px));
+              max-height: min(70vh, 600px);
+              background: linear-gradient(135deg, #2a1018 0%, #1a0a14 100%);
+              border: 1px solid rgba(244, 114, 182, 0.6);
+              border-radius: 12px;
+              box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(244, 114, 182, 0.2);
+              z-index: 9999;
+              display: flex;
+              flex-direction: column;
+              overflow: hidden;
+              animation: searchPopupSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            @keyframes searchPopupSlideIn {
+              from { transform: translateY(20px) scale(0.95); opacity: 0; }
+              to { transform: translateY(0) scale(1); opacity: 1; }
+            }
+            .search-popup.closing {
+              animation: searchPopupSlideOut 0.25s ease-in forwards;
+            }
+            @keyframes searchPopupSlideOut {
+              to { transform: translateY(20px) scale(0.95); opacity: 0; }
+            }
+            .search-popup-header {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              padding: 10px 12px;
+              background: linear-gradient(135deg, #3d1828 0%, #2a1018 100%);
+              border-bottom: 1px solid rgba(244, 114, 182, 0.3);
+              cursor: move;
+              user-select: none;
+            }
+            .search-popup-title {
+              font-weight: 700;
+              color: var(--pink);
+              font-size: .9rem;
+              flex: 1;
+            }
+            .search-popup-count {
+              font-size: .78rem;
+              color: #f9a8d4;
+              font-weight: 600;
+            }
+            .search-popup-actions {
+              display: flex;
+              gap: 4px;
+            }
+            .search-popup-btn {
+              background: transparent;
+              border: 1px solid rgba(244, 114, 182, 0.4);
+              color: #f9a8d4;
+              width: 28px;
+              height: 28px;
+              border-radius: 6px;
+              cursor: pointer;
+              font-size: .85rem;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              transition: background 0.15s, transform 0.15s;
+            }
+            .search-popup-btn:hover {
+              background: rgba(244, 114, 182, 0.2);
+              transform: scale(1.05);
+            }
+            .search-popup-btn.active {
+              background: rgba(245, 158, 11, 0.4);
+              color: #fbbf24;
+            }
+            .search-popup-timer {
+              height: 3px;
+              background: rgba(244, 114, 182, 0.15);
+              overflow: hidden;
+            }
+            .search-popup-timer-bar {
+              height: 100%;
+              background: linear-gradient(90deg, #f472b6 0%, #ec4899 100%);
+              width: 100%;
+              transition: width 0.1s linear;
+            }
+            .search-popup-body {
+              padding: 10px;
+              overflow-y: auto;
+              flex: 1;
               display: grid;
-              gap: 12px;
+              gap: 10px;
+            }
+            .search-popup.minimized .search-popup-body,
+            .search-popup.minimized .search-popup-timer {
+              display: none;
+            }
+            .search-popup.minimized {
+              max-height: auto;
+            }
+            @media (max-width: 520px) {
+              .search-popup {
+                right: 8px;
+                bottom: 8px;
+                width: calc(100vw - 16px);
+                max-height: 60vh;
+              }
+            }
+            /* Khi popup mở, vẫn có thể click xuyên qua nền bên ngoài */
+            .search-popup-backdrop {
+              position: fixed;
+              inset: 0;
+              background: rgba(0, 0, 0, 0.4);
+              z-index: 9998;
+              display: none;
+            }
+            .search-popup-backdrop.visible {
+              display: block;
             }
             .result-card {
               border: 1px solid rgba(244, 114, 182, 0.35);
@@ -364,6 +460,19 @@
               font-weight: 600;
               margin-left: 4px;
               vertical-align: middle;
+            }
+            .result-card .rc-phan-nhom-badge {
+              display: inline-block;
+              background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+              color: #fff;
+              font-size: .68rem;
+              padding: 2px 7px;
+              border-radius: 6px;
+              font-weight: 700;
+              margin-left: 4px;
+              vertical-align: middle;
+              letter-spacing: 0.3px;
+              box-shadow: 0 2px 6px rgba(79, 70, 229, 0.4);
             }
             .result-card .rc-status {
               font-size: .75rem;
@@ -2059,13 +2168,20 @@
             </div>
         </section>
 
-        <section id="searchResults" class="search-results" hidden>
-            <div class="result-head">
-                <span>🔎 Kết quả tìm kiếm</span>
-                <span id="resultCount"></span>
+        <!-- Popup kết quả tìm kiếm nổi - tự ẩn sau 15s -->
+        <div id="searchResults" class="search-popup" hidden>
+            <div class="search-popup-header">
+                <span class="search-popup-title">🔎 Kết quả tìm kiếm</span>
+                <span id="resultCount" class="search-popup-count"></span>
+                <div class="search-popup-actions">
+                    <button type="button" id="searchPopupPin" class="search-popup-btn" title="Ghim lại (không tự ẩn)">📌</button>
+                    <button type="button" id="searchPopupMinimize" class="search-popup-btn" title="Thu gọn">➖</button>
+                    <button type="button" id="searchPopupClose" class="search-popup-btn" title="Đóng">✕</button>
+                </div>
             </div>
-            <div id="resultBody" class="result-cards"></div>
-        </section>
+            <div class="search-popup-timer"><div id="searchPopupTimerBar" class="search-popup-timer-bar"></div></div>
+            <div id="resultBody" class="result-cards search-popup-body"></div>
+        </div>
 
         <section class="schedule-section" aria-label="Sơ đồ điểm danh lớp học">
             <div id="scheduleDayTabs" class="day-tabs">
@@ -2451,6 +2567,10 @@
                   searchInput: document.getElementById("searchInput"),
                   searchBtn: document.getElementById("searchBtn"),
                   searchResults: document.getElementById("searchResults"),
+                  searchPopupPin: document.getElementById("searchPopupPin"),
+                  searchPopupMinimize: document.getElementById("searchPopupMinimize"),
+                  searchPopupClose: document.getElementById("searchPopupClose"),
+                  searchPopupTimerBar: document.getElementById("searchPopupTimerBar"),
                   resultCount: document.getElementById("resultCount"),
                   resultBody: document.getElementById("resultBody"),
                   scheduleAuthBtn: document.getElementById("scheduleAuthBtn"),
@@ -2497,6 +2617,40 @@
                 });
                 this.dom.searchInput.addEventListener("input", () => {
                   if (!this.dom.searchInput.value.trim()) this.clearSearch();
+                });
+                // Bind nút điều khiển popup nổi.
+                if (this.dom.searchPopupClose) {
+                  this.dom.searchPopupClose.addEventListener("click", () => this.hideSearchPopup());
+                }
+                if (this.dom.searchPopupMinimize) {
+                  this.dom.searchPopupMinimize.addEventListener("click", () => {
+                    const popup = this.dom.searchResults;
+                    if (!popup) return;
+                    const willMinimize = !popup.classList.contains("minimized");
+                    popup.classList.toggle("minimized", willMinimize);
+                    this.dom.searchPopupMinimize.textContent = willMinimize ? "➕" : "➖";
+                    this.dom.searchPopupMinimize.title = willMinimize ? "Mở rộng" : "Thu gọn";
+                    if (!willMinimize) this.startSearchPopupTimer();
+                  });
+                }
+                if (this.dom.searchPopupPin) {
+                  this.dom.searchPopupPin.addEventListener("click", () => {
+                    const popup = this.dom.searchResults;
+                    if (!popup) return;
+                    const newPinned = popup.dataset.pinned !== "1";
+                    this.pinSearchPopup(newPinned);
+                  });
+                }
+                // Bỏ ghim khi user tương tác (focus vào input hoặc gõ lại).
+                // Click ra ngoài popup cũng bỏ ghim.
+                document.addEventListener("mousedown", (event) => {
+                  const popup = this.dom.searchResults;
+                  if (!popup || popup.hidden) return;
+                  if (popup.dataset.pinned !== "1") return;
+                  if (!popup.contains(event.target) && !this.dom.searchInput.contains(event.target)) {
+                    // Bỏ ghim khi user click ra ngoài.
+                    this.pinSearchPopup(false);
+                  }
                 });
             
                 this.dom.scheduleAuthBtn.addEventListener("click", () => this.toggleScheduleAdmin());
@@ -5334,6 +5488,17 @@
                 });
 
                 this.dom.resultCount.textContent = `${mergedMatches.length} kết quả`;
+                // ════════════════════════════════════════════════════════════════
+                // SẮP XẾP: Ưu tiên HS có phân nhóm lên đầu, sau đó là HS lớp thường.
+                // Trong cùng nhóm (PN / không PN), sắp theo alphabet tên để ổn định.
+                // ════════════════════════════════════════════════════════════════
+                mergedMatches.sort((a, b) => {
+                  // HS phân nhóm lên trước (return -1 nếu a có PN mà b không).
+                  if (a.isPhanNhom && !b.isPhanNhom) return -1;
+                  if (!a.isPhanNhom && b.isPhanNhom) return 1;
+                  // Trong cùng nhóm, sắp theo tên alphabet.
+                  return this.fold(a.displayName).localeCompare(this.fold(b.displayName), "vi");
+                });
                 // Render card thay vì bảng: mỗi HS = 1 card với thông tin chi tiết + nút hành động.
                 // Nếu cùng tên + cùng lớp -> gộp thành 1 card, hiển thị thông tin từ cả 2 record.
                 this.dom.resultBody.innerHTML = mergedMatches.map((merged) => {
@@ -5375,9 +5540,12 @@
                   const isAssistant = this.role === "assistant";
                   const parentPhoneDigits = this.normalizePhone(phoneSource.phone);
                   const isRealPhone = /^\d{9,}$/.test(parentPhoneDigits);
-                  const parentPhoneText = isAssistant
-                    ? this.displayPhone(phoneSource.phone)
-                    : this.maskedDisplayPhone(phoneSource.phone);
+                  // Hiển thị SĐT:
+                  // - Trợ giảng: luôn hiện (đầy đủ)
+                  // - Role khác: chỉ hiện khi SĐT hợp lệ (>= 9 số)
+                  // - Ẩn nếu SĐT không hợp lệ và không phải trợ giảng
+                  // Chỉ trợ giảng mới thấy SĐT phụ huynh. Role khác: ẩn hẳn.
+                  const parentPhoneText = isAssistant ? this.displayPhone(phoneSource.phone) : "";
                   // SĐT GV phụ trách.
                   const teacherPhoneDigits = teacherName ? this.normalizePhone(teacherPhoneMap[teacherName] || "") : "";
                   const canCallParent = isRealPhone;
@@ -5387,31 +5555,97 @@
                   return `
                     <article class="result-card" data-class-key="${this.esc(classKey)}" data-uid="${this.esc(primary.uid || primary.uniqueKey || "")}" data-all-uids="${this.esc(allUids)}">
                       <div class="rc-header">
-                        <div class="rc-name">${this.esc(displayName)}${students.length > 1 ? ` <span class="rc-merged-badge" title="Gộp ${students.length} record trùng tên">×${students.length}</span>` : ""}</div>
+                        <div class="rc-name">${this.esc(displayName)}${isPhanNhom ? ` <span class="rc-phan-nhom-badge" title="Học sinh thuộc phân nhóm">📋 PN</span>` : ""}${students.length > 1 ? ` <span class="rc-merged-badge" title="Gộp ${students.length} record trùng tên">×${students.length}</span>` : ""}</div>
                         <span class="rc-status ${statusClass}">${this.esc(statusLabel)}</span>
                       </div>
                       <dl class="rc-info">
                         <dt>Lớp</dt>
                         <dd>${this.esc(classData.name || classKey)}</dd>
                         ${isPhanNhom ? `<dt>Phân nhóm</dt><dd class="rc-phan-nhom">${this.esc(teacherName || "(HS thuộc phân nhóm)")}${groupInfo ? " · " + this.esc(groupInfo) : (roomFromConfig ? " · Phòng " + this.esc(roomFromConfig) : "")}</dd>` : ""}
-                        <dt>SĐT phụ huynh</dt>
-                        <dd>${this.esc(parentPhoneText)}</dd>
-                        ${canCallTeacher ? `<dt>GV phụ trách</dt><dd>${this.esc(teacherName)}</dd>` : ""}
+                        ${isAssistant ? `<dt>SĐT phụ huynh</dt><dd>${this.esc(parentPhoneText)}</dd>` : ""}
+                        ${(canCallTeacher && isAssistant) ? `<dt>GV phụ trách</dt><dd>${this.esc(teacherName)}</dd>` : ""}
                       </dl>
                       <div class="rc-actions">
-                        <button type="button" class="rc-btn rc-btn-call-parent" data-action="rc-call-parent" data-phone="${this.esc(parentPhoneDigits)}" data-name="${this.esc(displayName)}" ${canCallParent ? "" : "disabled"} title="${isAssistant ? "Gọi cho phụ huynh" : (isRealPhone ? "Chỉ Trợ giảng mới gọi được" : "Chưa có SĐT phụ huynh")}">📞 Gọi phụ huynh</button>
-                        <button type="button" class="rc-btn rc-btn-call-teacher" data-action="rc-call-teacher" data-phone="${this.esc(teacherPhoneDigits)}" data-name="${this.esc(teacherName)}" ${canCallTeacher ? "" : "disabled"} title="${isAssistant ? "Gọi cho giáo viên" : (teacherPhoneDigits ? "Chỉ Trợ giảng mới gọi được" : "Chưa có SĐT GV")}">📞 Gọi giáo viên</button>
+                        ${isAssistant ? `<button type="button" class="rc-btn rc-btn-call-parent" data-action="rc-call-parent" data-phone="${this.esc(parentPhoneDigits)}" data-name="${this.esc(displayName)}" ${canCallParent ? "" : "disabled"} title="${canCallParent ? "Gọi cho phụ huynh" : "SĐT không hợp lệ"}">📞 Gọi phụ huynh</button>` : ""}
+                        ${isAssistant ? `<button type="button" class="rc-btn rc-btn-call-teacher" data-action="rc-call-teacher" data-phone="${this.esc(teacherPhoneDigits)}" data-name="${this.esc(teacherName)}" ${canCallTeacher ? "" : "disabled"} title="${canCallTeacher ? "Gọi cho giáo viên" : "SĐT GV chưa có"}">📞 Gọi giáo viên</button>` : ""}
                         ${isPhanNhom ? `<button type="button" class="rc-btn rc-btn-goto-phan-nhom" data-action="goto-phan-nhom" data-class-key="${this.esc(classKey)}" data-uid="${this.esc(primary.uid || primary.uniqueKey || "")}" data-name="${this.esc(displayName)}" title="Mở vị trí trong phân nhóm">📍 Vị trí phân nhóm</button>` : ""}
                         <button type="button" class="rc-btn rc-btn-goto-class" data-action="goto-student" data-class-token="${this.esc(classToken)}" data-uid="${this.esc(primary.uid || "")}" title="Mở danh sách lớp">📋 Mở lớp</button>
                       </div>
                     </article>`;
                 }).join("");
                 this.dom.searchResults.hidden = false;
+                // Khởi động timer tự ẩn sau 15 giây (trừ khi đã ghim).
+                this.startSearchPopupTimer();
+                // Mở popup nổi: nếu đang thu gọn thì bung ra, nếu ẩn thì hiện.
+                if (this.dom.searchResults.classList.contains("minimized")) {
+                  this.dom.searchResults.classList.remove("minimized");
+                  if (this.dom.searchPopupMinimize) {
+                    this.dom.searchPopupMinimize.textContent = "➖";
+                    this.dom.searchPopupMinimize.title = "Thu gọn";
+                  }
+                }
                 // Cuộn tới khu vực kết quả tìm kiếm (không cuộn tới HS trong lớp nữa).
                 if (scroll) {
-                  setTimeout(() => {
-                    this.dom.searchResults?.scrollIntoView({ behavior: "smooth", block: "start" });
-                  }, 50);
+                  // Bỏ scrollIntoView vì giờ là popup nổi.
+                }
+              },
+
+              /*
+               * Bật/tắt timer tự ẩn popup kết quả tìm kiếm.
+               * Nếu user ghim (pin) thì timer không chạy.
+               */
+              startSearchPopupTimer(durationMs = 15000) {
+                this.stopSearchPopupTimer();
+                const popup = this.dom.searchResults;
+                const bar = this.dom.searchPopupTimerBar;
+                if (!popup || !bar) return;
+                // Nếu đã ghim, không chạy timer.
+                if (popup.dataset.pinned === "1") return;
+                const startTime = Date.now();
+                bar.style.width = "100%";
+                this._searchPopupTimer = setInterval(() => {
+                  const elapsed = Date.now() - startTime;
+                  const remaining = Math.max(0, durationMs - elapsed);
+                  bar.style.width = (remaining / durationMs * 100) + "%";
+                  if (remaining <= 0) {
+                    this.stopSearchPopupTimer();
+                    this.hideSearchPopup();
+                  }
+                }, 100);
+              },
+
+              stopSearchPopupTimer() {
+                if (this._searchPopupTimer) {
+                  clearInterval(this._searchPopupTimer);
+                  this._searchPopupTimer = null;
+                }
+              },
+
+              hideSearchPopup() {
+                const popup = this.dom.searchResults;
+                if (!popup) return;
+                popup.classList.add("closing");
+                setTimeout(() => {
+                  popup.hidden = true;
+                  popup.classList.remove("closing");
+                  this.clearSearch();
+                }, 250);
+              },
+
+              pinSearchPopup(pinned) {
+                const popup = this.dom.searchResults;
+                if (!popup) return;
+                popup.dataset.pinned = pinned ? "1" : "0";
+                const pinBtn = this.dom.searchPopupPin;
+                if (pinBtn) {
+                  pinBtn.classList.toggle("active", pinned);
+                  pinBtn.title = pinned ? "Bỏ ghim (sẽ tự ẩn)" : "Ghim lại (không tự ẩn)";
+                }
+                if (pinned) {
+                  this.stopSearchPopupTimer();
+                  if (this.dom.searchPopupTimerBar) this.dom.searchPopupTimerBar.style.width = "100%";
+                } else {
+                  this.startSearchPopupTimer();
                 }
               },
 
@@ -6727,6 +6961,6 @@
             window.AttendanceApp.attachFirebase(firebaseApi);
         </script>
 
-    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4810fab9d6abd83',t:'MTc5MTU4NzQ1Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a481256d28722105',t:'MTc5MTU4ODM0Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
