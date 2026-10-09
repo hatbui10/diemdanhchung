@@ -499,6 +499,11 @@
               color: #c084fc;
               font-weight: 600;
             }
+            .result-card .rc-schedule-line {
+              font-size: .82rem;
+              color: #d1d5db;
+              padding: 2px 0;
+            }
             .result-card .rc-actions {
               display: flex;
               gap: 6px;
@@ -2345,6 +2350,66 @@
                 "Q Hung + Tram Anh": ""
               },
               /*
+               * Sổ SĐT giáo viên TỔNG - dùng cho nút "Gọi giáo viên" ở cả HS phân nhóm và HS lớp thường.
+               * Nếu tên GV nằm trong bảng này, nút gọi sẽ hoạt động.
+               * Có thể tra cứu cả theo tên chính xác hoặc tên rút gọn.
+               * Để trống nếu chưa có SĐT.
+               */
+              TEACHER_PHONE_BOOK: {
+                // CAN-L11
+                "Hưng/QA": "",
+                "Hung/QA": "",
+                "Hà My/Trầm Anh": "",
+                "Ha My/Tram Anh": "",
+                "Bảo Anh": "",
+                "Bao Anh": "",
+                "Mạnh Toàn": "",
+                "Manh Toan": "",
+                // WONDER
+                "Quỳnh Anh": "",
+                "Quynh Anh": "",
+                "Trầm Anh": "",
+                "Tram Anh": "",
+                "Hồng Ngọc": "",
+                "Hong Ngoc": "",
+                "Bảo Anh + Trúc Anh": "",
+                "Bao Anh + Truc Anh": "",
+                // WIN-L10
+                "Hà My": "",
+                "Ha My": "",
+                "Q Hưng + Trầm Anh": "",
+                "Q Hung + Tram Anh": "",
+                // GV lớp thường
+                "Trang": "",
+                "My": "",
+                "Hà": "",
+                "Hương": "",
+                "Linh": "",
+                "Thảo": "",
+                "Phương": "",
+                // Tên đầy đủ (lấy từ sheet lịch học)
+                "Ngô Thị Thu Hằng": "",
+                "Ngô Hằng": "",
+                "Hằng": "",
+                // Tên phổ biến khác
+                "Anh": "",
+                "Chi": "",
+                "Duyên": "",
+                "Giang": "",
+                "Hoa": "",
+                "Lan": "",
+                "Mai": "",
+                "Nga": "",
+                "Oanh": "",
+                "Quyên": "",
+                "Thanh": "",
+                "Thúy": "",
+                "Trinh": "",
+                "Tú": "",
+                "Vân": "",
+                "Yến": ""
+              },
+              /*
                * Bảng phòng học/giờ học gợi ý cho từng lớp phân nhóm.
                * Mỗi lớp có thể có NHIỀU NHÓM với phòng/giờ khác nhau.
                * Key "default" áp dụng cho nhóm chưa có config cụ thể.
@@ -3416,7 +3481,36 @@
                   .sort((a, b) => Math.abs(a.normalized.length - wanted.length) - Math.abs(b.normalized.length - wanted.length))[0];
                 return partial ? [partial.key, partial.data] : null;
               },
-            
+
+              /*
+               * Tìm thông tin lịch học cho 1 lớp.
+               * Trả về mảng [{ day, time, room, teacher, teacherPhone, session }] - 1 lớp có thể học nhiều thứ.
+               */
+              getScheduleInfoForClass(classKey) {
+                if (!this.schedule || !classKey) return [];
+                const entry = this.findClassEntryByName(classKey);
+                if (!entry) return [];
+                const [, classData] = entry;
+                const wanted = this.normalizeClassName(classData.name || classKey);
+                const dayMap = { thu2: "Thứ 2", thu3: "Thứ 3", thu4: "Thứ 4", thu5: "Thứ 5", thu6: "Thứ 6", thu7: "Thứ 7", cn: "Chủ nhật" };
+                const results = [];
+                Object.entries(this.schedule).forEach(([day, items]) => {
+                  (items || []).forEach(item => {
+                    if (this.normalizeClassName(item.lopName) === wanted) {
+                      results.push({
+                        day: dayMap[day] || day,
+                        time: item.time || item.khungGio || "",
+                        room: item.room || item.phong || "",
+                        teacher: item.gv || item.teacher || item.gvName || "",
+                        teacherPhone: item.gvPhone || item.teacherPhone || "",
+                        session: item.session || ""
+                      });
+                    }
+                  });
+                });
+                return results;
+              },
+
               syncScheduleClassNamesWithDatabase() {
                 if (!Object.keys(this.db).length) return false;
                 let changed = false;
@@ -5544,12 +5638,72 @@
                   // - Trợ giảng: luôn hiện (đầy đủ)
                   // - Role khác: chỉ hiện khi SĐT hợp lệ (>= 9 số)
                   // - Ẩn nếu SĐT không hợp lệ và không phải trợ giảng
-                  // Chỉ trợ giảng mới thấy SĐT phụ huynh. Role khác: ẩn hẳn.
-                  const parentPhoneText = isAssistant ? this.displayPhone(phoneSource.phone) : "";
-                  // SĐT GV phụ trách.
-                  const teacherPhoneDigits = teacherName ? this.normalizePhone(teacherPhoneMap[teacherName] || "") : "";
+                  // Tất cả role đều hiển thị SĐT dạng mask 4 số giữa (bảo mật).
+                  // Nút gọi vẫn hoạt động bình thường với SĐT thật.
+                  const parentPhoneText = isRealPhone
+                    ? this.maskedDisplayPhone(phoneSource.phone)
+                    : "";
+                  // Lấy thông tin lịch học cho HS không thuộc phân nhóm (hiện Thứ, Giờ, Phòng, GV).
+                  let scheduleInfoList = [];
+                  let classTeacherName = "";
+                  let classTeacherPhone = "";
+                  if (!isPhanNhom) {
+                    scheduleInfoList = this.getScheduleInfoForClass(classKey) || [];
+                    // Lấy GV + SĐT đầu tiên từ lịch học.
+                    for (const sch of scheduleInfoList) {
+                      if (sch.teacher) {
+                        classTeacherName = sch.teacher;
+                        // ƯU TIÊN: lấy SĐT trực tiếp từ lịch học (đã có sẵn).
+                        if (sch.teacherPhone) {
+                          classTeacherPhone = this.normalizePhone(sch.teacherPhone);
+                        }
+                        break;
+                      }
+                    }
+                    // Nếu lịch học chưa có SĐT, tra từ sổ SĐT tổng. Thử nhiều cách match.
+                    if (classTeacherName && !classTeacherPhone) {
+                      const phoneBook = this.TEACHER_PHONE_BOOK || {};
+                      const teacherNameTrim = classTeacherName.trim();
+                      // 1. Thử tra chính xác tên đầy đủ.
+                      if (phoneBook[teacherNameTrim]) {
+                        classTeacherPhone = phoneBook[teacherNameTrim];
+                      } else {
+                        // 2. Thử match từng phần tên (tách theo khoảng trắng hoặc dấu +).
+                        const parts = teacherNameTrim.split(/[+\s]+/).filter(Boolean);
+                        for (let i = parts.length - 1; i >= 0; i--) {
+                          const part = parts[i];
+                          if (phoneBook[part]) {
+                            classTeacherPhone = phoneBook[part];
+                            break;
+                          }
+                        }
+                        // 3. Thử ghép 2 từ cuối.
+                        if (!classTeacherPhone && parts.length >= 2) {
+                          const lastTwo = parts.slice(-2).join(" ");
+                          if (phoneBook[lastTwo]) classTeacherPhone = phoneBook[lastTwo];
+                        }
+                        // 4. Thử match contains.
+                        if (!classTeacherPhone) {
+                          for (const key of Object.keys(phoneBook)) {
+                            if (!key) continue;
+                            if (teacherNameTrim.includes(key) || key.includes(parts[parts.length - 1])) {
+                              if (phoneBook[key]) {
+                                classTeacherPhone = phoneBook[key];
+                                break;
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                  // SĐT GV phụ trách: ưu tiên từ phân nhóm, sau đó từ lịch học lớp thường.
+                  const effectiveTeacherName = isPhanNhom ? teacherName : classTeacherName;
+                  const effectiveTeacherPhone = isPhanNhom
+                    ? (teacherName ? this.normalizePhone(teacherPhoneMap[teacherName] || "") : "")
+                    : this.normalizePhone(classTeacherPhone || "");
                   const canCallParent = isRealPhone;
-                  const canCallTeacher = !!teacherPhoneDigits;
+                  const canCallTeacher = !!effectiveTeacherPhone;
                   // Lưu tất cả uids của HS trong group để gotoStudent có thể mở đúng lớp.
                   const allUids = students.map(s => s.uid || s.uniqueKey || "").join(",");
                   return `
@@ -5562,12 +5716,13 @@
                         <dt>Lớp</dt>
                         <dd>${this.esc(classData.name || classKey)}</dd>
                         ${isPhanNhom ? `<dt>Phân nhóm</dt><dd class="rc-phan-nhom">${this.esc(teacherName || "(HS thuộc phân nhóm)")}${groupInfo ? " · " + this.esc(groupInfo) : (roomFromConfig ? " · Phòng " + this.esc(roomFromConfig) : "")}</dd>` : ""}
-                        ${isAssistant ? `<dt>SĐT phụ huynh</dt><dd>${this.esc(parentPhoneText)}</dd>` : ""}
+                        ${!isPhanNhom && scheduleInfoList.length > 0 ? '<dt>Lịch học</dt><dd>' + scheduleInfoList.map(s => '<div class="rc-schedule-line">📅 ' + this.esc(s.day) + (s.time ? ' · ⏰ ' + this.esc(s.time) : '') + (s.room ? ' · 📍 ' + this.esc(s.room) : '') + (s.teacher ? ' · 👨‍🏫 ' + this.esc(s.teacher) : '') + '</div>').join('') + '</dd>' : ''}
+                        ${parentPhoneText ? `<dt>SĐT phụ huynh</dt><dd>${this.esc(parentPhoneText)}</dd>` : ""}
                         ${(canCallTeacher && isAssistant) ? `<dt>GV phụ trách</dt><dd>${this.esc(teacherName)}</dd>` : ""}
                       </dl>
                       <div class="rc-actions">
                         ${isAssistant ? `<button type="button" class="rc-btn rc-btn-call-parent" data-action="rc-call-parent" data-phone="${this.esc(parentPhoneDigits)}" data-name="${this.esc(displayName)}" ${canCallParent ? "" : "disabled"} title="${canCallParent ? "Gọi cho phụ huynh" : "SĐT không hợp lệ"}">📞 Gọi phụ huynh</button>` : ""}
-                        ${isAssistant ? `<button type="button" class="rc-btn rc-btn-call-teacher" data-action="rc-call-teacher" data-phone="${this.esc(teacherPhoneDigits)}" data-name="${this.esc(teacherName)}" ${canCallTeacher ? "" : "disabled"} title="${canCallTeacher ? "Gọi cho giáo viên" : "SĐT GV chưa có"}">📞 Gọi giáo viên</button>` : ""}
+                        ${isAssistant ? `<button type="button" class="rc-btn rc-btn-call-teacher" data-action="rc-call-teacher" data-phone="${this.esc(effectiveTeacherPhone)}" data-name="${this.esc(effectiveTeacherName || 'Giáo viên')}" ${canCallTeacher ? "" : "disabled"} title="${canCallTeacher ? "Gọi cho " + this.esc(effectiveTeacherName || 'giáo viên') : "SĐT GV chưa có"}">📞 Gọi giáo viên</button>` : ""}
                         ${isPhanNhom ? `<button type="button" class="rc-btn rc-btn-goto-phan-nhom" data-action="goto-phan-nhom" data-class-key="${this.esc(classKey)}" data-uid="${this.esc(primary.uid || primary.uniqueKey || "")}" data-name="${this.esc(displayName)}" title="Mở vị trí trong phân nhóm">📍 Vị trí phân nhóm</button>` : ""}
                         <button type="button" class="rc-btn rc-btn-goto-class" data-action="goto-student" data-class-token="${this.esc(classToken)}" data-uid="${this.esc(primary.uid || "")}" title="Mở danh sách lớp">📋 Mở lớp</button>
                       </div>
@@ -6961,6 +7116,6 @@
             window.AttendanceApp.attachFirebase(firebaseApi);
         </script>
 
-    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a481256d28722105',t:'MTc5MTU4ODM0Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4813d548db5dda2',t:'MTc5MTU4OTMyMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
