@@ -5414,15 +5414,26 @@
                 Object.values(this.db).forEach(classData => {
                   (classData.students || []).forEach(student => {
                     student.status = "present";
-                    student.note = "";
+                    // GIỮ LẠI ghi chú "Phân nhóm - X" để không mất thông tin GV phụ trách.
+                    // Chỉ xóa ghi chú nếu KHÔNG phải ghi chú phân nhóm.
+                    if (student.note && !/^phân nhóm\s*-/i.test(String(student.note).trim())) {
+                      student.note = "";
+                    }
                     student.isExcused = false;
                     student.isNewStudentFlag = false;
                     student.absentAt = null;
                     delete student.absentTimestamp;
                   });
                   classData.isFull = false;
-                  classData.hasNewStudent = false;
+                  // Giữ nguyên cờ hasNewStudent vì nó phụ thuộc vào note "Phân nhóm - X".
+                  // (Sẽ được tính lại từ ghi chú nếu cần)
                   classData.lastUpdateTime = this.formatDateTime();
+                });
+                // Tính lại hasNewStudent dựa trên ghi chú phân nhóm (nếu có).
+                Object.values(this.db).forEach(classData => {
+                  classData.hasNewStudent = (classData.students || []).some(s =>
+                    this.isNewStudent(s) || /^phân nhóm\s*-/i.test(String(s.note || "").trim())
+                  );
                 });
               },
 
@@ -6107,6 +6118,6 @@
             window.AttendanceApp.attachFirebase(firebaseApi);
         </script>
 
-    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a480b6538e0784fd',t:'MTc5MTU4Mzc5Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a480b8980e3884fd',t:'MTc5MTU4Mzg4Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
