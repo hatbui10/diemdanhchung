@@ -4993,7 +4993,20 @@
                       app.setProgress(0, false);
                       return;
                     }
-            
+
+                    // ════════════════════════════════════════════════════════════════════
+                    //  BẢO TOÀN DỮ LIỆU PHÂN NHÓM: Lưu 3 lớp phân nhóm cũ (nếu có)
+                    //  để phục hồi sau khi import file Excel mới, tránh mất dữ liệu.
+                    // ════════════════════════════════════════════════════════════════════
+                    const PHAN_NHOM_CLASSES = ["CAN-L11", "WONDER", "WIN-L10"];
+                    const phanNhomBackup = {};
+                    PHAN_NHOM_CLASSES.forEach(name => {
+                      if (app.db && app.db[name]) {
+                        // Deep clone để tránh tham chiếu chung
+                        phanNhomBackup[name] = JSON.parse(JSON.stringify(app.db[name]));
+                      }
+                    });
+
                     // Giống code gốc: tạo database hoàn toàn mới khi nạp file.
                     const importedDatabase = {};
                     const sheetStudentCounts = Object.fromEntries(
@@ -5066,10 +5079,38 @@
                            */
                           app.db = app.normalizeDatabase(importedDatabase);
                           app.filename = file.name;
+
+                          // ═══════════════════════════════════════════════════════════
+                          //  PHỤC HỒI DỮ LIỆU PHÂN NHÓM: Nếu file Excel mới KHÔNG có
+                          //  sheet "Phan nhom" hoặc lớp phân nhóm bị thiếu, ghép lại
+                          //  dữ liệu cũ từ backup để không bị mất.
+                          // ═══════════════════════════════════════════════════════════
+                          PHAN_NHOM_CLASSES.forEach(name => {
+                            if (phanNhomBackup[name] && !app.db[name]) {
+                              // Lớp phân nhóm không có trong file mới -> phục hồi từ backup.
+                              app.db[name] = phanNhomBackup[name];
+                            } else if (phanNhomBackup[name] && app.db[name] && !app.db[name].students.length) {
+                              // Lớp có trong file mới nhưng rỗng -> phục hồi từ backup.
+                              app.db[name] = phanNhomBackup[name];
+                            } else if (phanNhomBackup[name] && app.db[name] && app.db[name].students.length) {
+                              // Lớp có dữ liệu trong file mới - giữ nguyên dữ liệu mới.
+                              // (Nếu muốn giữ dữ liệu cũ thì dùng phanNhomBackup[name])
+                            }
+                          });
+                          // Reset cache Firebase để ép buộc gửi dữ liệu mới lên server
+                          // (đảm bảo các thiết bị khác nhận được dữ liệu phân nhóm đã phục hồi).
+                          app._lastSavedPayload = "";
+                          app._lastSavedSchedule = "";
+                          // Lưu ngay vào localStorage để F5 không bị mất
+                          app.persistLocal();
+
                           app.openAddForms.clear();
                           const scheduleNamesChanged = app.syncScheduleClassNamesWithDatabase();
                           app.initScheduleDropdowns();
                           app.persistLocal();
+                          // Đẩy dữ liệu lên Firebase ngay để các thiết bị khác đồng bộ
+                          app.queueAttendanceSave(0);
+                          app.queueScheduleSave(0);
                           app.renderSchedule();
 
                           // Nếu vừa nạp từ sheet phân nhóm, tự động mở nhóm THPT
@@ -5115,7 +5156,13 @@
                               }
                             }, 300);
                             app.showToast(
-                              `Đã nạp ${phanNhomClassKeys.length} lớp phân nhóm: ${phanNhomClassKeys.join(", ")}`
+                              `Đã nạp ${phanNhomClassKeys.length} lớp phân nhóm: ${phanNhomClassKeys.join(", ")} - đang đồng bộ Firebase...`
+                            );
+                          } else if (phanNhomBackup && Object.keys(phanNhomBackup).length) {
+                            // Trường hợp file Excel mới KHÔNG có sheet phân nhóm nhưng vẫn
+                            // giữ được dữ liệu phân nhóm cũ -> thông báo.
+                            app.showToast(
+                              `Đã giữ lại ${Object.keys(phanNhomBackup).length} lớp phân nhóm từ dữ liệu trước - đang đồng bộ Firebase...`
                             );
                           }
             
@@ -6060,6 +6107,6 @@
             window.AttendanceApp.attachFirebase(firebaseApi);
         </script>
 
-    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a480abba7aca5dd6',t:'MTc5MTU4MzM1OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a480b6538e0784fd',t:'MTc5MTU4Mzc5Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
