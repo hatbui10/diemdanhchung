@@ -2864,6 +2864,12 @@
                     description: "Nhập mật khẩu quản lý để mở khóa chức năng tải file Excel. Sau khi nhập đúng, khu vực tải file sẽ tự động hiện ra.",
                     placeholder: "Nhập mật khẩu tải Excel...",
                     onSuccess: () => {
+                      // Mở tải Excel thì khóa chế độ xếp lịch lại
+                      if (this.scheduleAdminUnlocked) {
+                        this.scheduleAdminUnlocked = false;
+                        this.dom.scheduleAuthBtn.textContent = "🔐 Mở khóa xếp lịch";
+                        this.renderSchedule();
+                      }
                       this.uploadUnlocked = true;
                       this.dom.uploadCard.hidden = false;
                       this.dom.uploadActions.hidden = false;
@@ -3627,6 +3633,8 @@
                   description: "Nhập mật khẩu quản lý để bật chế độ sửa lịch. Sau khi nhập đúng, bạn có thể thêm/sửa/xóa thẻ lịch.",
                   placeholder: "Nhập mật khẩu...",
                   onSuccess: () => {
+                    // Mở xếp lịch thì khóa tải Excel lại
+                    this.closeUploadPanel();
                     this.scheduleAdminUnlocked = true;
                     this.dom.scheduleAuthBtn.textContent = "🔒 Khóa xếp lịch";
                     this.renderSchedule();
@@ -7625,7 +7633,7 @@
         </script>
 
         <script>
-            (function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4913c982b6306a5',t:'MTc5MTc1NzA2NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
+            (function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a49141228ea804be',t:'MTc5MTc1NzI1MA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
         </script>
     </body>
 
