@@ -306,7 +306,7 @@
             
             .search-card .input { flex: 1; }
             .search-card .btn { flex: 0 0 105px; }
-
+            
             /* ════════════════════════════════════════════════════════════════
                POPUP KẾT QUẢ TÌM KIẾM NỔI - tự ẩn sau 15s
                ════════════════════════════════════════════════════════════════ */
@@ -1045,7 +1045,7 @@
               border-color: var(--yellow);
               box-shadow: 0 0 13px rgba(255, 213, 74, .35);
             }
-
+            
             /* Nút "Xem vị trí trong phân nhóm" - hiện trong kết quả tìm kiếm */
             .phan-nhom-link {
               background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
@@ -1063,7 +1063,7 @@
               transform: translateY(-1px);
               box-shadow: 0 4px 10px rgba(79, 70, 229, 0.4);
             }
-
+            
             /* Highlight HS trong tab phân nhóm khi click từ tìm kiếm */
             .phan-nhom-students li.search-hit {
               background: rgba(255, 213, 74, 0.3);
@@ -1262,16 +1262,16 @@
               background: #2563eb;
               box-shadow: 0 0 11px rgba(59,130,246,.35);
             }
-
+            
             /* Nhãn "Hôm nay" ghim ở góc trên bên phải của tab ngày hiện tại. */
             .day-tabs {
               padding: 13px 1px 8px;
             }
-
+            
             .day-tab {
               position: relative;
             }
-
+            
             .day-tab .today-badge {
               position: absolute;
               top: -8px;
@@ -1286,7 +1286,7 @@
               background: linear-gradient(135deg, var(--yellow), #ffb700);
               box-shadow: 0 0 8px rgba(255, 213, 74, .55);
             }
-
+            
             .day-tab.active .today-badge {
               background: linear-gradient(135deg, #ffffff, var(--cyan));
               box-shadow: 0 0 9px rgba(0, 233, 255, .6);
@@ -1330,7 +1330,7 @@
               gap: 11px;
               align-items: start;
             }
-
+            
             /* Nút "Danh sách lớp" ở đầu mỗi tab thứ - bấm mới hiện popup */
             .day-summary-toggle-wrap {
               grid-column: 1 / -1;
@@ -1865,7 +1865,7 @@
               background: linear-gradient(135deg, #ffd54a, #ff9f1c) !important;
               box-shadow: 0 0 10px rgba(255, 213, 74, .35);
             }
-
+            
             .phan-nhom-tab {
               color: #00e9ff !important;
               border-color: var(--cyan) !important;
@@ -1937,22 +1937,42 @@
               align-items: center;
               justify-content: space-between;
               gap: 6px;
-              padding-bottom: 6px;
-              border-bottom: 1px dashed rgba(0, 233, 255, .35);
+              padding: 8px 12px;
+              border-bottom: 2px solid rgba(251, 191, 36, 0.5);
+              background: linear-gradient(135deg, rgba(251, 191, 36, 0.12) 0%, rgba(245, 158, 11, 0.05) 100%);
+              border-radius: 8px 8px 0 0;
             }
             .phan-nhom-group-name {
-              color: var(--yellow);
-              font-size: 1rem;
+              color: #fbbf24;
+              font-size: 1.05rem;
+              font-weight: 700;
+              text-shadow: 0 1px 3px rgba(251, 191, 36, 0.3);
               margin: 0;
               font-weight: 800;
             }
             .phan-nhom-group-count {
-              color: var(--pink);
-              font-size: .82rem;
-              font-weight: 700;
-              background: rgba(255, 38, 136, .15);
-              padding: 2px 8px;
+              color: #ffffff;
+              font-size: .9rem;
+              font-weight: 800;
+              background: linear-gradient(135deg, #ec4899 0%, #f43f5e 50%, #f97316 100%);
+              padding: 4px 12px;
               border-radius: 999px;
+              box-shadow: 0 2px 8px rgba(236, 72, 153, 0.5), inset 0 1px 0 rgba(255,255,255,0.3);
+              text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            }
+            .pn-teacher-text {
+              color: #fbbf24;
+              font-weight: 700;
+              font-size: .95rem;
+              white-space: nowrap;
+              text-shadow: 0 1px 3px rgba(251, 191, 36, 0.4);
+            }
+            .pn-time-text {
+              color: #60a5fa;
+              font-weight: 600;
+              font-size: .9rem;
+              white-space: nowrap;
+              text-shadow: 0 1px 3px rgba(96, 165, 250, 0.4);
             }
             .phan-nhom-group-teacher {
               color: var(--green);
@@ -2074,7 +2094,7 @@
               .upload-actions { grid-template-columns: 1fr; }
               th:nth-child(2), td:nth-child(2) { display: none; }
             }
-        
+                    
             /* ===== Cảnh báo khi trình duyệt KHÔNG lưu được dữ liệu ===== */
             .storage-warn {
               margin: 0 0 14px;
@@ -2088,10 +2108,10 @@
               background: rgba(255, 77, 95, .16);
               box-shadow: 0 0 16px rgba(255, 77, 95, .28);
             }
-
+            
             .storage-warn b { display: block; margin-bottom: 5px; color: var(--danger); font-size: .98rem; }
             .storage-warn code { color: var(--yellow); }
-
+            
             .backup-btn {
               padding: 9px 15px;
               color: var(--cyan);
@@ -2101,7 +2121,7 @@
               background: rgba(0, 233, 255, .12);
               box-shadow: 0 0 12px rgba(0, 233, 255, .22);
             }
-
+            
             .backup-btn.warn { color: var(--yellow); border-color: var(--yellow); background: rgba(255, 213, 74, .14); }
         </style>
     </head>
@@ -2110,7 +2130,7 @@
         <div id="storageWarn" class="storage-warn" role="alert" hidden>
             <b>⚠ Không lưu được dữ liệu trên thiết bị này — điểm danh sẽ mất nếu trang được tải lại</b>
             <span>Trình duyệt hiện tại đang chặn hoặc không giữ được <code>localStorage</code> (bản xem trước trong khung sandbox, chế độ ẩn danh/riêng tư, chặn cookie trang web, hết dung lượng…).
-            Vì vậy mỗi khi trang được tải lại (bấm ↻ Tải lại trang, đóng rồi mở lại tab, hoặc trình duyệt tự nạp lại) là toàn bộ điểm danh sẽ biến mất.</span><br>
+                Vì vậy mỗi khi trang được tải lại (bấm ↻ Tải lại trang, đóng rồi mở lại tab, hoặc trình duyệt tự nạp lại) là toàn bộ điểm danh sẽ biến mất.</span><br>
             <span>Cách xử lý: mở file bằng trình duyệt thật (Chrome / Edge / Cốc Cốc) ở chế độ thường, không ẩn danh. Trong lúc còn băng cảnh báo này, đừng tải lại trang hay đóng tab khi chưa đồng bộ xong lên Firebase (xem dòng trạng thái phía trên).</span>
         </div>
         <header>
@@ -2184,7 +2204,9 @@
                     <button type="button" id="searchPopupClose" class="search-popup-btn" title="Đóng">✕</button>
                 </div>
             </div>
-            <div class="search-popup-timer"><div id="searchPopupTimerBar" class="search-popup-timer-bar"></div></div>
+            <div class="search-popup-timer">
+                <div id="searchPopupTimerBar" class="search-popup-timer-bar"></div>
+            </div>
             <div id="resultBody" class="result-cards search-popup-body"></div>
         </div>
 
@@ -2220,7 +2242,7 @@
 
         <script>
             "use strict";
-
+            
             // ═══════════════════════════════════════════════════════════════════════
             //  📦 CẤU TRÚC MODULE (chia theo chức năng - dễ sửa, thay thế, mở rộng)
             // ═══════════════════════════════════════════════════════════════════════
@@ -2251,7 +2273,7 @@
             //   17. UI HELPERS               - Dòng ~5650: Toast, setSync, showToast
             //   18. FIREBASE INIT            - Dòng ~5800+: Kết nối Firebase module
             // ═══════════════════════════════════════════════════════════════════════
-
+            
             const AttendanceApp = {
               TARGET_SHEETS: ["SV", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
               // Tên sheet "phân nhóm" - hệ thống tự tìm theo các biến thể có dấu và không dấu.
@@ -2474,6 +2496,7 @@
                 { name: "Ngô Thị Thu Hằng", phone: "0968125259" },
                 { name: "Lê Minh Phương", phone: "0332323361" },
                 { name: "Nguyễn Như Mai", phone: "0395729123" },
+             { name: "Đình Nghĩa", phone: "0966951820" },
                 { name: "Nguyễn Bích", phone: "0392395612" }
               ],
               // Danh sách GVNN có cùng cấu trúc { name, phone } như danh sách giáo viên.
@@ -2592,7 +2615,7 @@
                   delete this.memoryStorage[`${storageName}:${key}`];
                 }
               },
-
+            
               // ════════════════════════════════════════════════════════════════════
               //  MODULE 4: INIT - Khởi tạo app, cache DOM elements, bind events
               // ════════════════════════════════════════════════════════════════════
@@ -2773,7 +2796,7 @@
                   if (control) this.handleChange(control);
                 });
               },
-
+            
               // ════════════════════════════════════════════════════════════════════
               //  MODULE 5: ROLE & PERMISSIONS - Phân quyền Trợ giảng/Giáo viên/Khách
               // ════════════════════════════════════════════════════════════════════
@@ -2823,9 +2846,22 @@
                 if (!this.requireAssistant()) return;
             
                 if (this.dom.uploadCard.hidden) {
-                  this.dom.uploadCard.hidden = false;
-                  this.dom.uploadPanelToggleBtn.textContent = "🔒 Khóa và ẩn tải Excel";
-                  setTimeout(() => this.dom.uploadPassword.focus(), 50);
+                  // Dùng modal mật khẩu giống modal sửa lịch
+                  this.showPasswordModal({
+                    title: "🔐 Mở khóa tải Excel",
+                    description: "Nhập mật khẩu quản lý để mở khóa chức năng tải file Excel. Sau khi nhập đúng, khu vực tải file sẽ tự động hiện ra.",
+                    placeholder: "Nhập mật khẩu tải Excel...",
+                    onSuccess: () => {
+                      this.uploadUnlocked = true;
+                      this.dom.uploadCard.hidden = false;
+                      this.dom.uploadActions.hidden = false;
+                      this.dom.uploadPanelToggleBtn.textContent = "🔒 Khóa và ẩn tải Excel";
+                      // Set giá trị password input để updateUploadLock pass
+                      if (this.dom.uploadPassword) this.dom.uploadPassword.value = this.UPLOAD_UI_PASSWORD;
+                      this.updateUploadLock();
+                      this.showToast("✅ Đã mở khóa tải Excel");
+                    }
+                  });
                   return;
                 }
             
@@ -2898,7 +2934,7 @@
                 this.persistLocal();
                 this.pendingModelMigration = true;
               },
-
+            
               // Sau khi Firebase đã tải/ghép dữ liệu xong mới đẩy bản đã chuyển đổi lên.
               finishModelMigration() {
                 this.pendingModelMigration = false;
@@ -2910,13 +2946,13 @@
                 this.queueScheduleSave(0);
                 this.queueAttendanceSave(0);
               },
-
+            
               // Máy này có dữ liệu để đẩy lên Firebase không?
               hasAnyLocalData() {
                 return Object.keys(this.db).length > 0 ||
                   Object.values(this.schedule).some(list => (list || []).length);
               },
-
+            
               // Gắn điểm danh bản cũ (lưu chung theo lớp) vào các thẻ của 1 thứ được chọn.
               importLegacyAttendance(dayKey) {
                 if (!this.SCHEDULE_DAYS[dayKey]) return 0;
@@ -2928,7 +2964,7 @@
                       student.status === "absent" || student.note || student.isExcused ||
                       student.isNewStudentFlag || this.isNewStudent(student));
                   if (!classMarked) return;
-
+            
                   (this.schedule[dayKey] || []).forEach(item => {
                     const match = this.findClassEntryByName(item.lopName);
                     if (!match || match[1] !== classData) return;
@@ -2950,7 +2986,7 @@
                     if (classData.lastUpdateTime) item.attTime = classData.lastUpdateTime;
                   });
                 });
-
+            
                 // Dọn dữ liệu điểm danh cũ trong danh sách lớp để chỉ còn một nguồn duy nhất.
                 Object.values(this.db).forEach(classData => {
                   (classData.students || []).forEach(student => {
@@ -2966,7 +3002,7 @@
                 });
                 return migrated;
               },
-
+            
               normalizeCardAttendance(input) {
                 const output = {};
                 if (!input || typeof input !== "object" || Array.isArray(input)) return output;
@@ -2990,7 +3026,7 @@
                 });
                 return output;
               },
-
+            
               normalizeSchedule(input) {
                 const output = { thu2: [], thu3: [], thu4: [], thu5: [], thu6: [], thu7: [], cn: [] };
                 if (!input || typeof input !== "object" || Array.isArray(input)) return output;
@@ -3094,7 +3130,7 @@
             
                 return output;
               },
-
+            
               /*
                * Đọc sheet "Phan nhom" (Phân nhóm) có cấu trúc 3 KHỐI CỘT DỌC đặt cạnh nhau:
                *
@@ -3127,13 +3163,13 @@
                 if (!rows || !rows.length) {
                   throw new Error("Sheet không có dữ liệu");
                 }
-
+            
                 // Hàm bỏ dấu + lowercase để so sánh không phân biệt dấu.
                 const fold = (value) => String(value || "")
                   .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                   .replace(/đ/g, "d").replace(/Đ/g, "D")
                   .toLowerCase().trim();
-
+            
                 // Bước 1: Tìm các khối cột (column blocks) dựa trên tên lớp ở hàng đầu.
                 // Tên lớp có thể ở 1 ô hoặc gộp ô. Quét hàng 0..5 để tìm.
                 const classNamesToFind = ["CAN-L11", "WONDER", "WIN-L10"];
@@ -3141,9 +3177,9 @@
                   name: c,
                   folded: fold(c)
                 }));
-
+            
                 let classBlocks = []; // [{ className, teacherCol, ttCol, nameCol, startRow }]
-
+            
                 // Tìm hàng có chứa tên lớp.
                 for (let headerRow = 0; headerRow < Math.min(rows.length, 8); headerRow++) {
                   const row = rows[headerRow] || [];
@@ -3182,28 +3218,28 @@
                   }
                   if (classBlocks.length >= 3) break; // Đã tìm đủ 3 lớp
                 }
-
+            
                 // Sắp xếp classBlocks theo blockStartCol tăng dần.
                 classBlocks.sort((a, b) => a.blockStartCol - b.blockStartCol);
-
+            
                 if (classBlocks.length === 0) {
                   throw new Error(
                     "Không tìm thấy tên lớp CAN-L11, WONDER, WIN-L10 trong sheet. " +
                     "Hãy đảm bảo hàng đầu của sheet có tên các lớp này."
                   );
                 }
-
+            
                 const teacherToClass = this.PHAN_NHOM_TEACHER_TO_CLASS || {};
                 const teacherKeys = Object.keys(teacherToClass);
                 const teacherFolds = teacherKeys.map(name => ({
                   name,
                   folded: fold(name)
                 }));
-
+            
                 let totalStudents = 0;
                 const usedClasses = new Set();
                 const skipped = [];
-
+            
                 // Bước 2: Duyệt từng khối lớp.
                 classBlocks.forEach((block, blockIdx) => {
                   // Xác định giới hạn cột của khối này.
@@ -3211,20 +3247,20 @@
                   const blockEndCol = nextBlock
                     ? nextBlock.blockStartCol - 1
                     : (rows[block.headerRow] || []).length;
-
+            
                   // Track phòng của nhóm hiện tại trong khối này.
                   // Khi gặp header "Nhóm I - T7/237", lưu lại "T7/237" làm phòng cho nhóm này.
                   // Áp dụng cho tất cả HS bên dưới cho đến khi gặp header "Nhóm" tiếp theo.
                   let currentGroupRoom = "";
                   let currentGroupName = "";
-
+            
                   // Bước 3: Trong khối, tìm header "Nhóm X" và bắt đầu đọc từ sau đó.
                   for (let r = block.headerRow + 1; r < rows.length; r++) {
                     const row = rows[r] || [];
                     if (!row || row.every(c => !c || !String(c).trim())) continue;
-
+            
                     const cells = row.map(c => String(c || "").trim());
-
+            
                     // Lấy tên giáo viên từ cột teacherCol.
                     const teacherText = cells[block.teacherCol] || "";
                     const teacherFolded = fold(teacherText);
@@ -3246,7 +3282,7 @@
                     if (/^nhom\s*[+\-iv0-9\s]/i.test(teacherFolded)) continue;
                     // Bỏ qua hàng header "TT" / "Học sinh".
                     if (teacherFolded === "tt" || teacherFolded === "hoc sinh") continue;
-
+            
                     // Tìm tên giáo viên khớp. Ưu tiên match exact trước,
                     // rồi mới match theo "includes" để tránh map nhầm
                     // (ví dụ: "Hà My" khớp exact, nhưng "Hà My/Trầm Anh" mới khớp includes).
@@ -3263,7 +3299,7 @@
                       }
                       continue;
                     }
-
+            
                     // Tên học sinh ở cột nameCol.
                     // Nếu nameCol trống, thử các cột tiếp theo trong khối.
                     let studentName = "";
@@ -3281,9 +3317,9 @@
                         break;
                       }
                     }
-
+            
                     if (!studentName) continue;
-
+            
                     // Tạo/lấy class entry.
                     const classKey = block.className;
                     if (!importedDatabase[classKey]) {
@@ -3301,7 +3337,7 @@
                         students: []
                       };
                     }
-
+            
                     // Tạo SĐT giả để định danh nội bộ.
                     const pseudoPhone = `PN${String(totalStudents + 1).padStart(6, "0")}`;
                     // Lưu thông tin phòng và nhóm vào note để hiển thị đúng trong tab "Phân nhóm".
@@ -3335,7 +3371,7 @@
                     usedClasses.add(classKey);
                   }
                 });
-
+            
                 return {
                   totalStudents,
                   totalClasses: usedClasses.size,
@@ -3343,7 +3379,7 @@
                   skipped: skipped.slice(0, 20)
                 };
               },
-
+            
               normalizePhone(value) {
                 if (!value || value === "Chưa có" || value === "undefined") return "";
                 let digits = String(value).replace(/\D/g, "");
@@ -3501,7 +3537,7 @@
                   .sort((a, b) => Math.abs(a.normalized.length - wanted.length) - Math.abs(b.normalized.length - wanted.length))[0];
                 return partial ? [partial.key, partial.data] : null;
               },
-
+            
               /*
                * Tìm thông tin lịch học cho 1 lớp.
                * Trả về mảng [{ day, time, room, teacher, teacherPhone, session }] - 1 lớp có thể học nhiều thứ.
@@ -3530,7 +3566,7 @@
                 });
                 return results;
               },
-
+            
               syncScheduleClassNamesWithDatabase() {
                 if (!Object.keys(this.db).length) return false;
                 let changed = false;
@@ -3573,14 +3609,90 @@
                   return;
                 }
             
-                const password = prompt("Nhập mật khẩu quản lý lịch học:");
-                if (password === this.UPLOAD_UI_PASSWORD) {
-                  this.scheduleAdminUnlocked = true;
-                  this.dom.scheduleAuthBtn.textContent = "🔒 Khóa xếp lịch";
-                  this.renderSchedule();
-                } else if (password !== null) {
-                  this.showToast("Mật khẩu quản lý lịch học không chính xác.", true);
-                }
+                // Modal nhập mật khẩu trong app (giống Excel)
+                this.showPasswordModal({
+                  title: "🔐 Mở khóa xếp lịch",
+                  description: "Nhập mật khẩu quản lý để bật chế độ sửa lịch. Sau khi nhập đúng, bạn có thể thêm/sửa/xóa thẻ lịch.",
+                  placeholder: "Nhập mật khẩu...",
+                  onSuccess: () => {
+                    this.scheduleAdminUnlocked = true;
+                    this.dom.scheduleAuthBtn.textContent = "🔒 Khóa xếp lịch";
+                    this.renderSchedule();
+                    this.showToast("✅ Đã mở khóa chế độ sửa lịch");
+                  }
+                });
+              },
+            
+              /*
+               * Hiện modal nhập mật khẩu trong app (giống Excel).
+               * Dùng để mở khóa chế độ sửa lịch hoặc upload.
+               * @param {Object} opts - { title, description, placeholder, onSuccess, password }
+               * Nếu không truyền `password`, dùng UPLOAD_UI_PASSWORD mặc định.
+               */
+              showPasswordModal(opts) {
+                const old = document.getElementById('app-pwd-modal');
+                if (old) old.remove();
+                const title = opts.title || '🔐 Nhập mật khẩu';
+                const desc = opts.description || 'Nhập mật khẩu để tiếp tục.';
+                const placeholder = opts.placeholder || 'Nhập mật khẩu...';
+                const expected = opts.password || this.UPLOAD_UI_PASSWORD;
+                const modal = document.createElement('div');
+                modal.id = 'app-pwd-modal';
+                modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.75);z-index:10002;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);';
+                let inner = '<div style="background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);color:#f9fafb;padding:28px;border-radius:16px;min-width:400px;max-width:92%;box-shadow:0 20px 60px rgba(0,0,0,0.7),0 0 0 1px rgba(251,191,36,0.25);border:1px solid rgba(251,191,36,0.4);">';
+                inner += '<h3 style="margin:0 0 12px;color:#fbbf24;font-size:22px;text-shadow:0 0 20px rgba(251,191,36,0.5);">' + this.esc(title) + '</h3>';
+                inner += '<p style="margin:0 0 18px;color:#cbd5e1;font-size:13px;line-height:1.6;">' + this.esc(desc) + '</p>';
+                inner += '<input id="app-pwd-input" type="password" placeholder="' + this.esc(placeholder) + '" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other" data-lpignore="true" data-1p-ignore="true" style="width:100%;padding:12px 14px;background:#0f172a;color:#fbbf24;border:2px solid #475569;border-radius:10px;font-size:16px;font-weight:600;box-sizing:border-box;letter-spacing:2px;text-align:center;outline:none;transition:all 0.2s;" autofocus onfocus="this.style.borderColor=\'#fbbf24\';this.style.boxShadow=\'0 0 0 3px rgba(251,191,36,0.2)\'" onblur="this.style.borderColor=\'#475569\';this.style.boxShadow=\'none\'">';
+                inner += '<div id="app-pwd-error" style="display:none;margin-top:10px;color:#fca5a5;font-size:13px;font-weight:600;background:rgba(239,68,68,0.15);padding:8px 12px;border-radius:6px;border:1px solid rgba(239,68,68,0.3);">❌ Mật khẩu không chính xác. Vui lòng thử lại.</div>';
+                inner += '<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;">';
+                inner += '<button id="app-pwd-cancel" style="padding:10px 20px;background:#374151;color:#d1d5db;border:1px solid #4b5563;border-radius:8px;cursor:pointer;font-weight:500;">Hủy</button>';
+                inner += '<button id="app-pwd-submit" style="padding:10px 20px;background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:700;box-shadow:0 4px 14px rgba(16,185,129,0.45);">🔓 Mở khóa</button>';
+                inner += '</div></div>';
+                modal.innerHTML = inner;
+                document.body.appendChild(modal);
+                const input = document.getElementById('app-pwd-input');
+                const errBox = document.getElementById('app-pwd-error');
+                // Auto focus input
+                setTimeout(() => { try { input.focus(); } catch (e) {} }, 50);
+                // Auto-submit khi đủ độ dài mật khẩu (giống Excel - nhập xong tự vào)
+                let autoSubmitted = false;
+                const trySubmit = () => {
+                  if (autoSubmitted) return;
+                  const val = input.value;
+                  if (val && val.length >= expected.length) {
+                    if (val === expected) {
+                      autoSubmitted = true;
+                      modal.remove();
+                      if (typeof opts.onSuccess === 'function') opts.onSuccess();
+                      return true;
+                    }
+                  }
+                  return false;
+                };
+                // Auto-submit khi nhấn Enter
+                input.addEventListener('keydown', (e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    document.getElementById('app-pwd-submit').click();
+                  }
+                });
+                // Auto-submit ngay khi nhập đúng (giống Excel - ko cần bấm)
+                input.addEventListener('input', () => {
+                  if (trySubmit()) return;
+                });
+                document.getElementById('app-pwd-cancel').addEventListener('click', () => modal.remove());
+                modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+                document.getElementById('app-pwd-submit').addEventListener('click', () => {
+                  const val = input.value;
+                  if (val === expected) {
+                    modal.remove();
+                    if (typeof opts.onSuccess === 'function') opts.onSuccess();
+                  } else {
+                    errBox.style.display = 'block';
+                    input.value = '';
+                    input.focus();
+                  }
+                });
               },
             
               changeScheduleDay(day, { openUid = "" } = {}) {
@@ -3601,19 +3713,19 @@
                 });
                 this.renderSchedule();
               },
-
+            
               // Đồng hồ máy -> khóa lịch tương ứng (0 = Chủ nhật, 1 = Thứ 2, ... 6 = Thứ 7).
               todayScheduleDayKey(date = new Date()) {
                 const map = { 0: "cn", 1: "thu2", 2: "thu3", 3: "thu4", 4: "thu5", 5: "thu6", 6: "thu7" };
                 return map[date.getDay()] || "thu2";
               },
-
+            
               // Mốc "ngày hiện tại" dạng yyyy-mm-dd để biết khi nào thực sự sang ngày mới.
               todayDayStampValue(date = new Date()) {
                 const pad = value => String(value).padStart(2, "0");
                 return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
               },
-
+            
               // Tự nhảy về thứ của ngày hôm đó. Trả về true nếu có chuyển tab.
               syncScheduleDayWithToday({ silent = false } = {}) {
                 const today = this.todayScheduleDayKey();
@@ -3623,7 +3735,7 @@
                 if (!silent) this.showToast(`Đã chuyển sang ${this.SCHEDULE_DAYS[today]} (hôm nay).`);
                 return true;
               },
-
+            
               // Theo dõi sang ngày mới: kiểm mỗi phút và mỗi khi quay lại tab.
               // Chỉ tự nhảy khi NGÀY thay đổi, không cướp quyền khi bạn cố ý xem ngày khác.
               startDayWatcher() {
@@ -3646,7 +3758,7 @@
                 setInterval(check, 60 * 1000);
                 document.addEventListener("visibilitychange", check);
               },
-
+            
               // Nhãn "Hôm nay" mini ở trên đầu tab ngày hiện tại.
               renderTodayBadge() {
                 if (!this.dom?.scheduleDayTabs) return;
@@ -3666,7 +3778,7 @@
                   }
                 });
               },
-
+            
               // ===== ĐIỂM DANH RIÊNG CHO TỪNG THẺ LỊCH (mỗi thứ hoạt động độc lập) =====
               // Trạng thái điểm danh của 1 học sinh trên 1 thẻ lịch; mặc định là "present".
               cardStudentState(item, uid) {
@@ -3681,7 +3793,7 @@
                   absentAt: Number.isFinite(absentAt) && absentAt > 0 ? absentAt : null
                 };
               },
-
+            
               // Ghi trạng thái điểm danh của 1 học sinh vào đúng thẻ lịch đang xem.
               setCardStudentState(item, uid, patch = {}) {
                 if (!item || !uid) return null;
@@ -3695,7 +3807,7 @@
                 item.attTime = this.formatDateTime();
                 return next;
               },
-
+            
               // Gom dữ liệu hiển thị của 1 thẻ: học sinh chính thức, học sinh mới, danh sách vắng.
               cardAttendance(item, classData) {
                 const roster = Array.isArray(classData?.students) ? classData.students : [];
@@ -3716,7 +3828,7 @@
                   lastUpdateTime: item?.attTime || classData?.lastUpdateTime || item?.lastUpdateTime || ""
                 };
               },
-
+            
               // Thẻ này có dấu vết điểm danh chưa? (tick "lớp đủ" hoặc có học sinh bị đánh dấu)
               cardHasMarks(item) {
                 if (!item) return false;
@@ -3725,7 +3837,7 @@
                 return Object.values(att).some(state =>
                   state && (state.status === "absent" || state.note || state.isExcused || state.isNew));
               },
-
+            
               // ===== TUẦN / NGÀY: mốc tuần và đặt lại điểm danh =====
               weekStampValue(date = new Date()) {
                 const day = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -3734,7 +3846,7 @@
                 const pad = value => String(value).padStart(2, "0");
                 return `${day.getFullYear()}-${pad(day.getMonth() + 1)}-${pad(day.getDate())}`;
               },
-
+            
               /* Bản chụp dữ liệu ngay trước khi hệ thống tự đặt lại điểm danh đầu tuần.
                  Nhờ nó mà "tuần mới" vẫn có đường lùi: bấm "🔁 Khôi phục mặc định" là lấy lại được. */
               savePreResetSnapshot() {
@@ -3753,7 +3865,7 @@
                   console.error("Không chụp được bản trước khi đặt lại:", error);
                 }
               },
-
+            
               loadPreResetSnapshot() {
                 try {
                   const raw = this.storageGet("localStorage", this.PRE_RESET_BACKUP_KEY);
@@ -3767,7 +3879,7 @@
                   return null;
                 }
               },
-
+            
               // Hết tuần (qua ngày Chủ nhật): toàn bộ các thứ trong tuần về trạng thái chưa điểm danh.
               // LƯU Ý QUAN TRỌNG: chỉ xoá khi BIẾT CHẮC mốc tuần cũ (khác tuần này).
               // Nếu mốc tuần cũ trống (máy mới mở bản này lần đầu, mở bằng trình duyệt khác,
@@ -3860,7 +3972,7 @@
                 this.openScheduleEditForms.delete(uid);
                 this.commitSchedule("Đã xóa thẻ lịch học.");
               },
-
+            
               // ════════════════════════════════════════════════════════════════════
               //  MODULE 12: SCHEDULE RENDER - Render DOM thẻ lịch học (sơ đồ)
               // ════════════════════════════════════════════════════════════════════
@@ -3911,7 +4023,7 @@
                 // Tạo nút "Danh sách lớp hôm nay" - bấm vào mới hiện popup tổng hợp.
                 const daySummary = this.buildDaySummary(list);
                 const summaryHtml = daySummary ? this.renderDaySummaryToggle(daySummary) : "";
-
+            
                 this.dom.scheduleContainer.innerHTML = summaryHtml + list.map(item => {
                   const match = this.findClassEntryByName(item.lopName);
                   const classKey = match?.[0] || "";
@@ -4093,7 +4205,7 @@
                   document.getElementById(`schedule-${item.uid}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
                 }, 80);
               },
-
+            
               /*
                * Tự động tạo thẻ lịch cho các lớp phân nhóm (CAN-L11, WONDER, WIN-L10)
                * vào ngày Chủ nhật sau khi nạp sheet "Phan nhom" thành công.
@@ -4103,11 +4215,11 @@
               createPhanNhomScheduleCards(classNames) {
                 if (!Array.isArray(classNames) || !classNames.length) return [];
                 if (!this.schedule || !this.schedule.cn) this.schedule.cn = [];
-
+            
                 const defaultSchedule = this.PHAN_NHOM_DEFAULT_SCHEDULE || {};
                 const created = [];
                 const skipped = [];
-
+            
                 classNames.forEach(className => {
                   // Bỏ qua nếu lớp không có trong db.
                   if (!this.db[className]) {
@@ -4158,7 +4270,7 @@
                   this.expandedScheduleCards.add(item.uid);
                   created.push({ className, uid: item.uid });
                 });
-
+            
                 if (created.length) {
                   this.commitSchedule(
                     `Đã tạo ${created.length} thẻ lịch phân nhóm ở Chủ nhật: ${created.map(c => c.className).join(", ")}.`
@@ -4166,7 +4278,7 @@
                 }
                 return { created, skipped };
               },
-
+            
               /*
                * Kiểm tra xem database có chứa lớp phân nhóm nào không.
                * Trả về true nếu có ít nhất 1 lớp trong PHAN_NHOM_TEACHER_TO_CLASS đã được tạo.
@@ -4175,7 +4287,7 @@
                 const targets = ["CAN-L11", "WONDER", "WIN-L10"];
                 return targets.some(name => this.db && this.db[name]);
               },
-
+            
               /*
                * Chuyển sang tab "Phân nhóm" và render panel hiển thị 3 lớp.
                */
@@ -4201,7 +4313,7 @@
                   document.getElementById("phanNhomPanel")?.scrollIntoView({ behavior: "smooth", block: "start" });
                 }, 80);
               },
-
+            
               /*
                * Tổng hợp thông tin các lớp trong ngày: tên lớp, nhà, giáo viên, SĐT, nút gọi.
                * Trả về mảng các object { lopName, building, gvName, gvPhone, floor, time }.
@@ -4230,7 +4342,7 @@
                 });
                 return result.length ? result : null;
               },
-
+            
               /*
                * Render nút "Danh sách lớp" ở đầu mỗi tab thứ.
                * Khi bấm vào sẽ mở popup hiển thị tất cả các lớp trong ngày.
@@ -4246,7 +4358,7 @@
                     <div class="day-summary-popup" id="daySummaryPopup" hidden></div>
                   </div>`;
               },
-
+            
               /*
                * Mở/đóng popup danh sách lớp trong ngày.
                * Render nội dung popup từ summary đã cache.
@@ -4272,7 +4384,7 @@
                 popup.hidden = false;
                 btn.innerHTML = btn.innerHTML.replace("▼", "▲");
               },
-
+            
               /*
                * Render nội dung popup danh sách lớp.
                * Hiển thị tên lớp, tên nhà, giáo viên, SĐT, nút gọi.
@@ -4306,7 +4418,7 @@
                   <div class="day-summary-popup-title">📅 ${this.esc(dayName)} - ${summary.length} lớp</div>
                   <div class="day-summary-list">${items}</div>`;
               },
-
+            
               // ════════════════════════════════════════════════════════════════════
               //  MODULE 13: PHAN NHOM RENDER - Render panel tab "Phân nhóm"
               // ════════════════════════════════════════════════════════════════════
@@ -4324,7 +4436,7 @@
                 // Khai báo allowEdit ở scope NGOÀI CÙNG để chắc chắn mọi forEach lồng đều thấy
                 const allowEdit = (this.currentRole === 'assistant' || this.scheduleAdminUnlocked);
                 let totalAll = 0;
-
+            
                 let html = '<div id="phanNhomPanel">';
                 // Tổng HS phân nhóm
                 const totalPn = targets.reduce((sum, c) => {
@@ -4365,8 +4477,6 @@
                     }
                     if (s.phanNhomTeacher) {
                       noteTeacher = s.phanNhomTeacher;
-                    } else if (s.phanNhomGroup && /[+\-]/.test(s.phanNhomGroup)) {
-                      // Nếu phanNhomGroup là "Nhóm I+II" thì lấy phần đầu làm fallback teacher
                     }
                     // 2) Nếu chưa có, parse từ note
                     if (!noteGroup || !noteTeacher) {
@@ -4389,6 +4499,13 @@
                         noteGroup = fixedGroups[matchedByRoom].name.replace(/^Nhóm\s+/i, "");
                       }
                     }
+                    // WRITE-BACK: lưu lại vào HS để lần render sau dùng luôn (cố định)
+                    if (noteGroup && !s.phanNhomGroup) {
+                      s.phanNhomGroup = noteGroup.startsWith("Nhóm ") ? noteGroup : "Nhóm " + noteGroup;
+                    }
+                    if (noteTeacher && !s.phanNhomTeacher) {
+                      s.phanNhomTeacher = noteTeacher;
+                    }
                     // Tìm nhóm phù hợp nhất
                     let matchedIdx = -1;
                     if (noteGroup) {
@@ -4397,7 +4514,7 @@
                         const map = { "1": "I", "2": "II", "3": "III", "4": "IV", "5": "V", "6": "VI" };
                         return map[s] || s.toUpperCase();
                       };
-                      const wantRoman = norm(noteGroup);
+                      const wantRoman = norm(noteGroup.replace(/^Nhóm\s+/i, ""));
                       matchedIdx = fixedGroups.findIndex(g => {
                         const gm = String(g.name || "").match(/Nhóm\s+([IVX0-9+\-]+)/i);
                         return gm && norm(gm[1]) === wantRoman;
@@ -4456,29 +4573,35 @@
                       }
                       // Thông tin meta: GV + giờ (giống dòng header dưới tiêu đề Excel)
                       const teacherLine = group.teacher
-                        ? `<span>👨‍🏫 <span class="pn-teacher-text">${this.esc(group.teacher)}</span></span>`
-                        : `<span style="color:#9ca3af;">Chưa có GV</span>`;
+                        ? '<span>👨‍🏫 <span class="pn-teacher-text">' + this.esc(group.teacher) + '</span></span>'
+                        : '<span style="color:#9ca3af;">Chưa có GV</span>';
                       const timeLine = group.time
-                        ? `<span style="color:#6b7280;">⏰ ${this.esc(group.time)}</span>`
+                        ? '<span>⏰ <span class="pn-time-text">' + this.esc(group.time) + '</span></span>'
                         : '';
-                      html += `
-                        <article class="phan-nhom-group-card" id="pn-group-${this.esc(className)}-${idx}">
-                          <header class="phan-nhom-group-head">
-                            <h3 class="phan-nhom-group-name">${this.esc(displayName)}</h3>
-                            <span class="phan-nhom-group-count">${group.students.length} HS</span>
-                            ${allowEdit ? `<button class="pn-edit-group-btn" data-class="${this.esc(className)}" data-idx="${idx}" title="Sửa tên/phòng/GV" style="background:#7c3aed;color:white;border:none;border-radius:4px;padding:2px 6px;cursor:pointer;font-size:11px;margin-left:4px;">✎</button>` : ''}
-                          </header>
-                          <div class="phan-nhom-group-meta" style="padding:4px 12px;font-size:.85rem;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.06);display:flex;gap:14px;flex-wrap:wrap;">
-                            ${teacherLine}
-                            ${timeLine}
-                          </div>
-                          <ol class="phan-nhom-students">
-                            ${listBody}
-                          </ol>
-                          <div class="phan-nhom-group-total" style="padding:5px 12px;font-size:.85rem;color:var(--muted);border-top:1px solid rgba(255,255,255,.06);">
-                            Tổng: <b>${group.students.length} HS</b>
-                          </div>
-                        </article>`;
+                      // Dùng String concat để tránh lỗi template literal với ký tự đặc biệt
+                      let articleHtml = '<article class="phan-nhom-group-card" id="pn-group-' + this.esc(className) + '-' + idx + '">';
+                      // Header: tên nhóm + badge HS + nút sửa (1 dòng) + dòng giờ (dòng 2)
+                      articleHtml += '<header class="phan-nhom-group-head" style="display:flex;flex-direction:column;gap:4px;padding:10px 12px;border-bottom:2px solid rgba(251, 191, 36, 0.5);background:linear-gradient(135deg, rgba(251, 191, 36, 0.12) 0%, rgba(245, 158, 11, 0.05) 100%);border-radius:8px 8px 0 0;">';
+                      articleHtml += '<div style="display:flex;align-items:center;justify-content:space-between;gap:6px;">';
+                      articleHtml += '<h3 class="phan-nhom-group-name" style="margin:0;color:#fbbf24;font-size:1.05rem;font-weight:700;text-shadow:0 1px 3px rgba(251, 191, 36, 0.3);">' + this.esc(displayName) + '</h3>';
+                      articleHtml += '<span style="display:flex;gap:6px;align-items:center;">';
+                      articleHtml += '<span class="phan-nhom-group-count">' + group.students.length + ' HS</span>';
+                      if (allowEdit) {
+                        articleHtml += '<button class="pn-edit-group-btn" data-class="' + this.esc(className) + '" data-idx="' + idx + '" title="Sửa tên/phòng/GV" style="background:#7c3aed;color:white;border:none;border-radius:4px;padding:2px 6px;cursor:pointer;font-size:11px;">✎</button>';
+                      }
+                      articleHtml += '</span></div>';
+                      // Dòng giờ ngay dưới tên nhóm, trên vạch vàng
+                      if (group.time) {
+                        articleHtml += '<div style="display:flex;align-items:center;gap:6px;font-size:.85rem;color:#60a5fa;font-weight:600;text-shadow:0 1px 3px rgba(96, 165, 250, 0.4);">⏰ <span class="pn-time-text">' + this.esc(group.time) + '</span></div>';
+                      }
+                      articleHtml += '</header>';
+                      // Dòng GV (dưới vạch vàng)
+                      articleHtml += '<div class="phan-nhom-group-meta" style="padding:6px 12px;font-size:.85rem;color:#9ca3af;display:flex;gap:14px;flex-wrap:nowrap;align-items:center;overflow:hidden;">';
+                      articleHtml += teacherLine;
+                      articleHtml += '</div>';
+                      articleHtml += '<ol class="phan-nhom-students">' + listBody + '</ol>';
+                      articleHtml += '</article>';
+                      html += articleHtml;
                     });
                   }
                   html += `</div></section>`;
@@ -4486,7 +4609,7 @@
                 });
                 html += `</div>`;
                 container.innerHTML = html;
-
+            
                 // Gắn event handler cho các nút Sửa nhóm / Chuyển nhóm / Xóa HS
                 if (allowEdit) {
                   // Nút Sửa nhóm (đổi tên, phòng, GV)
@@ -4517,12 +4640,12 @@
                     });
                   });
                 }
-
+            
                 } catch (err) {
                   console.error("LỖI renderPhanNhomPanel:", err);
                   if (typeof this.showToast === 'function') this.showToast("❌ Lỗi render phân nhóm: " + err.message, 5000);
                 }
-
+            
                 // Hàm chuyển số sang La Mã.
                 function toRoman(num) {
                   const map = [
@@ -4540,7 +4663,7 @@
                   return result;
                 }
               },
-
+            
               /*
                * Sửa thông tin nhóm: tên nhóm, phòng, GV, giờ.
                * Dùng modal trong app thay prompt() để tránh bị browser chặn.
@@ -4552,43 +4675,76 @@
                 // Xóa modal cũ
                 const old = document.getElementById('pn-edit-modal');
                 if (old) old.remove();
+                // Tạo options cho dropdown Tên nhóm (I, II, III, IV, V, I+II, I+II+III...)
+                const groupNameOptions = ['I', 'II', 'III', 'IV', 'V', 'VI', 'I+II', 'I+II+III', 'I+II+III+IV'];
+                let nameOptionsHtml = '';
+                groupNameOptions.forEach(opt => {
+                  const selected = String(g.name || '').replace(/^Nhóm\s+/i, '') === opt ? ' selected' : '';
+                  nameOptionsHtml += '<option value="Nhóm ' + opt + '"' + selected + '>Nhóm ' + opt + '</option>';
+                });
+                // Dropdown phòng
+                const roomOptions = ['T1/58', 'T1/30', 'T2/60', 'T3/30', 'T6/237', 'T7/237', 'T1/56'];
+                let roomOptionsHtml = '';
+                roomOptions.forEach(r => {
+                  const selected = g.room === r ? ' selected' : '';
+                  roomOptionsHtml += '<option value="' + this.esc(r) + '"' + selected + '>' + this.esc(r) + '</option>';
+                });
+                // Dropdown giờ
+                const timeOptions = ['7h30 - 9h00', '8h00 - 9h30', '8h30 - 10h00', '9h00 - 10h30', '9h30 - 11h00', '13h30 - 15h00', '15h00 - 16h30', '17h00 - 18h30'];
+                let timeOptionsHtml = '';
+                timeOptions.forEach(t => {
+                  const selected = g.time === t ? ' selected' : '';
+                  timeOptionsHtml += '<option value="' + this.esc(t) + '"' + selected + '>' + this.esc(t) + '</option>';
+                });
+                // Dropdown GV: dùng ds cố định + tên GV hiện tại (loại bỏ duplicate + keys ngắn)
+                const fixedTeachers = ['Hưng/QA', 'Hà My/Trầm Anh', 'Mạnh Toàn', 'Bảo Anh', 'Quỳnh Anh', 'Trầm Anh', 'Hồng Ngọc', 'Bảo Anh + Trúc Anh', 'Hà My', 'Q Hưng + Trầm Anh', 'Trúc Anh'];
+                // Thêm GV hiện tại của nhóm nếu chưa có
+                const allTeachers = fixedTeachers.slice();
+                if (g.teacher && !allTeachers.some(t => t.toLowerCase() === g.teacher.toLowerCase())) {
+                  allTeachers.unshift(g.teacher);
+                }
+                // Unique theo lowercase, giữ entry đầu tiên
+                const seen = new Set();
+                const uniqueTeachers = allTeachers.filter(t => {
+                  if (!t || t.length < 2) return false;
+                  const k = t.toLowerCase().trim();
+                  if (seen.has(k)) return false;
+                  seen.add(k);
+                  return true;
+                });
+                let teacherOptionsHtml = '';
+                uniqueTeachers.forEach(t => {
+                  const selected = (g.teacher || '').toLowerCase() === t.toLowerCase() ? ' selected' : '';
+                  teacherOptionsHtml += '<option value="' + this.esc(t) + '"' + selected + '>' + this.esc(t) + '</option>';
+                });
                 const modal = document.createElement('div');
                 modal.id = 'pn-edit-modal';
-                modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:10001;display:flex;align-items:center;justify-content:center;';
-                modal.innerHTML = `
-                  <div style="background:#1f2937;color:#f9fafb;padding:24px;border-radius:12px;min-width:380px;max-width:90%;">
-                    <h3 style="margin:0 0 16px;color:#fbbf24;">✎ Sửa nhóm ${this.esc(className)}</h3>
-                    <div style="margin-bottom:12px;">
-                      <label style="display:block;margin-bottom:4px;font-size:13px;">Tên nhóm:</label>
-                      <input id="pn-edit-name" value="${this.esc(g.name)}" style="width:100%;padding:8px;background:#374151;color:#f9fafb;border:1px solid #4b5563;border-radius:6px;">
-                    </div>
-                    <div style="margin-bottom:12px;">
-                      <label style="display:block;margin-bottom:4px;font-size:13px;">Phòng:</label>
-                      <input id="pn-edit-room" value="${this.esc(g.room)}" style="width:100%;padding:8px;background:#374151;color:#f9fafb;border:1px solid #4b5563;border-radius:6px;">
-                    </div>
-                    <div style="margin-bottom:12px;">
-                      <label style="display:block;margin-bottom:4px;font-size:13px;">Giáo viên:</label>
-                      <input id="pn-edit-teacher" value="${this.esc(g.teacher)}" style="width:100%;padding:8px;background:#374151;color:#f9fafb;border:1px solid #4b5563;border-radius:6px;">
-                    </div>
-                    <div style="margin-bottom:16px;">
-                      <label style="display:block;margin-bottom:4px;font-size:13px;">Giờ học:</label>
-                      <input id="pn-edit-time" value="${this.esc(g.time)}" style="width:100%;padding:8px;background:#374151;color:#f9fafb;border:1px solid #4b5563;border-radius:6px;">
-                    </div>
-                    <div style="display:flex;gap:8px;justify-content:flex-end;">
-                      <button id="pn-edit-cancel" style="padding:8px 16px;background:#6b7280;color:white;border:none;border-radius:6px;cursor:pointer;">Hủy</button>
-                      <button id="pn-edit-save" style="padding:8px 16px;background:#10b981;color:white;border:none;border-radius:6px;cursor:pointer;font-weight:600;">💾 Lưu</button>
-                    </div>
-                  </div>
-                `;
+                modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:10001;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);animation:fadeIn 0.2s ease;';
+                // Dùng String concat thay template literal để tránh lỗi ký tự đặc biệt
+                let modalInner = '<div style="background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);color:#f9fafb;padding:28px;border-radius:16px;min-width:420px;max-width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.6),0 0 0 1px rgba(251,191,36,0.2);border:1px solid rgba(251,191,36,0.3);">';
+                modalInner += '<h3 style="margin:0 0 18px;color:#fbbf24;font-size:20px;text-shadow:0 0 20px rgba(251,191,36,0.5);">✎ Sửa nhóm ' + this.esc(className) + '</h3>';
+                modalInner += '<div style="margin-bottom:14px;"><label style="display:block;margin-bottom:6px;font-size:13px;color:#9ca3af;font-weight:600;">📋 Tên nhóm:</label>';
+                modalInner += '<select id="pn-edit-name" style="width:100%;padding:10px;background:#0f172a;color:#fbbf24;border:1px solid #475569;border-radius:8px;font-size:14px;font-weight:600;">' + nameOptionsHtml + '</select></div>';
+                modalInner += '<div style="margin-bottom:14px;"><label style="display:block;margin-bottom:6px;font-size:13px;color:#9ca3af;font-weight:600;">🏫 Phòng:</label>';
+                modalInner += '<select id="pn-edit-room" style="width:100%;padding:10px;background:#0f172a;color:#60a5fa;border:1px solid #475569;border-radius:8px;font-size:14px;font-weight:600;">' + roomOptionsHtml + '</select></div>';
+                modalInner += '<div style="margin-bottom:14px;"><label style="display:block;margin-bottom:6px;font-size:13px;color:#9ca3af;font-weight:600;">👨‍🏫 Giáo viên:</label>';
+                modalInner += '<select id="pn-edit-teacher" style="width:100%;padding:10px;background:#0f172a;color:#fbbf24;border:1px solid #475569;border-radius:8px;font-size:14px;font-weight:600;">' + teacherOptionsHtml + '</select></div>';
+                modalInner += '<div style="margin-bottom:18px;"><label style="display:block;margin-bottom:6px;font-size:13px;color:#9ca3af;font-weight:600;">⏰ Giờ học:</label>';
+                modalInner += '<select id="pn-edit-time" style="width:100%;padding:10px;background:#0f172a;color:#60a5fa;border:1px solid #475569;border-radius:8px;font-size:14px;font-weight:600;">' + timeOptionsHtml + '</select></div>';
+                modalInner += '<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px;">';
+                modalInner += '<button id="pn-edit-cancel" style="padding:10px 20px;background:#374151;color:#d1d5db;border:1px solid #4b5563;border-radius:8px;cursor:pointer;font-weight:500;transition:all 0.15s;">Hủy</button>';
+                modalInner += '<button id="pn-edit-save" style="padding:10px 20px;background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:700;box-shadow:0 4px 12px rgba(16,185,129,0.4);transition:all 0.15s;">💾 Lưu</button>';
+                modalInner += '</div></div>';
+                modal.innerHTML = modalInner;
                 document.body.appendChild(modal);
                 // Sự kiện
                 document.getElementById('pn-edit-cancel').addEventListener('click', () => modal.remove());
                 modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
                 document.getElementById('pn-edit-save').addEventListener('click', () => {
-                  const newName = document.getElementById('pn-edit-name').value.trim() || g.name;
-                  const newRoom = document.getElementById('pn-edit-room').value.trim() || g.room;
-                  const newTeacher = document.getElementById('pn-edit-teacher').value.trim() || g.teacher;
-                  const newTime = document.getElementById('pn-edit-time').value.trim() || g.time;
+                  const newName = document.getElementById('pn-edit-name').value;
+                  const newRoom = document.getElementById('pn-edit-room').value;
+                  const newTeacher = document.getElementById('pn-edit-teacher').value;
+                  const newTime = document.getElementById('pn-edit-time').value;
                   g.name = newName;
                   g.room = newRoom;
                   g.teacher = newTeacher;
@@ -4603,7 +4759,7 @@
                   if (typeof this.showToast === 'function') this.showToast('✅ Đã cập nhật nhóm');
                 });
               },
-
+            
               /*
                * Hiện popup nổi cho phép chọn nhóm đích để chuyển HS.
                */
@@ -4634,20 +4790,54 @@
                 }
                 const popup = document.createElement('div');
                 popup.id = 'pn-move-popup';
-                popup.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;border:2px solid #3b82f6;border-radius:8px;padding:20px;z-index:10000;box-shadow:0 8px 24px rgba(0,0,0,0.3);min-width:300px;';
+                popup.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.75);z-index:10000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);';
+                // Tạo options dùng String concat - style giống box HS (nền đậm, chữ sáng)
                 let optionsHtml = '';
                 def.groups.forEach((g, idx) => {
                   const isCurrent = idx === currentGroupIdx;
-                  optionsHtml += `<button data-idx="${idx}" style="display:block;width:100%;text-align:left;padding:10px;margin:6px 0;border:1px solid ${isCurrent ? '#10b981' : '#e5e7eb'};border-radius:6px;background:${isCurrent ? '#d1fae5' : 'white'};cursor:pointer;font-size:14px;">
-                    ${idx === currentGroupIdx ? '✓ ' : ''}${this.esc(g.name)} - ${this.esc(g.room)} (${this.esc(g.teacher)})
-                  </button>`;
+                  // Style giống box HS: nền đậm, chữ trắng nổi bật
+                  if (isCurrent) {
+                    // Nhóm hiện tại: nền xanh lá đậm + chữ trắng
+                    var bg = 'linear-gradient(135deg,#059669 0%,#10b981 100%)';
+                    var borderColor = '#34d399';
+                    var textColor = '#ffffff';
+                    var iconColor = '#ffffff';
+                    var checkMark = '✓';
+                  } else {
+                    // Nhóm khác: nền xám đậm + chữ trắng sáng
+                    var bg = '#1e293b';
+                    var borderColor = '#475569';
+                    var textColor = '#f1f5f9';
+                    var iconColor = '#94a3b8';
+                    var checkMark = '○';
+                  }
+                  const labelText = g.name + '  ·  ' + g.room + '  ·  ' + (g.teacher || '');
+                  optionsHtml += '<button data-idx="' + idx + '" style="display:flex;align-items:center;width:100%;text-align:left;padding:12px 14px;margin:8px 0;border:2px solid ' + borderColor + ';border-radius:8px;background:' + bg + ';color:' + textColor + ';cursor:pointer;font-size:14px;font-weight:' + (isCurrent ? '700' : '600') + ';box-shadow:' + (isCurrent ? '0 0 12px rgba(16,185,129,0.4),inset 0 1px 0 rgba(255,255,255,0.15)' : '0 1px 3px rgba(0,0,0,0.2)') + ';transition:all 0.2s;text-shadow:' + (isCurrent ? '0 1px 2px rgba(0,0,0,0.3)' : 'none') + ';">';
+                  optionsHtml += '<span style="display:inline-block;width:20px;color:' + iconColor + ';font-weight:bold;font-size:16px;">' + checkMark + '</span>';
+                  optionsHtml += '<span style="flex:1;">' + this.esc(labelText) + '</span>';
+                  optionsHtml += '</button>';
                 });
-                popup.innerHTML = `
-                  <h3 style="margin:0 0 12px;color:#1e40af;">Chuyển nhóm cho HS</h3>
-                  <p style="margin:0 0 12px;color:#6b7280;font-size:13px;">HS: <b>${this.esc(student.name || '')}</b><br>Lớp: <b>${this.esc(className)}</b></p>
-                  ${optionsHtml}
-                  <button id="pn-move-cancel" style="margin-top:8px;padding:8px 16px;background:#6b7280;color:white;border:none;border-radius:4px;cursor:pointer;width:100%;">Hủy</button>
-                `;
+                // Header - style giống modal sửa
+                let popupInner = '<div style="background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);color:#f9fafb;padding:24px;border-radius:16px;min-width:400px;max-width:92%;box-shadow:0 20px 60px rgba(0,0,0,0.7),0 0 0 1px rgba(251,191,36,0.25);border:1px solid rgba(251,191,36,0.4);">';
+                popupInner += '<h3 style="margin:0 0 16px;color:#fbbf24;font-size:20px;text-shadow:0 0 20px rgba(251,191,36,0.5);">🔀 Chuyển nhóm cho HS</h3>';
+                // Box HS info - nền xanh nước biển, label + tên HS cùng 1 dòng
+                popupInner += '<div style="margin-bottom:16px;background:linear-gradient(135deg,#DA6556 0%,#C654C3 100%);padding:12px 14px;border-radius:8px;border:1px solid #06b6d4;box-shadow:0 0 12px rgba(6,182,212,0.3);">';
+                popupInner += '<div style="display:flex;align-items:center;gap:10px;flex-wrap:nowrap;">';
+                popupInner += '<div style="font-size:11px;color:#cffafe;text-transform:uppercase;letter-spacing:1px;font-weight:700;white-space:nowrap;">👤 HỌC SINH</div>';
+                popupInner += '<div style="font-size:16px;font-weight:700;color:#ffffff;text-shadow:0 1px 4px rgba(0,0,0,0.4);">' + this.esc(student.name || '') + '</div>';
+                popupInner += '</div>';
+                popupInner += '<div style="font-size:12px;color:#cffafe;margin-top:4px;">📚 Lớp: <b style="color:#ffffff;">' + this.esc(className) + '</b></div>';
+                popupInner += '</div>';
+                // Label + options - style giống modal sửa
+                popupInner += '<div style="margin-bottom:14px;">';
+                popupInner += '<label style="display:block;margin-bottom:8px;font-size:13px;color:#9ca3af;font-weight:600;">📋 Chọn nhóm đích:</label>';
+                popupInner += '<div style="max-height:280px;overflow-y:auto;">' + optionsHtml + '</div>';
+                popupInner += '</div>';
+                // Footer buttons - style giống modal sửa
+                popupInner += '<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px;">';
+                popupInner += '<button id="pn-move-cancel" style="padding:10px 20px;background:#374151;color:#d1d5db;border:1px solid #4b5563;border-radius:8px;cursor:pointer;font-weight:500;">Hủy</button>';
+                popupInner += '</div></div>';
+                popup.innerHTML = popupInner;
                 document.body.appendChild(popup);
                 // Sự kiện
                 popup.querySelectorAll('button[data-idx]').forEach(b => {
@@ -4671,7 +4861,7 @@
                   document.addEventListener('click', handler);
                 }, 100);
               },
-
+            
               /*
                * Chuyển HS sang nhóm mới (cập nhật note).
                */
@@ -4710,7 +4900,7 @@
                 this.renderPhanNhomPanel();
                 if (typeof this.showToast === 'function') this.showToast(`✅ Đã chuyển HS sang ${targetGroup.name}`);
               },
-
+            
               /*
                * Xóa HS khỏi lớp phân nhóm.
                */
@@ -4747,7 +4937,7 @@
                   if (typeof this.showToast === 'function') this.showToast(`🗑️ Đã xóa HS ${student.name}`);
                 });
               },
-
+            
               finishDraftIfComplete(item) {
                 if (item.isDraft && item.lopName && item.time && item.gvName) {
                   item.isDraft = false;
@@ -4889,7 +5079,7 @@
                   isExcused: row.state.isExcused,
                   absentAt: row.state.absentAt
                 }));
-
+            
                 return `
                   <section class="absent-box">
                     <div class="absent-head">
@@ -4898,7 +5088,7 @@
                     </div>
                     ${this.renderAbsentList(classKey, absentRows)}
                   </section>
-
+            
                   <section class="new-students-box">
                     <div class="new-students-head">
                       <h3 class="new-students-title">Học sinh mới</h3>
@@ -4912,7 +5102,7 @@
                         : '<div class="new-students-empty">Chưa có học sinh mới.</div>'}
                     </div>
                   </section>
-
+            
                   <div class="regular-students-title">Danh sách học sinh</div>
                   <div class="student-list">
                     ${view.regular.length
@@ -4994,7 +5184,7 @@
                   classes: new Set(Array.from(document.querySelectorAll(".class-card.active"), element => element.dataset.classToken))
                 };
               },
-
+            
               // ════════════════════════════════════════════════════════════════════
               //  MODULE 14: CLASS / LỚP HỌC - Render danh sách lớp & học sinh
               // ════════════════════════════════════════════════════════════════════
@@ -5006,11 +5196,11 @@
                   return;
                 }
                 this._lastRenderAll = now;
-
+            
                 const open = preserve ? this.captureOpenState() : { groups: new Set(), classes: new Set() };
                 const scrollY = window.scrollY;
                 const entries = this.sortedClassEntries();
-
+            
                 if (!entries.length) {
                   this.dom.mainContainer.innerHTML = '<div class="empty">Danh sách đang trống. Hãy chuyển sang chế độ Trợ giảng, mở khóa và tải file Excel.</div>';
                   this.applyAutoOpen();
@@ -5139,7 +5329,7 @@
                   const label = option || "-- Ghi chú --";
                   return `<option value="${this.esc(option)}" ${note === option ? "selected" : ""}>${this.esc(label)}</option>`;
                 }).join("");
-
+            
                 return `
                   <article class="student status-${isNew ? "new" : (absent ? "absent" : "present")}" id="${this.esc(idPrefix)}-${classToken}-${this.esc(student.uid)}" data-uid="${this.esc(student.uid)}">
                     <div class="student-top">
@@ -5186,22 +5376,22 @@
             
               handleAction(control) {
                 const action = control.dataset.action;
-
+            
                 if (action === "toggle-group") {
                   control.closest(".group")?.classList.toggle("active");
                   return;
                 }
-
+            
                 if (action === "toggle-day-summary") {
                   this.toggleDaySummaryPopup();
                   return;
                 }
-
+            
                 if (action === "call-teacher") {
                   this.callPhone(control.dataset.phone, control.dataset.name);
                   return;
                 }
-
+            
                 if (action === "toggle-class") {
                   control.closest(".class-card")?.classList.toggle("active");
                   return;
@@ -5217,7 +5407,7 @@
                   this.callPhone(control.dataset.phone);
                   return;
                 }
-
+            
                 if (action === "goto-phan-nhom") {
                   this.gotoPhanNhomStudent(
                     control.dataset.classKey,
@@ -5226,7 +5416,7 @@
                   );
                   return;
                 }
-
+            
                 if (action === "rc-call-parent") {
                   if (control.disabled) return;
                   if (!this.requireAssistant()) {
@@ -5236,7 +5426,7 @@
                   this.callPhone(control.dataset.phone, control.dataset.name);
                   return;
                 }
-
+            
                 if (action === "rc-call-teacher") {
                   if (control.disabled) return;
                   if (!this.requireAssistant()) {
@@ -5473,7 +5663,7 @@
               touchClass(classData) {
                 classData.lastUpdateTime = this.formatDateTime();
               },
-
+            
               /*
                * Cập nhật badge HSM/ĐỦ trên thẻ lớp mà không cần re-render toàn bộ
                * (tránh mất focus dropdown ghi chú).
@@ -5593,12 +5783,12 @@
               async copyAbsentReport(classKey, control = null, scheduleItem = null) {
                 const classData = this.db[classKey];
                 if (!classData || control?.disabled) return false;
-
+            
                 let className = classData.name;
                 let newStudents = [];
                 let absent = [];
                 let presentCount = 0;
-
+            
                 if (scheduleItem) {
                   // Copy theo đúng trạng thái điểm danh của thẻ lịch đang mở.
                   const view = this.cardAttendance(scheduleItem, classData);
@@ -5695,11 +5885,11 @@
                 const phoneKeyword = rawKeyword.replace(/\D/g, "");
                 this.clearSearch();
                 if (!keyword && !phoneKeyword) return;
-
+            
                 // Khai báo trước các hằng số dùng chung để tránh lỗi "temporal dead zone".
                 const phanNhomClasses = ["CAN-L11", "WONDER", "WIN-L10"];
                 const teacherPhoneMap = this.PHAN_NHOM_TEACHER_PHONE || {};
-
+            
                 const matches = [];
                 this.sortedClassEntries().forEach(([classKey, classData]) => {
                   classData.students.forEach(student => {
@@ -5713,7 +5903,7 @@
                   if (!silent) this.showToast("Không tìm thấy học sinh phù hợp.", true);
                   return;
                 }
-
+            
                 // ════════════════════════════════════════════════════════════════
                 // GỘP HS cùng tên trong cùng 1 lớp thành 1 card duy nhất.
                 // Ví dụ: "Ngô Việt Bách" xuất hiện 2 lần (lớp thường + phân nhóm)
@@ -5879,7 +6069,7 @@
                     m.statusClass = "new";
                   }
                 });
-
+            
                 this.dom.resultCount.textContent = `${mergedMatches.length} kết quả`;
                 // ════════════════════════════════════════════════════════════════
                 // SẮP XẾP: Ưu tiên HS có phân nhóm lên đầu, sau đó là HS lớp thường.
@@ -6043,7 +6233,7 @@
                   // Bỏ scrollIntoView vì giờ là popup nổi.
                 }
               },
-
+            
               /*
                * Bật/tắt timer tự ẩn popup kết quả tìm kiếm.
                * Nếu user ghim (pin) thì timer không chạy.
@@ -6067,14 +6257,14 @@
                   }
                 }, 100);
               },
-
+            
               stopSearchPopupTimer() {
                 if (this._searchPopupTimer) {
                   clearInterval(this._searchPopupTimer);
                   this._searchPopupTimer = null;
                 }
               },
-
+            
               hideSearchPopup() {
                 const popup = this.dom.searchResults;
                 if (!popup) return;
@@ -6085,7 +6275,7 @@
                   this.clearSearch();
                 }, 250);
               },
-
+            
               pinSearchPopup(pinned) {
                 const popup = this.dom.searchResults;
                 if (!popup) return;
@@ -6102,7 +6292,7 @@
                   this.startSearchPopupTimer();
                 }
               },
-
+            
               gotoStudent(classToken, uid) {
                 const entry = Object.entries(this.db).find(([key]) => this.token(key) === classToken);
                 if (!entry) return;
@@ -6126,7 +6316,7 @@
             
                 this.showToast(`Lớp ${classData.name} chưa được xếp vào lịch Thứ 2–Chủ nhật.`, true);
               },
-
+            
               /*
                * Mở tab "Phân nhóm" và cuộn tới học sinh cụ thể.
                * Được gọi từ kết quả tìm kiếm khi HS thuộc lớp phân nhóm.
@@ -6173,7 +6363,7 @@
                   }
                 }, 250);
               },
-
+            
               applyAutoOpen() {
                 if (this.autoOpenApplied) return;
                 const requested = new URLSearchParams(location.search).get("class");
@@ -6259,7 +6449,7 @@
                         actualName => String(actualName).trim().toUpperCase() === targetName
                       ))
                       .filter(Boolean);
-
+            
                     // Tìm sheet "Phan nhom" (phân nhóm) nếu có.
                     // Sheet này có cấu trúc 3 cột dọc: [Giáo viên phụ trách] | [Nhóm] | [Tên học sinh]
                     // Hệ thống sẽ gom học sinh từng nhóm vào lớp tương ứng với giáo viên phụ trách.
@@ -6268,14 +6458,14 @@
                       return app.PHAN_NHOM_SHEET_NAMES.some(target => app.fold(target) === normalized);
                     });
                     const hasPhanNhom = Boolean(phanNhomSheetName);
-
+            
                     if (sheetsToProcess.length === 0 && !hasPhanNhom) {
                       app.importInProgress = false;
                       alert(`Không tìm thấy sheet hợp lệ trong file Excel. Các sheet được đọc: ${app.TARGET_SHEETS.join(", ")}.`);
                       app.setProgress(0, false);
                       return;
                     }
-
+            
                     // ════════════════════════════════════════════════════════════════════
                     //  BẢO TOÀN DỮ LIỆU PHÂN NHÓM: Lưu 3 lớp phân nhóm cũ (nếu có)
                     //  để phục hồi sau khi import file Excel mới, tránh mất dữ liệu.
@@ -6288,7 +6478,7 @@
                         phanNhomBackup[name] = JSON.parse(JSON.stringify(app.db[name]));
                       }
                     });
-
+            
                     // Giống code gốc: tạo database hoàn toàn mới khi nạp file.
                     const importedDatabase = {};
                     const sheetStudentCounts = Object.fromEntries(
@@ -6304,12 +6494,12 @@
                       try {
                         if (currentSheetIdx >= totalSheets) {
                           app.setProgress(100, true);
-
+            
                           let totalStudentsCount = 0;
                           Object.keys(importedDatabase).forEach(classKey => {
                             totalStudentsCount += importedDatabase[classKey].students.length;
                           });
-
+            
                           /*
                            * Nếu có sheet "Phan nhom" trong file, xử lý nó để gom học sinh
                            * từng nhóm vào các lớp tương ứng (CAN-L11, WONDER, WIN-L10...).
@@ -6348,20 +6538,20 @@
                               phanNhomSummary = ` | Sheet "${phanNhomSheetName}" lỗi: ${pnError.message || "không rõ"}`;
                             }
                           }
-
+            
                           if (Object.keys(importedDatabase).length === 0 || totalStudentsCount === 0) {
                             throw new Error(
                               "Không lọc được học sinh. Kiểm tra tên lớp ở B, lịch học ở B và số điện thoại ở Q."
                             );
                           }
-
+            
                           /*
                            * Chỉ chuyển sang cấu trúc nội bộ SAU KHI code gốc đã lọc xong.
                            * normalizeDatabase chỉ bổ sung uid an toàn, không thay đổi danh sách đã lọc.
                            */
                           app.db = app.normalizeDatabase(importedDatabase);
                           app.filename = file.name;
-
+            
                           // ═══════════════════════════════════════════════════════════
                           //  PHỤC HỒI DỮ LIỆU PHÂN NHÓM: Nếu file Excel mới KHÔNG có
                           //  sheet "Phan nhom" hoặc lớp phân nhóm bị thiếu, ghép lại
@@ -6385,7 +6575,7 @@
                           app._lastSavedSchedule = "";
                           // Lưu ngay vào localStorage để F5 không bị mất
                           app.persistLocal();
-
+            
                           app.openAddForms.clear();
                           const scheduleNamesChanged = app.syncScheduleClassNamesWithDatabase();
                           app.initScheduleDropdowns();
@@ -6394,7 +6584,7 @@
                           app.queueAttendanceSave(0);
                           app.queueScheduleSave(0);
                           app.renderSchedule();
-
+            
                           // Nếu vừa nạp từ sheet phân nhóm, tự động mở nhóm THPT
                           // và mở sẵn các lớp phân nhóm để người dùng thấy ngay kết quả.
                           if (hasPhanNhom) {
@@ -6413,7 +6603,7 @@
                             });
                           }
                           app.renderAll(false);
-
+            
                           // Nếu có phân nhóm, tự động tạo thẻ lịch cho các lớp phân nhóm
                           // ở ngày Chủ nhật (cạnh nút Chủ nhật trên thanh lịch).
                           if (hasPhanNhom && phanNhomClassKeys.length) {
@@ -6427,7 +6617,7 @@
                             // Tự động chuyển sang tab "Phân nhóm" để người dùng thấy ngay danh sách.
                             setTimeout(() => app.showPhanNhomPanel(), 600);
                           }
-
+            
                           // Nếu có phân nhóm, cuộn xuống lớp phân nhóm đầu tiên và toast thông báo.
                           if (hasPhanNhom && phanNhomClassKeys.length) {
                             setTimeout(() => {
@@ -6718,19 +6908,19 @@
                   );
                 });
               },
-
+            
               // Còn dấu vết điểm danh nào trên các thẻ lịch không?
               hasAttendanceMarks() {
                 return Object.values(this.schedule).some(items =>
                   (items || []).some(item => this.cardHasMarks(item)));
               },
-
+            
               // Còn thẻ lịch nào đang bật "Đã điểm danh" không?
               hasScheduleCheckedMarks() {
                 return Object.values(this.schedule).some(items =>
                   (items || []).some(item => item?.isChecked));
               },
-
+            
               // Sang ngày mới: điểm danh của các thứ vẫn được GIỮ NGUYÊN.
               // Mỗi thẻ lịch giữ điểm danh riêng của mình, chỉ mất khi hết Chủ nhật.
             
@@ -6845,7 +7035,7 @@
                 this.firebase = api;
                 if (this.initialized) this.connectFirebase();
               },
-
+            
               // ════════════════════════════════════════════════════════════════════
               //  MODULE 16: FIREBASE - Kết nối, đồng bộ realtime với Firestore
               // ════════════════════════════════════════════════════════════════════
@@ -6895,7 +7085,7 @@
                   this.setSync("Không tải được Firebase; đang dùng dữ liệu cục bộ.", "error");
                 } finally {
                   this.firebaseLoadFinished = true;
-
+            
                   // Chuyển đổi mô hình dữ liệu: đẩy lên sau khi đã ghép dữ liệu Firebase.
                   if (this.pendingModelMigration) this.finishModelMigration();
                   // Nếu đã reset khi Firebase chưa sẵn sàng, đẩy lại ngay sau khi kết nối.
@@ -6931,32 +7121,32 @@
                 const now = Date.now();
                 if (this._lastApplyRemote && (now - this._lastApplyRemote) < 1500) return;
                 this._lastApplyRemote = now;
-
+            
                 // Bản rỗng từ máy khác không được xóa danh sách lớp đang có trên máy này.
                 const incomingDb = this.normalizeDatabase(payload.database || {});
                 if (!Object.keys(incomingDb).length && Object.keys(this.db).length) {
                   this.queueAttendanceSave(0);
                   return;
                 }
-
+            
                 // Máy này còn thay đổi CHƯA đẩy xong lên Firebase: không để bản cũ trên
                 // Firebase ghi đè (đây cũng là một nguyên nhân điểm danh "biến mất" sau khi tải lại).
                 if (this.firebaseLoadFinished && this.pendingAttendanceSave) return;
-
+            
                 const remoteResetKey = String(payload.nightResetKey || "");
                 // Khi bản reset đang chờ đẩy lên Firebase, bỏ qua snapshot cũ hơn.
                 if (this.pendingResetKey && remoteResetKey < this.pendingResetKey) return;
                 if (this.pendingResetKey && remoteResetKey >= this.pendingResetKey) {
                   this.pendingResetKey = "";
                 }
-
+            
                 const remoteString = JSON.stringify(incomingDb);
                 const localString = JSON.stringify(this.db);
                 const resetKeyChanged = String(payload.nightResetKey || "") !== String(this.meta.nightResetKey || "");
-
+            
                 this.filename = String(payload.filename || "");
                 this.meta.nightResetKey = String(payload.nightResetKey || "");
-
+            
                 if (remoteString !== localString) {
                   // BẢO TOÀN DỮ LIỆU PHÂN NHÓM: Nếu local có 1 trong 3 lớp phân nhóm
                   // (CAN-L11, WONDER, WIN-L10) mà remote KHÔNG có -> giữ nguyên local
@@ -7004,9 +7194,9 @@
                 } else if (resetKeyChanged) {
                   this.persistLocal();
                 }
-
+            
               },
-
+            
               /*
                * So sánh 2 database xem có khác nhau về CẤU TRÚC hay không
                * (bỏ qua các thay đổi nhỏ như note, excused, isNew).
@@ -7119,13 +7309,13 @@
                   this.setSync("Đã lưu trên thiết bị; chưa kết nối Firebase.", "error");
                   return;
                 }
-
+            
                 const payload = {
                   database: JSON.parse(JSON.stringify(this.db)),
                   filename: this.filename || "",
                   nightResetKey: this.meta.nightResetKey || ""
                 };
-
+            
                 // KIỂM TRA: nếu dữ liệu không có thay đổi thực sự so với lần lưu trước,
                 // BỎ QUA - không gửi lên Firebase. Tránh spam "Đang lưu/Đã lưu" liên tục.
                 const payloadString = JSON.stringify(payload);
@@ -7134,7 +7324,7 @@
                   this.setSync("Không có thay đổi mới, bỏ qua lưu Firebase.", "ok");
                   return;
                 }
-
+            
                 this.saveQueue = this.saveQueue
                   .catch(() => undefined)
                   .then(async () => {
@@ -7158,7 +7348,7 @@
               },
             
               /* ===== AN TOÀN DỮ LIỆU: lưu trữ – tự tải lại – sao lưu ra file ===== */
-
+            
               // Trình duyệt có THỰC SỰ ghi nhớ dữ liệu sau khi tải lại trang không?
               // (khung xem trước sandbox, chế độ ẩn danh, chặn cookie trang web, hết dung lượng… đều không)
               checkStorageHealth() {
@@ -7174,7 +7364,7 @@
                 }
                 return this.storageOk;
               },
-
+            
               markStorageBroken() {
                 if (this.storageOk === false && this.storageWarned) return;
                 this.storageOk = false;
@@ -7185,17 +7375,17 @@
                   this.showToast("Không lưu được dữ liệu trên thiết bị này. Đừng tải lại trang để tránh mất điểm danh.", true);
                 }
               },
-
+            
               updateStorageWarning() {
                 if (!this.dom || !this.dom.storageWarn) return;
                 this.dom.storageWarn.hidden = this.storageOk;
               },
-
+            
               // Có thay đổi cục bộ nào chưa đẩy xong lên Firebase không?
               hasUnsavedChanges() {
                 return Boolean(this.pendingAttendanceSave || this.pendingScheduleSave);
               },
-
+            
               // Lưu cục bộ trước, chờ đẩy Firebase xong (tối đa 6 giây) rồi mới tải lại trang.
               reloadSafely() {
                 this.persistLocal();
@@ -7228,9 +7418,9 @@
                   }
                 }, 400);
               },
-
+            
               /* ===== SAO LƯU RA FILE (dùng được cả khi trình duyệt không lưu được dữ liệu) ===== */
-
+            
               exportBackup() {
                 const payload = {
                   app: "so-do-diem-danh",
@@ -7262,7 +7452,7 @@
                 if (isBlobUrl) setTimeout(() => URL.revokeObjectURL(url), 5000);
                 this.showToast("Đã xuất bản lưu. Hãy giữ file này để khôi phục khi cần.");
               },
-
+            
               async importBackup(file) {
                 if (!file) return;
                 try {
@@ -7294,7 +7484,7 @@
                   this.importInProgress = false;
                 }
               },
-
+            
               setSync(text, state = "busy") {
                 if (!this.dom) return;
                 // Bỏ qua nếu text và state giống hệt lần trước, tránh
@@ -7310,7 +7500,7 @@
                 this.dom.syncText.textContent = text;
                 this.dom.syncLine.className = `sync-line ${state}`;
               },
-
+            
               // ════════════════════════════════════════════════════════════════════
               //  MODULE 17: UI HELPERS - Toast, setSync, các tiện ích giao diện
               // ════════════════════════════════════════════════════════════════════
@@ -7415,6 +7605,9 @@
             window.AttendanceApp.attachFirebase(firebaseApi);
         </script>
 
-    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a490cf91f8fe099d',t:'MTc5MTc1MjU5OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+        <script>
+            (function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4911fccaaf6b1bf',t:'MTc5MTc1NTg4NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
+        </script>
+    </body>
 
 </html>
