@@ -3232,8 +3232,10 @@
                     // Bỏ qua hàng "Tổng".
                     if (teacherFolded === "tong") continue;
                     // PHÁT HIỆN header "Nhóm X - T1/58" để lưu phòng cho nhóm này.
+                    // Tìm trong CẢ DÒNG (mọi cột) để tránh phụ thuộc vào cột GV.
                     // Ví dụ: "Nhóm I - T7/237" -> currentGroupRoom = "T7-237", currentGroupName = "Nhóm I"
-                    const groupHeaderMatch = teacherText.match(/^(Nhóm\s+[IVX0-9+\-]+)\s*[-–]\s*(T[\d\-\/]+)/i);
+                    const rowText = cells.join(" | ");
+                    const groupHeaderMatch = rowText.match(/(Nhóm\s+[IVX0-9+\-]+)\s*[-–]\s*(T[\d\-\/]+)/i);
                     if (groupHeaderMatch) {
                       currentGroupName = groupHeaderMatch[1].trim();
                       // Chuẩn hóa room: "T7/237" -> "T7-237"
@@ -4314,10 +4316,13 @@
                * rồi nhóm theo tên nhóm trong schedule (nếu có).
                */
               renderPhanNhomPanel() {
+                try {
                 const container = this.dom.scheduleContainer;
                 if (!container) return;
                 const targets = ["CAN-L11", "WONDER", "WIN-L10"];
                 const defaultSchedule = this.PHAN_NHOM_DEFAULT_SCHEDULE || {};
+                // Khai báo allowEdit ở scope NGOÀI CÙNG để chắc chắn mọi forEach lồng đều thấy
+                const allowEdit = (this.currentRole === 'assistant' || this.scheduleAdminUnlocked);
                 let totalAll = 0;
 
                 let html = '<div id="phanNhomPanel">';
@@ -4348,19 +4353,43 @@
                     byGroup.set(0, { name: "Chung", room: "", time: "", teacher: "", students: [] });
                   }
                   students.forEach(s => {
-                    const note = String(s.note || "");
-                    const parts = note.split("|").map(p => p.trim());
+                    // Ưu tiên 1: dùng phanNhomGroup đã lưu trong HS (cố định, không bị mất khi reload)
+                    // Ưu tiên 2: parse từ note
+                    // Ưu tiên 3: match theo GV
+                    // Ưu tiên 4: nhóm đầu tiên
                     let noteTeacher = "";
                     let noteGroup = "";
-                    if (parts[0]) {
-                      const m = parts[0].match(/Phân nhóm\s*-\s*(.+)$/i);
-                      if (m) noteTeacher = m[1].trim();
+                    // 1) Ưu tiên phanNhomGroup cố định
+                    if (s.phanNhomGroup) {
+                      noteGroup = s.phanNhomGroup;
                     }
-                    if (parts[1]) {
-                      const gm = parts[1].match(/^Nhóm\s+([IVX0-9+\-]+)/i);
-                      if (gm) noteGroup = gm[1].trim();
+                    if (s.phanNhomTeacher) {
+                      noteTeacher = s.phanNhomTeacher;
+                    } else if (s.phanNhomGroup && /[+\-]/.test(s.phanNhomGroup)) {
+                      // Nếu phanNhomGroup là "Nhóm I+II" thì lấy phần đầu làm fallback teacher
                     }
-                    // Tìm nhóm phù hợp nhất: ưu tiên match tên nhóm (Roman), sau đó match GV.
+                    // 2) Nếu chưa có, parse từ note
+                    if (!noteGroup || !noteTeacher) {
+                      const note = String(s.note || "");
+                      const parts = note.split("|").map(p => p.trim());
+                      if (parts[0]) {
+                        const m = parts[0].match(/Phân nhóm\s*-\s*(.+)$/i);
+                        if (m && !noteTeacher) noteTeacher = m[1].trim();
+                      }
+                      if (parts[1]) {
+                        const gm = parts[1].match(/^Nhóm\s+([IVX0-9+\-]+)/i);
+                        if (gm && !noteGroup) noteGroup = gm[1].trim();
+                      }
+                    }
+                    // 3) Nếu vẫn chưa có group, thử lấy từ trường khác
+                    if (!noteGroup && s.phanNhomRoom) {
+                      // Tìm nhóm nào có phòng khớp
+                      const matchedByRoom = fixedGroups.findIndex(g => g.room === s.phanNhomRoom);
+                      if (matchedByRoom >= 0) {
+                        noteGroup = fixedGroups[matchedByRoom].name.replace(/^Nhóm\s+/i, "");
+                      }
+                    }
+                    // Tìm nhóm phù hợp nhất
                     let matchedIdx = -1;
                     if (noteGroup) {
                       // Chuẩn hóa Roman: "I" -> "I", "II" -> "II", "1" -> "I"
@@ -4392,7 +4421,6 @@
                       </header>
                       <div class="phan-nhom-cards">`;
                   const groupEntries = Array.from(byGroup.values());
-                  const canEdit = (this.currentRole === 'assistant' || this.scheduleAdminUnlocked);
                   if (groupEntries.length === 0) {
                     html += '<div class="empty">Chưa có khung nhóm cố định cho lớp này.</div>';
                   } else {
@@ -4413,14 +4441,17 @@
                           // Highlight HS mới: dùng class .is-new có sẵn (CSS nền vàng)
                           const isNew = /new|mới/i.test(String(s.note || "")) || /new|mới/i.test(sName);
                           const newClass = isNew ? ' is-new' : '';
-                          listBody += `
-                            <li class="${newClass.trim()}" data-pn-uid="${this.esc(sUid)}">
-                              <span class="pn-name" style="flex:1;">${sName}</span>
-                              ${canEdit ? `<span class="pn-actions" style="display:inline-flex;gap:4px;">
-                                <button class="pn-move-btn" data-pn-uid="${this.esc(sUid)}" data-class="${this.esc(className)}" title="Chuyển nhóm" style="background:#3b82f6;color:white;border:none;border-radius:4px;padding:2px 6px;cursor:pointer;font-size:12px;">↔</button>
-                                <button class="pn-del-btn" data-pn-uid="${this.esc(sUid)}" data-class="${this.esc(className)}" title="Xóa HS" style="background:#dc2626;color:white;border:none;border-radius:4px;padding:2px 6px;cursor:pointer;font-size:12px;">✕</button>
-                              </span>` : ''}
-                            </li>`;
+                          // Dùng String concatenation thay template literal để tránh lỗi ký tự đặc biệt
+                          let liHtml = '<li class="' + newClass.trim() + '" data-pn-uid="' + this.esc(sUid) + '">';
+                          liHtml += '<span class="pn-name" style="flex:1;">' + sName + '</span>';
+                          if (allowEdit) {
+                            liHtml += '<span class="pn-actions" style="display:inline-flex;gap:4px;">';
+                            liHtml += '<button class="pn-move-btn" data-pn-uid="' + this.esc(sUid) + '" data-class="' + this.esc(className) + '" title="Chuyển nhóm" style="background:#3b82f6;color:white;border:none;border-radius:4px;padding:2px 6px;cursor:pointer;font-size:12px;">↔</button>';
+                            liHtml += '<button class="pn-del-btn" data-pn-uid="' + this.esc(sUid) + '" data-class="' + this.esc(className) + '" title="Xóa HS" style="background:#dc2626;color:white;border:none;border-radius:4px;padding:2px 6px;cursor:pointer;font-size:12px;">✕</button>';
+                            liHtml += '</span>';
+                          }
+                          liHtml += '</li>';
+                          listBody += liHtml;
                         });
                       }
                       // Thông tin meta: GV + giờ (giống dòng header dưới tiêu đề Excel)
@@ -4435,7 +4466,7 @@
                           <header class="phan-nhom-group-head">
                             <h3 class="phan-nhom-group-name">${this.esc(displayName)}</h3>
                             <span class="phan-nhom-group-count">${group.students.length} HS</span>
-                            ${canEdit ? `<button class="pn-edit-group-btn" data-class="${this.esc(className)}" data-idx="${idx}" title="Sửa tên/phòng/GV" style="background:#7c3aed;color:white;border:none;border-radius:4px;padding:2px 6px;cursor:pointer;font-size:11px;margin-left:4px;">✎</button>` : ''}
+                            ${allowEdit ? `<button class="pn-edit-group-btn" data-class="${this.esc(className)}" data-idx="${idx}" title="Sửa tên/phòng/GV" style="background:#7c3aed;color:white;border:none;border-radius:4px;padding:2px 6px;cursor:pointer;font-size:11px;margin-left:4px;">✎</button>` : ''}
                           </header>
                           <div class="phan-nhom-group-meta" style="padding:4px 12px;font-size:.85rem;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.06);display:flex;gap:14px;flex-wrap:wrap;">
                             ${teacherLine}
@@ -4457,7 +4488,7 @@
                 container.innerHTML = html;
 
                 // Gắn event handler cho các nút Sửa nhóm / Chuyển nhóm / Xóa HS
-                if (canEdit) {
+                if (allowEdit) {
                   // Nút Sửa nhóm (đổi tên, phòng, GV)
                   container.querySelectorAll('.pn-edit-group-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
@@ -4485,6 +4516,11 @@
                       this.deletePhanNhomStudent(className, uid);
                     });
                   });
+                }
+
+                } catch (err) {
+                  console.error("LỖI renderPhanNhomPanel:", err);
+                  if (typeof this.showToast === 'function') this.showToast("❌ Lỗi render phân nhóm: " + err.message, 5000);
                 }
 
                 // Hàm chuyển số sang La Mã.
@@ -7379,6 +7415,6 @@
             window.AttendanceApp.attachFirebase(firebaseApi);
         </script>
 
-    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a490b933ddea5df8',t:'MTc5MTc1MTY4Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a490cf91f8fe099d',t:'MTc5MTc1MjU5OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
