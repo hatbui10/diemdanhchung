@@ -179,7 +179,12 @@
               display: none !important;
             }
             
-            .upload-card { border-color: var(--yellow); }
+            .upload-card { border-color: var(--yellow); background: linear-gradient(135deg, rgba(30,41,59,0.6) 0%, rgba(15,23,42,0.4) 100%); border-radius: 12px; padding: 16px 18px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+            .upload-card .card-title { color: #fbbf24; text-shadow: 0 0 12px rgba(251,191,36,0.3); margin-bottom: 12px; font-size: 1.05rem; }
+            .upload-actions { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 4px; }
+            #chooseExcelBtn { background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%) !important; border: none; padding: 12px 32px; font-size: 15px; font-weight: 700; border-radius: 10px; box-shadow: 0 4px 12px rgba(14,165,233,0.4); transition: all 0.2s; min-width: 220px; }
+            #chooseExcelBtn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(14,165,233,0.5); }
+            .file-status { margin-top: 10px; padding: 4px 0; font-size: 13px; text-align: center; color: #86efac; }
             
             .card-title {
               margin-bottom: 9px;
@@ -263,14 +268,21 @@
             }
             
             .upload-actions {
-              display: grid;
-              grid-template-columns: 1fr 1fr;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
               gap: 8px;
               margin-top: 10px;
             }
             
+            .upload-actions > [hidden],
+            .upload-actions [hidden] {
+              display: none !important;
+            }
+            
             .upload-actions #restoreDefaultBtn {
-              grid-column: 1 / -1;
+              width: 100%;
+              max-width: 300px;
             }
             
             .file-status {
@@ -2123,6 +2135,7 @@
             }
             
             .backup-btn.warn { color: var(--yellow); border-color: var(--yellow); background: rgba(255, 213, 74, .14); }
+                    .pwd-mask { -webkit-text-security: disc; }
         </style>
     </head>
 
@@ -2167,16 +2180,15 @@
 
         <section id="uploadCard" class="card upload-card assistant-only" aria-labelledby="uploadTitle" hidden>
             <h2 id="uploadTitle" class="card-title">Tải danh sách từ Excel</h2>
-            <p class="help-text">Đọc sheet SV và toàn bộ sheet 2–12: tên học sinh ở cột B, số điện thoại ở cột Q. Dòng không có SĐT sẽ kết thúc lớp hiện tại.<br>Hệ thống tự lưu bản lưu mặc định mỗi 24 giờ, và tự chụp thêm một bản ngay trước khi đặt lại điểm danh đầu tuần – bấm "🔁 Khôi phục mặc định" để lấy lại bản MỚI NHẤT trong hai bản đó.</p>
 
-            <div class="row">
-                <input id="uploadPassword" class="input" type="password" autocomplete="off" placeholder="Nhập mật khẩu mở chức năng tải file">
+            <div class="row" style="display:none;">
+                <input id="uploadPassword" class="input pwd-mask" type="text" autocomplete="off" data-lpignore="true" data-1p-ignore="true" data-form-type="other" placeholder="Nhập mật khẩu mở chức năng tải file">
             </div>
 
             <div id="uploadActions" class="upload-actions" hidden>
                 <button type="button" id="chooseExcelBtn" class="btn btn-primary">📂 Chọn file Excel</button>
-                <button type="button" id="clearAttendanceBtn" class="btn btn-danger">Xóa điểm danh cũ</button>
-                <button type="button" id="restoreDefaultBtn" class="btn btn-success">🔁 Khôi phục mặc định</button>
+                <button type="button" id="clearAttendanceBtn" class="btn btn-danger" hidden>Xóa điểm danh cũ</button>
+                <button type="button" id="restoreDefaultBtn" class="btn btn-success" hidden>🔁 Khôi phục mặc định</button>
             </div>
             <input id="excelFileInput" type="file" accept=".xlsx,.xls" hidden>
             <div id="fileStatus" class="file-status">Chưa mở khóa chức năng tải file.</div>
@@ -2496,7 +2508,7 @@
                 { name: "Ngô Thị Thu Hằng", phone: "0968125259" },
                 { name: "Lê Minh Phương", phone: "0332323361" },
                 { name: "Nguyễn Như Mai", phone: "0395729123" },
-             { name: "Đình Nghĩa", phone: "0966951820" },
+            { name: "Đình Nghĩa", phone: "0966951820" },
                 { name: "Nguyễn Bích", phone: "0392395612" }
               ],
               // Danh sách GVNN có cùng cấu trúc { name, phone } như danh sách giáo viên.
@@ -2883,7 +2895,7 @@
                 this.uploadUnlocked = this.dom.uploadPassword.value === this.UPLOAD_UI_PASSWORD;
                 this.dom.uploadActions.hidden = !this.uploadUnlocked;
                 this.dom.fileStatus.textContent = this.uploadUnlocked
-                  ? "🔓 Đã mở khóa. Bạn có thể tải Excel hoặc xóa điểm danh cũ."
+                  ? "🔓 Đã mở khóa. Bạn có thể tải Excel "
                   : "Chưa mở khóa chức năng tải file.";
                 this.dom.fileStatus.style.color = this.uploadUnlocked ? "var(--green)" : "var(--yellow)";
               },
@@ -3642,7 +3654,7 @@
                 let inner = '<div style="background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);color:#f9fafb;padding:28px;border-radius:16px;min-width:400px;max-width:92%;box-shadow:0 20px 60px rgba(0,0,0,0.7),0 0 0 1px rgba(251,191,36,0.25);border:1px solid rgba(251,191,36,0.4);">';
                 inner += '<h3 style="margin:0 0 12px;color:#fbbf24;font-size:22px;text-shadow:0 0 20px rgba(251,191,36,0.5);">' + this.esc(title) + '</h3>';
                 inner += '<p style="margin:0 0 18px;color:#cbd5e1;font-size:13px;line-height:1.6;">' + this.esc(desc) + '</p>';
-                inner += '<input id="app-pwd-input" type="password" placeholder="' + this.esc(placeholder) + '" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other" data-lpignore="true" data-1p-ignore="true" style="width:100%;padding:12px 14px;background:#0f172a;color:#fbbf24;border:2px solid #475569;border-radius:10px;font-size:16px;font-weight:600;box-sizing:border-box;letter-spacing:2px;text-align:center;outline:none;transition:all 0.2s;" autofocus onfocus="this.style.borderColor=\'#fbbf24\';this.style.boxShadow=\'0 0 0 3px rgba(251,191,36,0.2)\'" onblur="this.style.borderColor=\'#475569\';this.style.boxShadow=\'none\'">';
+                inner += '<input id="app-pwd-input" class="pwd-mask" type="text" placeholder="' + this.esc(placeholder) + '" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other" data-lpignore="true" data-1p-ignore="true" style="width:100%;padding:12px 14px;background:#0f172a;color:#fbbf24;border:2px solid #475569;border-radius:10px;font-size:16px;font-weight:600;box-sizing:border-box;letter-spacing:2px;text-align:center;outline:none;transition:all 0.2s;" autofocus onfocus="this.style.borderColor=\'#fbbf24\';this.style.boxShadow=\'0 0 0 3px rgba(251,191,36,0.2)\'" onblur="this.style.borderColor=\'#475569\';this.style.boxShadow=\'none\'">';
                 inner += '<div id="app-pwd-error" style="display:none;margin-top:10px;color:#fca5a5;font-size:13px;font-weight:600;background:rgba(239,68,68,0.15);padding:8px 12px;border-radius:6px;border:1px solid rgba(239,68,68,0.3);">❌ Mật khẩu không chính xác. Vui lòng thử lại.</div>';
                 inner += '<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;">';
                 inner += '<button id="app-pwd-cancel" style="padding:10px 20px;background:#374151;color:#d1d5db;border:1px solid #4b5563;border-radius:8px;cursor:pointer;font-weight:500;">Hủy</button>';
@@ -4791,6 +4803,12 @@
                 const popup = document.createElement('div');
                 popup.id = 'pn-move-popup';
                 popup.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.75);z-index:10000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);';
+                // Click vào backdrop (vùng đen bên ngoài modal) thì đóng
+                popup.addEventListener('click', (e) => {
+                  if (e.target === popup) {
+                    popup.remove();
+                  }
+                });
                 // Tạo options dùng String concat - style giống box HS (nền đậm, chữ sáng)
                 let optionsHtml = '';
                 def.groups.forEach((g, idx) => {
@@ -4849,17 +4867,18 @@
                     popup.remove();
                   });
                 });
-                document.getElementById('pn-move-cancel').addEventListener('click', () => popup.remove());
-                // Click ngoài thì đóng
-                setTimeout(() => {
-                  const handler = (ev) => {
-                    if (!popup.contains(ev.target)) {
-                      popup.remove();
-                      document.removeEventListener('click', handler);
-                    }
-                  };
-                  document.addEventListener('click', handler);
-                }, 100);
+                document.getElementById('pn-move-cancel').addEventListener('click', (e) => {
+                  e.stopPropagation();
+                  popup.remove();
+                });
+                // ESC để đóng
+                const escHandler = (e) => {
+                  if (e.key === 'Escape') {
+                    popup.remove();
+                    document.removeEventListener('keydown', escHandler);
+                  }
+                };
+                document.addEventListener('keydown', escHandler);
               },
             
               /*
@@ -7606,7 +7625,7 @@
         </script>
 
         <script>
-            (function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4911fccaaf6b1bf',t:'MTc5MTc1NTg4NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
+            (function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4913c982b6306a5',t:'MTc5MTc1NzA2NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
         </script>
     </body>
 
