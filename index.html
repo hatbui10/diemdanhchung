@@ -2184,6 +2184,33 @@
           }
         }
 
+        /* Ẩn nút Xóa ngày (giữ nguyên logic JS) */
+        #clearScheduleCardDayBtn { display: none !important; }
+
+        /* Nút mở khóa: gradient đẹp, nổi bật */
+        #scheduleAuthBtn, #uploadPanelToggleBtn {
+          color: #ffffff !important;
+          border: none !important;
+          font-weight: 700;
+          letter-spacing: .2px;
+          transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+        }
+        #scheduleAuthBtn {
+          background: linear-gradient(135deg, #7c3aed 0%, #c026d3 55%, #ec4899 100%) !important;
+          box-shadow: 0 4px 14px rgba(192, 38, 211, 0.45), inset 0 1px 0 rgba(255,255,255,0.18);
+        }
+        #uploadPanelToggleBtn {
+          background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 60%, #4f46e5 100%) !important;
+          box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45), inset 0 1px 0 rgba(255,255,255,0.18);
+        }
+        #scheduleAuthBtn:hover, #uploadPanelToggleBtn:hover {
+          transform: translateY(-1px);
+          filter: brightness(1.08);
+        }
+        #scheduleAuthBtn:active, #uploadPanelToggleBtn:active {
+          transform: translateY(0);
+        }
+
         /* Nút Tìm kiếm không xuống dòng */
         .search-btn, #searchBtn { white-space: nowrap; }
 </style>
