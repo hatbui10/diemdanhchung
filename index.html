@@ -1470,7 +1470,7 @@
               align-self: start;
               height: auto;
               cursor: default;
-              transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+              transition: border-color .2s ease, box-shadow .2s ease;
             }
             
             .schedule-card.is-expanded {
@@ -1489,11 +1489,7 @@
               .schedule-card.is-expanded:hover,
               .schedule-card.has-new-students:hover {
                 border-color: #67e8f9;
-                box-shadow:
-                  0 0 7px rgba(255, 255, 255, .45),
-                  0 0 19px rgba(0, 233, 255, .62),
-                  0 0 34px rgba(37, 99, 235, .38);
-                transform: translateY(-2px);
+                box-shadow: 0 0 10px rgba(0, 233, 255, .35);
               }
             }
             
@@ -3738,7 +3734,7 @@
                 let inner = '<div style="background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);color:#f9fafb;padding:28px;border-radius:16px;min-width:400px;max-width:92%;box-shadow:0 20px 60px rgba(0,0,0,0.7),0 0 0 1px rgba(251,191,36,0.25);border:1px solid rgba(251,191,36,0.4);">';
                 inner += '<h3 style="margin:0 0 12px;color:#fbbf24;font-size:22px;text-shadow:0 0 20px rgba(251,191,36,0.5);">' + this.esc(title) + '</h3>';
                 inner += '<p style="margin:0 0 18px;color:#cbd5e1;font-size:13px;line-height:1.6;">' + this.esc(desc) + '</p>';
-                inner += '<input id="app-pwd-input" class="pwd-mask" type="text" placeholder="' + this.esc(placeholder) + '" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other" data-lpignore="true" data-1p-ignore="true" style="width:100%;padding:12px 14px;background:#0f172a;color:#fbbf24;border:2px solid #475569;border-radius:10px;font-size:16px;font-weight:600;box-sizing:border-box;letter-spacing:2px;text-align:center;outline:none;transition:all 0.2s;" autofocus onfocus="this.style.borderColor=\'#fbbf24\';this.style.boxShadow=\'0 0 0 3px rgba(251,191,36,0.2)\'" onblur="this.style.borderColor=\'#475569\';this.style.boxShadow=\'none\'">';
+                inner += '<input id="app-pwd-input" class="pwd-mask" type="text" placeholder="' + this.esc(placeholder) + '" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other" data-lpignore="true" data-1p-ignore="true" style="width:100%;padding:12px 14px;background:#0f172a;color:#fbbf24;border:2px solid #475569;border-radius:10px;font-size:16px;font-weight:600;box-sizing:border-box;letter-spacing:2px;text-align:center;outline:none;transition:all 0.2s;" onfocus="this.style.borderColor=\'#fbbf24\';this.style.boxShadow=\'0 0 0 3px rgba(251,191,36,0.2)\'" onblur="this.style.borderColor=\'#475569\';this.style.boxShadow=\'none\'">';
                 inner += '<div id="app-pwd-error" style="display:none;margin-top:10px;color:#fca5a5;font-size:13px;font-weight:600;background:rgba(239,68,68,0.15);padding:8px 12px;border-radius:6px;border:1px solid rgba(239,68,68,0.3);">❌ Mật khẩu không chính xác. Vui lòng thử lại.</div>';
                 inner += '<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;">';
                 inner += '<button id="app-pwd-cancel" style="padding:10px 20px;background:#374151;color:#d1d5db;border:1px solid #4b5563;border-radius:8px;cursor:pointer;font-weight:500;">Hủy</button>';
@@ -4923,7 +4919,7 @@
                 let popupInner = '<div style="background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);color:#f9fafb;padding:24px;border-radius:16px;min-width:400px;max-width:92%;box-shadow:0 20px 60px rgba(0,0,0,0.7),0 0 0 1px rgba(251,191,36,0.25);border:1px solid rgba(251,191,36,0.4);">';
                 popupInner += '<h3 style="margin:0 0 16px;color:#fbbf24;font-size:20px;text-shadow:0 0 20px rgba(251,191,36,0.5);">🔀 Chuyển nhóm cho HS</h3>';
                 // Box HS info - nền xanh nước biển, label + tên HS cùng 1 dòng
-                popupInner += '<div style="margin-bottom:16px;background:linear-gradient(135deg,#DA6556 0%,#C654C3 100%);padding:12px 14px;border-radius:8px;border:1px solid #06b6d4;box-shadow:0 0 12px rgba(6,182,212,0.3);">';
+                popupInner += '<div style="margin-bottom:16px;background:linear-gradient(135deg,#0891b2 0%,#0e7490 100%);padding:12px 14px;border-radius:8px;border:1px solid #06b6d4;box-shadow:0 0 12px rgba(6,182,212,0.3);">';
                 popupInner += '<div style="display:flex;align-items:center;gap:10px;flex-wrap:nowrap;">';
                 popupInner += '<div style="font-size:11px;color:#cffafe;text-transform:uppercase;letter-spacing:1px;font-weight:700;white-space:nowrap;">👤 HỌC SINH</div>';
                 popupInner += '<div style="font-size:16px;font-weight:700;color:#ffffff;text-shadow:0 1px 4px rgba(0,0,0,0.4);">' + this.esc(student.name || '') + '</div>';
@@ -7245,12 +7241,15 @@
                 if (!payload || typeof payload !== "object") return;
                 // Chống vòng lặp re-render: bỏ qua nếu vừa xử lý applyRemote trong 1500ms.
                 const now = Date.now();
+                const dbAt = String(payload.updatedAt || "");
+                if (dbAt && this._lastDbWriteIso && dbAt < this._lastDbWriteIso) return;
                 if (this._lastApplyRemote && (now - this._lastApplyRemote) < 1500) {
                   // Chỉ hoãn khi nội dung thật sự khác dữ liệu đang có (tránh vòng lặp lưu-nhận-lưu gây giật).
                   const incomingDbStr = JSON.stringify(this.normalizeDatabase(payload.database || {}));
                   if (incomingDbStr === JSON.stringify(this.db)) return;
+                  this._latestRemote = payload;
                   clearTimeout(this._trailingRemote);
-                  this._trailingRemote = setTimeout(() => this.applyRemote(payload), 1550 - (now - this._lastApplyRemote));
+                  this._trailingRemote = setTimeout(() => this.applyRemote(this._latestRemote), 1550 - (now - this._lastApplyRemote));
                   return;
                 }
                 this._lastApplyRemote = now;
@@ -7362,12 +7361,16 @@
                 if (this.firebaseLoadFinished && this.pendingScheduleSave) return;
                 // Chống vòng lặp re-render: bỏ qua nếu vừa xử lý trong 1500ms.
                 const now = Date.now();
+                // Bản cũ hơn lần ghi gần nhất của máy này -> bỏ qua (tránh ghi đè điểm danh vừa bấm).
+                const schedAt = String(payload?.updatedAt || "");
+                if (schedAt && this._lastScheduleWriteIso && schedAt < this._lastScheduleWriteIso) return;
                 if (this._lastApplyRemoteSchedule && (now - this._lastApplyRemoteSchedule) < 1500) {
                   // Chỉ hoãn khi lịch thật sự khác (tránh vòng lặp gây giật).
                   const incomingSchedStr = JSON.stringify(this.normalizeSchedule(payload?.content || payload || null));
                   if (incomingSchedStr === JSON.stringify(this.schedule)) return;
+                  this._latestRemoteSchedule = payload;
                   clearTimeout(this._trailingRemoteSchedule);
-                  this._trailingRemoteSchedule = setTimeout(() => this.applyRemoteSchedule(payload), 1550 - (now - this._lastApplyRemoteSchedule));
+                  this._trailingRemoteSchedule = setTimeout(() => this.applyRemoteSchedule(this._latestRemoteSchedule), 1550 - (now - this._lastApplyRemoteSchedule));
                   return;
                 }
                 this._lastApplyRemoteSchedule = now;
@@ -7468,6 +7471,7 @@
                     // Gộp với lịch đang có trên Firebase trước khi ghi, để không xóa thẻ/điểm danh của máy khác.
                     await this.mergeRemoteScheduleBeforeSave();
                     const mergedContent = JSON.parse(JSON.stringify(this.schedule));
+                    this._lastScheduleWriteIso = new Date().toISOString();
                     await this.firebase.saveSchedule(mergedContent);
                     this.pendingScheduleReset = false;
                     this.pendingScheduleSave = false;
@@ -7523,6 +7527,7 @@
                   .catch(() => undefined)
                   .then(async () => {
                     this.setSync("Đang lưu dữ liệu lên Firebase…", "busy");
+                    this._lastDbWriteIso = new Date().toISOString();
                     await this.firebase.save(payload);
                     this.pendingAttendanceSave = false;
                     this._lastSavedPayload = payloadString;
@@ -7711,15 +7716,47 @@
                   this.dom.toast.classList.remove("show");
                   setTimeout(() => { this.dom.toast.hidden = true; }, 200);
                 };
-                // Tăng thời gian hiển thị lên 8 giây để người dùng kịp đọc.
+                // Thông báo hiển thị 2 giây rồi tự ẩn.
                 this.toastTimer = setTimeout(() => {
                   this.dom.toast.classList.remove("show");
                   setTimeout(() => { this.dom.toast.hidden = true; }, 200);
-                }, 8000);
+                }, 2000);
               }
             };
             
             window.AttendanceApp = AttendanceApp;
+            
+            // ══ Không vẽ lại khi người dùng đang mở dropdown (select) ══
+            // Vẽ lại làm dropdown ghi chú tự đóng. Nếu đang mở, hoãn vẽ lại đến khi đóng.
+            (function () {
+              const app = window.AttendanceApp;
+              const isSelectOpen = () => {
+                const el = document.activeElement;
+                return !!el && el.tagName === "SELECT" &&
+                  !!el.closest("#scheduleContainer, #mainContainer, #allClassesDetails, #phanNhomPanel");
+              };
+              app._deferredRender = null;
+              ["renderSchedule", "renderAll"].forEach(name => {
+                const original = app[name].bind(app);
+                app[name] = function (...args) {
+                  if (isSelectOpen()) {
+                    app._deferredRender = { name, args };
+                    return;
+                  }
+                  return original(...args);
+                };
+              });
+              document.addEventListener("focusout", event => {
+                if (event.target.tagName !== "SELECT") return;
+                setTimeout(() => {
+                  const pending = app._deferredRender;
+                  if (!pending || isSelectOpen()) return;
+                  app._deferredRender = null;
+                  if (pending.name === "renderSchedule") app._lastRenderSchedule = 0;
+                  app[pending.name](...pending.args);
+                }, 150);
+              }, true);
+            })();
             document.addEventListener("DOMContentLoaded", () => AttendanceApp.init());
         </script>
 
@@ -7800,7 +7837,7 @@
         </script>
 
         <script>
-            (function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a49610d1af1c4f91',t:'MTc5MTgwNzcwMA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
+            (function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4a669dada528b35',t:'MTc5MTk3OTExOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
         </script>
     </body>
 
