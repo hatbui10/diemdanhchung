@@ -5143,7 +5143,9 @@
                     this.renderSchedule();
                     return;
                   }
-                  if (list.some(entry => entry.uid !== uid && entry.lopName === value)) {
+                  // Cùng lớp = cùng tên sau khi bỏ khoảng trắng và phần sau dấu "/" (vd "CAN - L11" = "CAN-L11").
+                  const classKey = name => String(name || "").split("/")[0].replace(/\s+/g, "").toUpperCase();
+                  if (list.some(entry => entry.uid !== uid && classKey(entry.lopName) === classKey(value))) {
                     this.showToast("Mỗi thứ chỉ có 1 thẻ cho mỗi lớp.", true);
                     this.renderSchedule();
                     return;
