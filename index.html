@@ -274,12 +274,12 @@
               gap: 8px;
               margin-top: 10px;
             }
-
+            
             .upload-actions > [hidden],
             .upload-actions [hidden] {
               display: none !important;
             }
-
+            
             .upload-actions #restoreDefaultBtn {
               width: 100%;
               max-width: 300px;
@@ -318,7 +318,7 @@
             
             .search-card .input { flex: 1; }
             .search-card .btn { flex: 0 0 105px; }
-
+            
             /* ════════════════════════════════════════════════════════════════
                POPUP KẾT QUẢ TÌM KIẾM NỔI - tự ẩn sau 15s
                ════════════════════════════════════════════════════════════════ */
@@ -1057,7 +1057,7 @@
               border-color: var(--yellow);
               box-shadow: 0 0 13px rgba(255, 213, 74, .35);
             }
-
+            
             /* Nút "Xem vị trí trong phân nhóm" - hiện trong kết quả tìm kiếm */
             .phan-nhom-link {
               background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
@@ -1075,7 +1075,7 @@
               transform: translateY(-1px);
               box-shadow: 0 4px 10px rgba(79, 70, 229, 0.4);
             }
-
+            
             /* Highlight HS trong tab phân nhóm khi click từ tìm kiếm */
             .phan-nhom-students li.search-hit {
               background: rgba(255, 213, 74, 0.3);
@@ -1274,16 +1274,16 @@
               background: #2563eb;
               box-shadow: 0 0 11px rgba(59,130,246,.35);
             }
-
+            
             /* Nhãn "Hôm nay" ghim ở góc trên bên phải của tab ngày hiện tại. */
             .day-tabs {
               padding: 13px 1px 8px;
             }
-
+            
             .day-tab {
               position: relative;
             }
-
+            
             .day-tab .today-badge {
               position: absolute;
               top: -8px;
@@ -1298,7 +1298,7 @@
               background: linear-gradient(135deg, var(--yellow), #ffb700);
               box-shadow: 0 0 8px rgba(255, 213, 74, .55);
             }
-
+            
             .day-tab.active .today-badge {
               background: linear-gradient(135deg, #ffffff, var(--cyan));
               box-shadow: 0 0 9px rgba(0, 233, 255, .6);
@@ -1342,7 +1342,7 @@
               gap: 11px;
               align-items: start;
             }
-
+            
             /* Nút "Danh sách lớp" ở đầu mỗi tab thứ - bấm mới hiện popup */
             .day-summary-toggle-wrap {
               grid-column: 1 / -1;
@@ -1873,7 +1873,7 @@
               background: linear-gradient(135deg, #ffd54a, #ff9f1c) !important;
               box-shadow: 0 0 10px rgba(255, 213, 74, .35);
             }
-
+            
             .phan-nhom-tab {
               color: #00e9ff !important;
               border-color: var(--cyan) !important;
@@ -2102,7 +2102,7 @@
               .upload-actions { grid-template-columns: 1fr; }
               th:nth-child(2), td:nth-child(2) { display: none; }
             }
-        
+                    
             /* ===== Cảnh báo khi trình duyệt KHÔNG lưu được dữ liệu ===== */
             .storage-warn {
               margin: 0 0 14px;
@@ -2116,10 +2116,10 @@
               background: rgba(255, 77, 95, .16);
               box-shadow: 0 0 16px rgba(255, 77, 95, .28);
             }
-
+            
             .storage-warn b { display: block; margin-bottom: 5px; color: var(--danger); font-size: .98rem; }
             .storage-warn code { color: var(--yellow); }
-
+            
             .backup-btn {
               padding: 9px 15px;
               color: var(--cyan);
@@ -2129,20 +2129,20 @@
               background: rgba(0, 233, 255, .12);
               box-shadow: 0 0 12px rgba(0, 233, 255, .22);
             }
-
+            
             .backup-btn.warn { color: var(--yellow); border-color: var(--yellow); background: rgba(255, 213, 74, .14); }
-        .pwd-mask { -webkit-text-security: disc; }
-
-        /* ===== Responsive cho điện thoại ===== */
-        @media (max-width: 600px) {
-          /* Lớp nền modal: chừa lề 12px 2 bên, không dính mép màn hình */
-          #pn-edit-modal, #pn-move-popup, #app-pwd-modal, #pn-del-modal {
+                    .pwd-mask { -webkit-text-security: disc; }
+            
+                    /* ===== Responsive cho điện thoại ===== */
+                    @media (max-width: 600px) {
+                      /* Lớp nền modal: chừa lề 12px 2 bên, không dính mép màn hình */
+                      #pn-edit-modal, #pn-move-popup, #app-pwd-modal, #pn-del-modal {
             padding: 12px !important;
             box-sizing: border-box !important;
             align-items: center !important;
-          }
-          /* Khung modal: bỏ min-width cứng, co theo màn hình */
-          #pn-edit-modal > div, #pn-move-popup > div, #app-pwd-modal > div, #pn-del-modal > div {
+                      }
+                      /* Khung modal: bỏ min-width cứng, co theo màn hình */
+                      #pn-edit-modal > div, #pn-move-popup > div, #app-pwd-modal > div, #pn-del-modal > div {
             min-width: 0 !important;
             width: 100% !important;
             max-width: 100% !important;
@@ -2151,72 +2151,72 @@
             box-sizing: border-box !important;
             padding: 18px 16px !important;
             border-radius: 14px !important;
-          }
-          #pn-edit-modal h3, #pn-move-popup h3, #app-pwd-modal h3, #pn-del-modal h3 {
+                      }
+                      #pn-edit-modal h3, #pn-move-popup h3, #app-pwd-modal h3, #pn-del-modal h3 {
             font-size: 18px !important;
             line-height: 1.3;
-          }
-          /* Nút trong modal: chia đều, dễ bấm bằng ngón tay */
-          #pn-edit-modal button, #pn-move-popup button, #app-pwd-modal button, #pn-del-modal button {
+                      }
+                      /* Nút trong modal: chia đều, dễ bấm bằng ngón tay */
+                      #pn-edit-modal button, #pn-move-popup button, #app-pwd-modal button, #pn-del-modal button {
             min-height: 44px;
             touch-action: manipulation;
-          }
-          #pn-edit-modal > div > div:last-child,
-          #pn-del-modal > div > div:last-child {
+                      }
+                      #pn-edit-modal > div > div:last-child,
+                      #pn-del-modal > div > div:last-child {
             display: flex !important;
             gap: 10px !important;
-          }
-          #pn-edit-modal > div > div:last-child button,
-          #pn-del-modal > div > div:last-child button {
+                      }
+                      #pn-edit-modal > div > div:last-child button,
+                      #pn-del-modal > div > div:last-child button {
             flex: 1 1 0;
             padding: 10px 12px !important;
-          }
-          #pn-move-cancel {
+                      }
+                      #pn-move-cancel {
             width: 100%;
             margin-top: 6px;
-          }
-          #app-pwd-modal input {
+                      }
+                      #app-pwd-modal input {
             font-size: 18px !important;
-          }
-        }
-
-        /* Ẩn nút Xóa ngày (giữ nguyên logic JS) */
-        #clearScheduleCardDayBtn { display: none !important; }
-
-        /* Nút mở khóa: gradient đẹp, nổi bật */
-        #scheduleAuthBtn, #uploadPanelToggleBtn {
-          color: #ffffff !important;
-          border: none !important;
-          font-weight: 700;
-          letter-spacing: .2px;
-          transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
-        }
-        #scheduleAuthBtn {
-          background: linear-gradient(135deg, #7c3aed 0%, #c026d3 55%, #ec4899 100%) !important;
-          box-shadow: 0 4px 14px rgba(192, 38, 211, 0.45), inset 0 1px 0 rgba(255,255,255,0.18);
-        }
-        #uploadPanelToggleBtn {
-          background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 60%, #4f46e5 100%) !important;
-          box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45), inset 0 1px 0 rgba(255,255,255,0.18);
-        }
-        #scheduleAuthBtn:hover, #uploadPanelToggleBtn:hover {
-          transform: translateY(-1px);
-          filter: brightness(1.08);
-        }
-        #scheduleAuthBtn:active, #uploadPanelToggleBtn:active {
-          transform: translateY(0);
-        }
-
-        /* Nút Tìm kiếm không xuống dòng */
-        .search-btn, #searchBtn { white-space: nowrap; }
-</style>
+                      }
+                    }
+            
+                    /* Ẩn nút Xóa ngày (giữ nguyên logic JS) */
+                    #clearScheduleCardDayBtn { display: none !important; }
+            
+                    /* Nút mở khóa: gradient đẹp, nổi bật */
+                    #scheduleAuthBtn, #uploadPanelToggleBtn {
+                      color: #ffffff !important;
+                      border: none !important;
+                      font-weight: 700;
+                      letter-spacing: .2px;
+                      transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+                    }
+                    #scheduleAuthBtn {
+                      background: linear-gradient(135deg, #7c3aed 0%, #c026d3 55%, #ec4899 100%) !important;
+                      box-shadow: 0 4px 14px rgba(192, 38, 211, 0.45), inset 0 1px 0 rgba(255,255,255,0.18);
+                    }
+                    #uploadPanelToggleBtn {
+                      background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 60%, #4f46e5 100%) !important;
+                      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45), inset 0 1px 0 rgba(255,255,255,0.18);
+                    }
+                    #scheduleAuthBtn:hover, #uploadPanelToggleBtn:hover {
+                      transform: translateY(-1px);
+                      filter: brightness(1.08);
+                    }
+                    #scheduleAuthBtn:active, #uploadPanelToggleBtn:active {
+                      transform: translateY(0);
+                    }
+            
+                    /* Nút Tìm kiếm không xuống dòng */
+                    .search-btn, #searchBtn { white-space: nowrap; }
+        </style>
     </head>
 
     <body class="role-teacher">
         <div id="storageWarn" class="storage-warn" role="alert" hidden>
             <b>⚠ Không lưu được dữ liệu trên thiết bị này — điểm danh sẽ mất nếu trang được tải lại</b>
             <span>Trình duyệt hiện tại đang chặn hoặc không giữ được <code>localStorage</code> (bản xem trước trong khung sandbox, chế độ ẩn danh/riêng tư, chặn cookie trang web, hết dung lượng…).
-            Vì vậy mỗi khi trang được tải lại (bấm ↻ Tải lại trang, đóng rồi mở lại tab, hoặc trình duyệt tự nạp lại) là toàn bộ điểm danh sẽ biến mất.</span><br>
+                Vì vậy mỗi khi trang được tải lại (bấm ↻ Tải lại trang, đóng rồi mở lại tab, hoặc trình duyệt tự nạp lại) là toàn bộ điểm danh sẽ biến mất.</span><br>
             <span>Cách xử lý: mở file bằng trình duyệt thật (Chrome / Edge / Cốc Cốc) ở chế độ thường, không ẩn danh. Trong lúc còn băng cảnh báo này, đừng tải lại trang hay đóng tab khi chưa đồng bộ xong lên Firebase (xem dòng trạng thái phía trên).</span>
         </div>
         <header>
@@ -2289,7 +2289,9 @@
                     <button type="button" id="searchPopupClose" class="search-popup-btn" title="Đóng">✕</button>
                 </div>
             </div>
-            <div class="search-popup-timer"><div id="searchPopupTimerBar" class="search-popup-timer-bar"></div></div>
+            <div class="search-popup-timer">
+                <div id="searchPopupTimerBar" class="search-popup-timer-bar"></div>
+            </div>
             <div id="resultBody" class="result-cards search-popup-body"></div>
         </div>
 
@@ -2325,7 +2327,7 @@
 
         <script>
             "use strict";
-
+            
             // ═══════════════════════════════════════════════════════════════════════
             //  📦 CẤU TRÚC MODULE (chia theo chức năng - dễ sửa, thay thế, mở rộng)
             // ═══════════════════════════════════════════════════════════════════════
@@ -2356,7 +2358,7 @@
             //   17. UI HELPERS               - Dòng ~5650: Toast, setSync, showToast
             //   18. FIREBASE INIT            - Dòng ~5800+: Kết nối Firebase module
             // ═══════════════════════════════════════════════════════════════════════
-
+            
             const AttendanceApp = {
               TARGET_SHEETS: ["SV", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
               // Tên sheet "phân nhóm" - hệ thống tự tìm theo các biến thể có dấu và không dấu.
@@ -2374,10 +2376,12 @@
                 "WIN-L10": {
                   "Hà My": "T7-237",
                   "Ha My": "T7-237",
-                  "Bảo Anh + Trúc Anh": "T1-58",
-                  "Bao Anh + Truc Anh": "T1-58",
+                  "Bảo Anh + Trúc Anh": "T2-60",
+                  "Bao Anh + Truc Anh": "T2-60",
                   "Q Hưng + Trầm Anh": "T1-56",
-                  "Q Hung + Tram Anh": "T1-56"
+                  "Q Hung + Tram Anh": "T1-56",
+                  "Mạnh Toàn": "T1-58",
+                  "Manh Toan": "T1-58"
                 },
                 "CAN-L11": {
                   "Hưng/QA": "T1-58",
@@ -2540,8 +2544,10 @@
                 },
                 "WIN-L10": {
                   groups: [
-                    { name: "Nhóm I+II", room: "T7/237", time: "8h00 - 9h30", teacher: "Hà My" },
-                    { name: "Nhóm III", room: "T1/58", time: "9h30 - 11h00", teacher: "Bảo Anh + Trúc Anh" }
+                    { name: "Nhóm I", room: "T7/237", time: "8h00 - 9h30", teacher: "Hà My" },
+                    { name: "Nhóm II", room: "T2/60", time: "9h30 - 11h00", teacher: "Bảo Anh + Trúc Anh" },
+                    { name: "Nhóm III", room: "T1/56", time: "13h30 - 15h00", teacher: "Q Hưng + Trầm Anh" },
+                    { name: "Nhóm IV", room: "T1/58", time: "15h00 - 16h30", teacher: "Mạnh Toàn" }
                   ]
                 }
               },
@@ -2697,7 +2703,7 @@
                   delete this.memoryStorage[`${storageName}:${key}`];
                 }
               },
-
+            
               // ════════════════════════════════════════════════════════════════════
               //  MODULE 4: INIT - Khởi tạo app, cache DOM elements, bind events
               // ════════════════════════════════════════════════════════════════════
@@ -2878,7 +2884,7 @@
                   if (control) this.handleChange(control);
                 });
               },
-
+            
               // ════════════════════════════════════════════════════════════════════
               //  MODULE 5: ROLE & PERMISSIONS - Phân quyền Trợ giảng/Giáo viên/Khách
               // ════════════════════════════════════════════════════════════════════
@@ -2926,7 +2932,7 @@
             
               toggleUploadPanel() {
                 if (!this.requireAssistant()) return;
-
+            
                 if (this.dom.uploadCard.hidden) {
                   // Dùng modal mật khẩu giống modal sửa lịch
                   this.showPasswordModal({
@@ -2952,7 +2958,7 @@
                   });
                   return;
                 }
-
+            
                 this.closeUploadPanel();
               },
             
@@ -3022,7 +3028,7 @@
                 this.persistLocal();
                 this.pendingModelMigration = true;
               },
-
+            
               // Sau khi Firebase đã tải/ghép dữ liệu xong mới đẩy bản đã chuyển đổi lên.
               finishModelMigration() {
                 this.pendingModelMigration = false;
@@ -3033,13 +3039,13 @@
                 if (!this.hasAnyLocalData()) return;
                 // Không tự đẩy: dữ liệu chỉ lên Firebase khi người dùng thao tác (có gộp).
               },
-
+            
               // Máy này có dữ liệu để đẩy lên Firebase không?
               hasAnyLocalData() {
                 return Object.keys(this.db).length > 0 ||
                   Object.values(this.schedule).some(list => (list || []).length);
               },
-
+            
               // Gắn điểm danh bản cũ (lưu chung theo lớp) vào các thẻ của 1 thứ được chọn.
               importLegacyAttendance(dayKey) {
                 if (!this.SCHEDULE_DAYS[dayKey]) return 0;
@@ -3051,7 +3057,7 @@
                       student.status === "absent" || student.note || student.isExcused ||
                       student.isNewStudentFlag || this.isNewStudent(student));
                   if (!classMarked) return;
-
+            
                   (this.schedule[dayKey] || []).forEach(item => {
                     const match = this.findClassEntryByName(item.lopName);
                     if (!match || match[1] !== classData) return;
@@ -3073,7 +3079,7 @@
                     if (classData.lastUpdateTime) item.attTime = classData.lastUpdateTime;
                   });
                 });
-
+            
                 // Dọn dữ liệu điểm danh cũ trong danh sách lớp để chỉ còn một nguồn duy nhất.
                 Object.values(this.db).forEach(classData => {
                   (classData.students || []).forEach(student => {
@@ -3089,7 +3095,7 @@
                 });
                 return migrated;
               },
-
+            
               normalizeCardAttendance(input) {
                 const output = {};
                 if (!input || typeof input !== "object" || Array.isArray(input)) return output;
@@ -3113,7 +3119,7 @@
                 });
                 return output;
               },
-
+            
               normalizeSchedule(input) {
                 const output = { thu2: [], thu3: [], thu4: [], thu5: [], thu6: [], thu7: [], cn: [] };
                 if (!input || typeof input !== "object" || Array.isArray(input)) return output;
@@ -3217,7 +3223,7 @@
             
                 return output;
               },
-
+            
               /*
                * Đọc sheet "Phan nhom" (Phân nhóm) có cấu trúc 3 KHỐI CỘT DỌC đặt cạnh nhau:
                *
@@ -3238,6 +3244,42 @@
               // ════════════════════════════════════════════════════════════════════
               //  MODULE 9: PHAN NHOM - Xử lý sheet "Phan nhom" trong file Excel
               // ════════════════════════════════════════════════════════════════════
+              normalizePhanNhomCode(raw) {
+                const digitToRoman = {
+                  "1": "I", "2": "II", "3": "III", "4": "IV",
+                  "5": "V", "6": "VI", "7": "VII", "8": "VIII"
+                };
+                const cleaned = String(raw || "")
+                  .replace(/^\s*nh[oó]m\s+/i, "")
+                  .trim()
+                  .replace(/\s*([+\-])\s*/g, "$1");
+                if (!cleaned) return "";
+                return cleaned
+                  .split(/([+\-])/)
+                  .map(part => digitToRoman[part] || part.toUpperCase())
+                  .join("");
+              },
+            
+              phanNhomSortWeight(rawName) {
+                const code = this.normalizePhanNhomCode(rawName);
+                const order = {
+                  "I": 10, "I+II": 15, "I+II+III": 16, "I+II+III+IV": 17,
+                  "II": 20, "II+III": 25,
+                  "III": 30, "III+IV": 35,
+                  "IV": 40, "IV+V": 45,
+                  "V": 50, "VI": 60, "VII": 70, "VIII": 80
+                };
+                return order[code] || 900;
+              },
+            
+              normalizePhanNhomRoom(rawRoom, slashStyle = true) {
+                const s = String(rawRoom || "").trim();
+                if (!s) return "";
+                const m = s.match(/^T(\d+)\s*[\/\-]\s*(\d+)$/i);
+                if (m) return slashStyle ? `T${m[1]}/${m[2]}` : `T${m[1]}-${m[2]}`;
+                return slashStyle ? s.replace(/-/g, "/") : s;
+              },
+            
               parsePhanNhomSheet(worksheet, importedDatabase, sheetDisplayName) {
                 if (!worksheet) {
                   throw new Error("Sheet rỗng hoặc không tồn tại");
@@ -3250,194 +3292,277 @@
                 if (!rows || !rows.length) {
                   throw new Error("Sheet không có dữ liệu");
                 }
-
+            
+                // Điền giá trị cho các ô gộp dọc (vertical merge) trên cùng 1 cột (ví dụ cột Giáo viên gộp nhiều hàng).
+                // Không điền merge ngang để tránh nhân bản tiêu đề lớp trên hàng đầu.
+                const merges = Array.isArray(worksheet["!merges"]) ? worksheet["!merges"] : [];
+                merges.forEach(m => {
+                  if (!m || !m.s || !m.e) return;
+                  if (m.s.c === m.e.c && m.e.r > m.s.r) {
+                    const topRow = rows[m.s.r];
+                    const topVal = topRow ? String(topRow[m.s.c] || "").trim() : "";
+                    if (!topVal) return;
+                    for (let rr = m.s.r + 1; rr <= m.e.r; rr++) {
+                      if (!rows[rr]) rows[rr] = [];
+                      if (!String(rows[rr][m.s.c] || "").trim()) {
+                        rows[rr][m.s.c] = topVal;
+                      }
+                    }
+                  }
+                });
+            
                 // Hàm bỏ dấu + lowercase để so sánh không phân biệt dấu.
                 const fold = (value) => String(value || "")
                   .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                   .replace(/đ/g, "d").replace(/Đ/g, "D")
                   .toLowerCase().trim();
-
+            
                 // Bước 1: Tìm các khối cột (column blocks) dựa trên tên lớp ở hàng đầu.
-                // Tên lớp có thể ở 1 ô hoặc gộp ô. Quét hàng 0..5 để tìm.
-                const classNamesToFind = ["CAN-L11", "WONDER", "WIN-L10"];
-                const classNameFolds = classNamesToFind.map(c => ({
-                  name: c,
-                  folded: fold(c)
-                }));
-
-                let classBlocks = []; // [{ className, teacherCol, ttCol, nameCol, startRow }]
-
-                // Tìm hàng có chứa tên lớp.
+                const classAliases = [
+                  { name: "CAN-L11", patterns: ["can-l11", "can l11", "can11", "can 11"] },
+                  { name: "WONDER", patterns: ["wonder"] },
+                  { name: "WIN-L10", patterns: ["win-l10", "win l10", "win10", "win 10"] }
+                ];
+            
+                let classBlocks = [];
+            
+                // Tìm hàng có chứa tên lớp (quét 8 hàng đầu).
                 for (let headerRow = 0; headerRow < Math.min(rows.length, 8); headerRow++) {
                   const row = rows[headerRow] || [];
                   const cells = row.map(c => String(c || "").trim());
                   for (let c = 0; c < cells.length; c++) {
                     const cellFolded = fold(cells[c]);
                     if (!cellFolded) continue;
-                    const match = classNameFolds.find(t =>
-                      cellFolded === t.folded ||
-                      cellFolded.includes(t.folded) ||
-                      t.folded.includes(cellFolded)
+                    const match = classAliases.find(t =>
+                      t.patterns.some(p => cellFolded === p || cellFolded.includes(p))
                     );
-                    if (match) {
-                      // Tìm thấy tên lớp tại (headerRow, c).
-                      // Khối lớp thường có 3 cột: GV, TT, Tên HS
-                      // Cột GV = c, cột TT = c+1, cột HS = c+2
-                      // Lưu ý: nếu cột GV ở c, thì cột bắt đầu khối = c.
-                      // Nhưng thực tế trong ảnh, cột "Nhóm I - T1/58" chiếm 2 cột nên:
-                      //   [c] = "Nhóm I - T1/58" (header nhóm)
-                      //   [c+1] = "TT"
-                      //   [c+2] = "Học sinh"
-                      // và GV nằm ở cùng cột [c] trong các hàng bên dưới.
+                    if (match && !classBlocks.some(b => b.className === match.name)) {
                       classBlocks.push({
                         className: match.name,
-                        // Cột bắt đầu khối = cột có tên lớp
                         blockStartCol: c,
-                        // Cột giáo viên: nằm ở đầu khối (cùng cột với tên lớp)
                         teacherCol: c,
-                        // Cột TT: ngay sau (hoặc cùng cột nếu khối đặc biệt)
-                        // Sẽ tự động phát hiện khi quét
                         ttCol: c + 1,
                         nameCol: c + 2,
                         headerRow
                       });
                     }
                   }
-                  if (classBlocks.length >= 3) break; // Đã tìm đủ 3 lớp
+                  if (classBlocks.length >= 3) break;
                 }
-
+            
                 // Sắp xếp classBlocks theo blockStartCol tăng dần.
                 classBlocks.sort((a, b) => a.blockStartCol - b.blockStartCol);
-
+            
                 if (classBlocks.length === 0) {
                   throw new Error(
                     "Không tìm thấy tên lớp CAN-L11, WONDER, WIN-L10 trong sheet. " +
                     "Hãy đảm bảo hàng đầu của sheet có tên các lớp này."
                   );
                 }
-
+            
                 const teacherToClass = this.PHAN_NHOM_TEACHER_TO_CLASS || {};
                 const teacherKeys = Object.keys(teacherToClass);
                 const teacherFolds = teacherKeys.map(name => ({
                   name,
                   folded: fold(name)
                 }));
-
+            
+                const maxColIndex = rows.reduce((mx, r) => Math.max(mx, (r ? r.length : 0) - 1), 0);
                 let totalStudents = 0;
                 const usedClasses = new Set();
                 const skipped = [];
-
-                // Bước 2: Duyệt từng khối lớp.
+            
+                // Helper đảm bảo đã khởi tạo object lớp trong importedDatabase
+                const ensureClassEntry = (classKey) => {
+                  if (!importedDatabase[classKey]) {
+                    let sheet = "11";
+                    if (/L10|L-10/i.test(classKey)) sheet = "10";
+                    else if (/L11|L-11/i.test(classKey)) sheet = "11";
+                    else if (/L12|L-12/i.test(classKey)) sheet = "12";
+                    else if (/WONDER/i.test(classKey)) sheet = "11";
+                    importedDatabase[classKey] = {
+                      sheet,
+                      schedule: "",
+                      isFull: false,
+                      lastTime: "",
+                      students: [],
+                      phanNhomGroupsFromExcel: []
+                    };
+                  } else if (!Array.isArray(importedDatabase[classKey].phanNhomGroupsFromExcel)) {
+                    importedDatabase[classKey].phanNhomGroupsFromExcel = [];
+                  }
+                  return importedDatabase[classKey];
+                };
+            
+                // Bước 2: Duyệt từng khối lớp độc lập theo đúng phạm vi cột của lớp đó.
                 classBlocks.forEach((block, blockIdx) => {
-                  // Xác định giới hạn cột của khối này.
                   const nextBlock = classBlocks[blockIdx + 1];
                   const blockEndCol = nextBlock
                     ? nextBlock.blockStartCol - 1
-                    : (rows[block.headerRow] || []).length;
-
-                  // Track phòng của nhóm hiện tại trong khối này.
-                  // Khi gặp header "Nhóm I - T7/237", lưu lại "T7/237" làm phòng cho nhóm này.
-                  // Áp dụng cho tất cả HS bên dưới cho đến khi gặp header "Nhóm" tiếp theo.
+                    : Math.max(block.nameCol + 1, maxColIndex);
+            
                   let currentGroupRoom = "";
                   let currentGroupName = "";
-
-                  // Bước 3: Trong khối, tìm header "Nhóm X" và bắt đầu đọc từ sau đó.
+                  let currentGroupTime = "";
+                  let currentGroupTeacher = "";
+                  let activeExcelGroupObj = null;
+            
+                  const registerOrUpdateExcelGroup = (gName, gRoom, gTime, gTeacher) => {
+                    const code = this.normalizePhanNhomCode(gName);
+                    if (!code) return null;
+                    const normalizedName = `Nhóm ${code}`;
+                    const classEntry = ensureClassEntry(block.className);
+                    const list = classEntry.phanNhomGroupsFromExcel;
+                    let existing = list.find(item => this.normalizePhanNhomCode(item.name) === code);
+                    if (!existing) {
+                      existing = {
+                        name: normalizedName,
+                        room: this.normalizePhanNhomRoom(gRoom, true),
+                        time: gTime || "",
+                        teacher: gTeacher || ""
+                      };
+                      list.push(existing);
+                    } else {
+                      if (gRoom && !existing.room) existing.room = this.normalizePhanNhomRoom(gRoom, true);
+                      if (gTime && !existing.time) existing.time = gTime;
+                      if (gTeacher && !existing.teacher) existing.teacher = gTeacher;
+                    }
+                    return existing;
+                  };
+            
+                  // Bước 3: Quét từng dòng CHỈ TRONG PHẠM VI CỘT CỦA KHỐI LỚP NÀY (tránh đọc nhầm cột lớp bên cạnh).
                   for (let r = block.headerRow + 1; r < rows.length; r++) {
                     const row = rows[r] || [];
-                    if (!row || row.every(c => !c || !String(c).trim())) continue;
-
-                    const cells = row.map(c => String(c || "").trim());
-
-                    // Lấy tên giáo viên từ cột teacherCol.
-                    const teacherText = cells[block.teacherCol] || "";
-                    const teacherFolded = fold(teacherText);
-                    if (!teacherFolded) continue;
-                    // Bỏ qua hàng "Tổng".
-                    if (teacherFolded === "tong") continue;
-                    // PHÁT HIỆN header "Nhóm X - T1/58" để lưu phòng cho nhóm này.
-                    // Tìm trong CẢ DÒNG (mọi cột) để tránh phụ thuộc vào cột GV.
-                    // Ví dụ: "Nhóm I - T7/237" -> currentGroupRoom = "T7-237", currentGroupName = "Nhóm I"
-                    const rowText = cells.join(" | ");
-                    const groupHeaderMatch = rowText.match(/(Nhóm\s+[IVX0-9+\-]+)\s*[-–]\s*(T[\d\-\/]+)/i);
-                    if (groupHeaderMatch) {
-                      currentGroupName = groupHeaderMatch[1].trim();
-                      // Chuẩn hóa room: "T7/237" -> "T7-237"
-                      currentGroupRoom = groupHeaderMatch[2].replace(/\//g, "-");
-                      continue; // Bỏ qua hàng header này
+                    const blockCells = [];
+                    for (let c = block.blockStartCol; c <= blockEndCol; c++) {
+                      blockCells.push(String(row[c] || "").trim());
                     }
-                    // Bỏ qua hàng tiêu đề "Nhóm X..." không có phòng (ví dụ: "Nhóm I").
-                    if (/^nhom\s*[+\-iv0-9\s]/i.test(teacherFolded)) continue;
-                    // Bỏ qua hàng header "TT" / "Học sinh".
-                    if (teacherFolded === "tt" || teacherFolded === "hoc sinh") continue;
-
-                    // Tìm tên giáo viên khớp. Ưu tiên match exact trước,
-                    // rồi mới match theo "includes" để tránh map nhầm
-                    // (ví dụ: "Hà My" khớp exact, nhưng "Hà My/Trầm Anh" mới khớp includes).
-                    // Bỏ qua các dòng metadata ("Sĩ số tổng lớp", "Số nhóm") trước khi match.
-                    const isMetadata = /^(si so|so nhom|so luong|sĩ số|số nhóm|số lượng)/i.test(teacherText);
-                    if (isMetadata) continue;
-                    const teacherMatch = teacherFolds.find(t => teacherFolded === t.folded)
-                      || teacherFolds.find(t => teacherFolded.includes(t.folded) && t.folded.length >= 4)
-                      || teacherFolds.find(t => t.folded.includes(teacherFolded) && teacherFolded.length >= 4);
-                    if (!teacherMatch) {
-                      // Có thể là tên GV mới chưa map -> bỏ qua nhưng log.
-                      if (teacherText.length >= 2) {
-                        skipped.push(`GV "${teacherText}" (hàng ${r + 1}, lớp ${block.className}): chưa map sang lớp`);
+                    if (blockCells.every(c => !c)) continue;
+            
+                    const rawTeacherCell = String(row[block.teacherCol] || "").trim();
+                    const teacherFolded = fold(rawTeacherCell);
+                    const rawTtCell = String(row[block.ttCol] || "").trim();
+                    const ttFolded = fold(rawTtCell);
+                    const isNumericTt = /^\d+$/.test(rawTtCell);
+            
+                    // 3a) Phát hiện dòng tiêu đề nhóm ("Nhóm I - T7/237", "Nhóm IV", "Nhóm 5 - P.201",...)
+                    // Chỉ coi là dòng tiêu đề nhóm khi cột TT KHÔNG phải số thứ tự học sinh.
+                    if (!isNumericTt) {
+                      const headerCandidate = blockCells.find(cell =>
+                        /^\s*nh[oó]m\s+[IVX0-9]+/i.test(cell) ||
+                        /^\s*nhom\s+[ivx0-9]+/i.test(fold(cell))
+                      );
+                      if (headerCandidate) {
+                        const blockLine = blockCells.filter(Boolean).join(" | ");
+                        const gm = headerCandidate.match(/^\s*nh[oó]m\s+([IVX0-9]+(?:\s*[+\-]\s*[IVX0-9]+)*)/i)
+                          || fold(headerCandidate).match(/^\s*nhom\s+([ivx0-9]+(?:\s*[+\-]\s*[ivx0-9]+)*)/i);
+                        if (gm) {
+                          const code = this.normalizePhanNhomCode(gm[1]);
+                          currentGroupName = code ? `Nhóm ${code}` : "";
+                          // Bắt phòng (ví dụ T7/237, T1-58, hoặc phần sau dấu gạch ngang nếu không phải TT/Học sinh)
+                          const roomMatch = blockLine.match(/\b(T\d+\s*[\/\-]\s*\d+)\b/i);
+                          if (roomMatch) {
+                            currentGroupRoom = this.normalizePhanNhomRoom(roomMatch[1].replace(/\s+/g, ""), false);
+                          } else {
+                            const afterDash = headerCandidate.match(/nh[oó]m\s+[IVX0-9+\-\s]+\s*[-–:]\s*([^|()]+)/i);
+                            const candidateRoom = afterDash ? afterDash[1].trim() : "";
+                            currentGroupRoom = (candidateRoom && !/^(tt|hoc sinh)$/i.test(fold(candidateRoom)))
+                              ? candidateRoom
+                              : "";
+                          }
+                          // Bắt khung giờ nếu có trên tiêu đề nhóm (ví dụ "8h00 - 9h30")
+                          const timeMatch = blockLine.match(/(\d{1,2}h\d{0,2}\s*[-–]\s*\d{1,2}h\d{0,2})/i);
+                          currentGroupTime = timeMatch ? timeMatch[1].replace(/\s*[-–]\s*/, " - ").trim() : "";
+                          currentGroupTeacher = "";
+                          activeExcelGroupObj = registerOrUpdateExcelGroup(
+                            currentGroupName,
+                            currentGroupRoom,
+                            currentGroupTime,
+                            ""
+                          );
+                          usedClasses.add(block.className);
+                          continue;
+                        }
+                      }
+                    }
+            
+                    // 3b) Bỏ qua dòng Tổng / Sĩ số / Tiêu đề cột "TT - Học sinh"
+                    if (
+                      teacherFolded === "tong" ||
+                      ttFolded === "tong" ||
+                      /^(tong|si so|so nhom|so luong)/.test(teacherFolded) ||
+                      teacherFolded === "tt" ||
+                      teacherFolded === "hoc sinh"
+                    ) {
+                      if (teacherFolded === "tong" || ttFolded === "tong" || /^(tong|si so|so nhom)/.test(teacherFolded)) {
+                        currentGroupTeacher = "";
                       }
                       continue;
                     }
-
-                    // Tên học sinh ở cột nameCol.
-                    // Nếu nameCol trống, thử các cột tiếp theo trong khối.
+            
+                    // 3c) Xác định tên Giáo viên của dòng hiện tại (hỗ trợ cả ô GV gộp dọc hoặc bỏ trống các dòng dưới trong cùng nhóm)
+                    let resolvedTeacher = "";
+                    if (rawTeacherCell) {
+                      const teacherMatch = teacherFolds.find(t => teacherFolded === t.folded)
+                        || teacherFolds.find(t => teacherFolded.includes(t.folded) && t.folded.length >= 4)
+                        || teacherFolds.find(t => t.folded.includes(teacherFolded) && teacherFolded.length >= 4);
+                      if (teacherMatch) {
+                        resolvedTeacher = teacherMatch.name;
+                      } else if (isNumericTt || currentGroupName) {
+                        // Chấp nhận tên GV mới trong Excel dù chưa khai báo cứng trong PHAN_NHOM_TEACHER_TO_CLASS
+                        resolvedTeacher = rawTeacherCell;
+                      } else {
+                        if (rawTeacherCell.length >= 2) {
+                          skipped.push(`GV "${rawTeacherCell}" (hàng ${r + 1}, lớp ${block.className}): bỏ qua do không rõ nhóm/TT`);
+                        }
+                        continue;
+                      }
+                      currentGroupTeacher = resolvedTeacher;
+                    } else if (isNumericTt && (currentGroupTeacher || currentGroupName)) {
+                      // Ô GV để trống ở các hàng dưới nhưng có số TT học sinh -> kế thừa GV của nhóm hiện tại
+                      resolvedTeacher = currentGroupTeacher;
+                    } else {
+                      continue;
+                    }
+            
+                    // 3d) Tìm tên học sinh trong phạm vi cột của khối lớp này
                     let studentName = "";
                     for (let c = block.ttCol; c <= blockEndCol; c++) {
                       const txt = String(row[c] || "").trim();
                       if (!txt) continue;
-                      // Bỏ qua cột TT (chỉ chứa số).
                       if (/^\d+$/.test(txt)) continue;
-                      // Bỏ qua header.
-                      if (fold(txt) === "tt" || fold(txt) === "hoc sinh") continue;
-                      // Bỏ qua tên GV khác (tránh lấy nhầm cột GV kế tiếp).
-                      if (teacherFolds.some(t => fold(txt) === t.folded || fold(txt).includes(t.folded))) continue;
+                      const fTxt = fold(txt);
+                      if (fTxt === "tt" || fTxt === "hoc sinh" || fTxt === "tong") continue;
+                      if (/^(si so|so nhom|so luong)/.test(fTxt)) continue;
+                      if (c !== block.nameCol && teacherFolds.some(t => fTxt === t.folded)) continue;
                       if (txt.length >= 2 && /[a-zA-ZÀ-ỹ]/.test(txt)) {
                         studentName = txt;
                         break;
                       }
                     }
-
+            
                     if (!studentName) continue;
-
-                    // Tạo/lấy class entry.
-                    const classKey = block.className;
-                    if (!importedDatabase[classKey]) {
-                      // Xác định sheet (cấp lớp) dựa trên tên lớp.
-                      let sheet = "11";
-                      if (/L10|L-10/i.test(classKey)) sheet = "10";
-                      else if (/L11|L-11/i.test(classKey)) sheet = "11";
-                      else if (/L12|L-12/i.test(classKey)) sheet = "12";
-                      else if (/WONDER/i.test(classKey)) sheet = "11";
-                      importedDatabase[classKey] = {
-                        sheet,
-                        schedule: "",
-                        isFull: false,
-                        lastTime: "",
-                        students: []
-                      };
+            
+                    // Cập nhật GV vào khung nhóm Excel nếu nhóm vừa tạo chưa có GV
+                    if (activeExcelGroupObj && resolvedTeacher && !activeExcelGroupObj.teacher) {
+                      activeExcelGroupObj.teacher = resolvedTeacher;
+                    } else if (currentGroupName) {
+                      registerOrUpdateExcelGroup(currentGroupName, currentGroupRoom, currentGroupTime, resolvedTeacher);
                     }
-
-                    // Tạo SĐT giả để định danh nội bộ.
+            
+                    const classKey = block.className;
+                    const classEntry = ensureClassEntry(classKey);
+            
                     const pseudoPhone = `PN${String(totalStudents + 1).padStart(6, "0")}`;
-                    // Lưu thông tin phòng và nhóm vào note để hiển thị đúng trong tab "Phân nhóm".
-                    // Format: "Phân nhóm - Hưng/QA | Nhóm I - T7-237"
-                    let phanNhomNote = `Phân nhóm - ${teacherMatch.name}`;
+                    let phanNhomNote = resolvedTeacher ? `Phân nhóm - ${resolvedTeacher}` : "Phân nhóm";
                     if (currentGroupName) {
                       phanNhomNote += ` | ${currentGroupName}`;
                       if (currentGroupRoom) {
                         phanNhomNote += ` - ${currentGroupRoom}`;
                       }
                     }
-                    importedDatabase[classKey].students.push({
-                      id: importedDatabase[classKey].students.length + 1,
+                    classEntry.students.push({
+                      id: classEntry.students.length + 1,
                       name: studentName,
                       phone: pseudoPhone,
                       uniqueKey: `pn_${fold(studentName).replace(/\s+/g, "_")}_${pseudoPhone}`,
@@ -3448,9 +3573,10 @@
                       evaluations: {},
                       lastEditor: "Phân nhóm",
                       lastEditTime: "",
-                      // Lưu thêm phòng riêng của nhóm để dùng cho các module khác
                       phanNhomRoom: currentGroupRoom || "",
                       phanNhomGroup: currentGroupName || "",
+                      phanNhomTeacher: resolvedTeacher || "",
+                      phanNhomTime: currentGroupTime || "",
                       sourceRowLabel: `${block.className}-${r + 1}`,
                       sourceSheet: String(sheetDisplayName || "Phan nhom")
                     });
@@ -3458,7 +3584,7 @@
                     usedClasses.add(classKey);
                   }
                 });
-
+            
                 return {
                   totalStudents,
                   totalClasses: usedClasses.size,
@@ -3466,7 +3592,7 @@
                   skipped: skipped.slice(0, 20)
                 };
               },
-
+            
               normalizePhone(value) {
                 if (!value || value === "Chưa có" || value === "undefined") return "";
                 let digits = String(value).replace(/\D/g, "");
@@ -3624,7 +3750,7 @@
                   .sort((a, b) => Math.abs(a.normalized.length - wanted.length) - Math.abs(b.normalized.length - wanted.length))[0];
                 return partial ? [partial.key, partial.data] : null;
               },
-
+            
               /*
                * Tìm thông tin lịch học cho 1 lớp.
                * Trả về mảng [{ day, time, room, teacher, teacherPhone, session }] - 1 lớp có thể học nhiều thứ.
@@ -3653,7 +3779,7 @@
                 });
                 return results;
               },
-
+            
               syncScheduleClassNamesWithDatabase() {
                 if (!Object.keys(this.db).length) return false;
                 let changed = false;
@@ -3688,14 +3814,14 @@
                   this.showToast("Chỉ Trợ giảng mới được mở khóa xếp lịch.", true);
                   return;
                 }
-
+            
                 if (this.scheduleAdminUnlocked) {
                   this.scheduleAdminUnlocked = false;
                   this.dom.scheduleAuthBtn.textContent = "🔐 Mở khóa xếp lịch";
                   this.renderSchedule();
                   return;
                 }
-
+            
                 // Modal nhập mật khẩu trong app (giống Excel)
                 this.showPasswordModal({
                   title: "🔐 Mở khóa xếp lịch",
@@ -3711,7 +3837,7 @@
                   }
                 });
               },
-
+            
               /*
                * Hiện modal nhập mật khẩu trong app (giống Excel).
                * Dùng để mở khóa chế độ sửa lịch hoặc upload.
@@ -3783,7 +3909,7 @@
                   }
                 });
               },
-
+            
               changeScheduleDay(day, { openUid = "" } = {}) {
                 if (!Object.prototype.hasOwnProperty.call(this.SCHEDULE_DAYS, day)) return;
                 this.currentScheduleDay = day;
@@ -3802,19 +3928,19 @@
                 });
                 this.renderSchedule();
               },
-
+            
               // Đồng hồ máy -> khóa lịch tương ứng (0 = Chủ nhật, 1 = Thứ 2, ... 6 = Thứ 7).
               todayScheduleDayKey(date = new Date()) {
                 const map = { 0: "cn", 1: "thu2", 2: "thu3", 3: "thu4", 4: "thu5", 5: "thu6", 6: "thu7" };
                 return map[date.getDay()] || "thu2";
               },
-
+            
               // Mốc "ngày hiện tại" dạng yyyy-mm-dd để biết khi nào thực sự sang ngày mới.
               todayDayStampValue(date = new Date()) {
                 const pad = value => String(value).padStart(2, "0");
                 return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
               },
-
+            
               // Tự nhảy về thứ của ngày hôm đó. Trả về true nếu có chuyển tab.
               syncScheduleDayWithToday({ silent = false } = {}) {
                 const today = this.todayScheduleDayKey();
@@ -3824,7 +3950,7 @@
                 if (!silent) this.showToast(`Đã chuyển sang ${this.SCHEDULE_DAYS[today]} (hôm nay).`);
                 return true;
               },
-
+            
               // Theo dõi sang ngày mới: kiểm mỗi phút và mỗi khi quay lại tab.
               // Chỉ tự nhảy khi NGÀY thay đổi, không cướp quyền khi bạn cố ý xem ngày khác.
               startDayWatcher() {
@@ -3847,7 +3973,7 @@
                 setInterval(check, 60 * 1000);
                 document.addEventListener("visibilitychange", check);
               },
-
+            
               // Nhãn "Hôm nay" mini ở trên đầu tab ngày hiện tại.
               renderTodayBadge() {
                 if (!this.dom?.scheduleDayTabs) return;
@@ -3867,7 +3993,7 @@
                   }
                 });
               },
-
+            
               // ===== ĐIỂM DANH RIÊNG CHO TỪNG THẺ LỊCH (mỗi thứ hoạt động độc lập) =====
               // Trạng thái điểm danh của 1 học sinh trên 1 thẻ lịch; mặc định là "present".
               cardStudentState(item, uid) {
@@ -3882,7 +4008,7 @@
                   absentAt: Number.isFinite(absentAt) && absentAt > 0 ? absentAt : null
                 };
               },
-
+            
               // Ghi trạng thái điểm danh của 1 học sinh vào đúng thẻ lịch đang xem.
               setCardStudentState(item, uid, patch = {}) {
                 if (!item || !uid) return null;
@@ -3896,7 +4022,7 @@
                 item.attTime = this.formatDateTime();
                 return next;
               },
-
+            
               // Gom dữ liệu hiển thị của 1 thẻ: học sinh chính thức, học sinh mới, danh sách vắng.
               cardAttendance(item, classData) {
                 const roster = Array.isArray(classData?.students) ? classData.students : [];
@@ -3917,7 +4043,7 @@
                   lastUpdateTime: item?.attTime || classData?.lastUpdateTime || item?.lastUpdateTime || ""
                 };
               },
-
+            
               // Thẻ này có dấu vết điểm danh chưa? (tick "lớp đủ" hoặc có học sinh bị đánh dấu)
               cardHasMarks(item) {
                 if (!item) return false;
@@ -3926,7 +4052,7 @@
                 return Object.values(att).some(state =>
                   state && (state.status === "absent" || state.note || state.isExcused || state.isNew));
               },
-
+            
               // ===== TUẦN / NGÀY: mốc tuần và đặt lại điểm danh =====
               weekStampValue(date = new Date()) {
                 const day = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -3935,7 +4061,7 @@
                 const pad = value => String(value).padStart(2, "0");
                 return `${day.getFullYear()}-${pad(day.getMonth() + 1)}-${pad(day.getDate())}`;
               },
-
+            
               /* Bản chụp dữ liệu ngay trước khi hệ thống tự đặt lại điểm danh đầu tuần.
                  Nhờ nó mà "tuần mới" vẫn có đường lùi: bấm "🔁 Khôi phục mặc định" là lấy lại được. */
               savePreResetSnapshot() {
@@ -3954,7 +4080,7 @@
                   console.error("Không chụp được bản trước khi đặt lại:", error);
                 }
               },
-
+            
               loadPreResetSnapshot() {
                 try {
                   const raw = this.storageGet("localStorage", this.PRE_RESET_BACKUP_KEY);
@@ -3968,7 +4094,7 @@
                   return null;
                 }
               },
-
+            
               // Hết tuần (qua ngày Chủ nhật): toàn bộ các thứ trong tuần về trạng thái chưa điểm danh.
               // LƯU Ý QUAN TRỌNG: chỉ xoá khi BIẾT CHẮC mốc tuần cũ (khác tuần này).
               // Nếu mốc tuần cũ trống (máy mới mở bản này lần đầu, mở bằng trình duyệt khác,
@@ -3990,7 +4116,7 @@
                   (items || []).some(item => inThisWeek(item.attTime)));
                 return classHit || cardHit;
               },
-
+            
               startNewAttendanceWeek({ silent = false } = {}) {
                 const week = this.weekStampValue();
                 const storedWeek = String(this.meta.attendanceWeekKey || "");
@@ -4001,7 +4127,7 @@
                 this.ensureWeeklyReset();
                 return Boolean(storedWeek);
               },
-
+            
               // Reset điểm danh TUẦN CŨ trên Firebase.
               // - Khóa tuần (weekKey) nằm trên Firebase nên chỉ một lần cho mọi máy.
               // - Chỉ xóa lớp/thẻ chưa có điểm danh nào trong tuần hiện tại (dựa trên thời gian cập nhật và thời điểm vắng).
@@ -4053,7 +4179,7 @@
                   return false;
                 }
               },
-
+            
               // Giờ bắt đầu của ca học (vd "8h30 - 10h00" -> 8). Trả về null nếu không đọc được.
               parseStartHour(time) {
                 const match = String(time || "").match(/(\d{1,2})\s*(?:h|:)/i);
@@ -4112,7 +4238,7 @@
                 this.openScheduleEditForms.delete(uid);
                 this.commitSchedule("Đã xóa thẻ lịch học.");
               },
-
+            
               // ════════════════════════════════════════════════════════════════════
               //  MODULE 12: SCHEDULE RENDER - Render DOM thẻ lịch học (sơ đồ)
               // ════════════════════════════════════════════════════════════════════
@@ -4163,7 +4289,7 @@
                 // Tạo nút "Danh sách lớp hôm nay" - bấm vào mới hiện popup tổng hợp.
                 const daySummary = this.buildDaySummary(list);
                 const summaryHtml = daySummary ? this.renderDaySummaryToggle(daySummary) : "";
-
+            
                 this.dom.scheduleContainer.innerHTML = summaryHtml + list.map(item => {
                   const match = this.findClassEntryByName(item.lopName);
                   const classKey = match?.[0] || "";
@@ -4345,7 +4471,7 @@
                   document.getElementById(`schedule-${item.uid}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
                 }, 80);
               },
-
+            
               /*
                * Tự động tạo thẻ lịch cho các lớp phân nhóm (CAN-L11, WONDER, WIN-L10)
                * vào ngày Chủ nhật sau khi nạp sheet "Phan nhom" thành công.
@@ -4355,11 +4481,11 @@
               createPhanNhomScheduleCards(classNames) {
                 if (!Array.isArray(classNames) || !classNames.length) return [];
                 if (!this.schedule || !this.schedule.cn) this.schedule.cn = [];
-
+            
                 const defaultSchedule = this.PHAN_NHOM_DEFAULT_SCHEDULE || {};
                 const created = [];
                 const skipped = [];
-
+            
                 classNames.forEach(className => {
                   // Bỏ qua nếu lớp không có trong db.
                   if (!this.db[className]) {
@@ -4410,7 +4536,7 @@
                   this.expandedScheduleCards.add(item.uid);
                   created.push({ className, uid: item.uid });
                 });
-
+            
                 if (created.length) {
                   this.commitSchedule(
                     `Đã tạo ${created.length} thẻ lịch phân nhóm ở Chủ nhật: ${created.map(c => c.className).join(", ")}.`
@@ -4418,7 +4544,7 @@
                 }
                 return { created, skipped };
               },
-
+            
               /*
                * Kiểm tra xem database có chứa lớp phân nhóm nào không.
                * Trả về true nếu có ít nhất 1 lớp trong PHAN_NHOM_TEACHER_TO_CLASS đã được tạo.
@@ -4427,7 +4553,7 @@
                 const targets = ["CAN-L11", "WONDER", "WIN-L10"];
                 return targets.some(name => this.db && this.db[name]);
               },
-
+            
               /*
                * Chuyển sang tab "Phân nhóm" và render panel hiển thị 3 lớp.
                */
@@ -4453,7 +4579,7 @@
                   document.getElementById("phanNhomPanel")?.scrollIntoView({ behavior: "smooth", block: "start" });
                 }, 80);
               },
-
+            
               /*
                * Tổng hợp thông tin các lớp trong ngày: tên lớp, nhà, giáo viên, SĐT, nút gọi.
                * Trả về mảng các object { lopName, building, gvName, gvPhone, floor, time }.
@@ -4482,7 +4608,7 @@
                 });
                 return result.length ? result : null;
               },
-
+            
               /*
                * Render nút "Danh sách lớp" ở đầu mỗi tab thứ.
                * Khi bấm vào sẽ mở popup hiển thị tất cả các lớp trong ngày.
@@ -4498,7 +4624,7 @@
                     <div class="day-summary-popup" id="daySummaryPopup" hidden></div>
                   </div>`;
               },
-
+            
               /*
                * Mở/đóng popup danh sách lớp trong ngày.
                * Render nội dung popup từ summary đã cache.
@@ -4524,7 +4650,7 @@
                 popup.hidden = false;
                 btn.innerHTML = btn.innerHTML.replace("▼", "▲");
               },
-
+            
               /*
                * Render nội dung popup danh sách lớp.
                * Hiển thị tên lớp, tên nhà, giáo viên, SĐT, nút gọi.
@@ -4558,113 +4684,206 @@
                   <div class="day-summary-popup-title">📅 ${this.esc(dayName)} - ${summary.length} lớp</div>
                   <div class="day-summary-list">${items}</div>`;
               },
-
+            
               // ════════════════════════════════════════════════════════════════════
               //  MODULE 13: PHAN NHOM RENDER - Render panel tab "Phân nhóm"
               // ════════════════════════════════════════════════════════════════════
+              extractStudentPhanNhomMeta(s) {
+                let teacher = String(s.phanNhomTeacher || "").trim();
+                let groupRaw = String(s.phanNhomGroup || "").trim();
+                let roomRaw = String(s.phanNhomRoom || "").trim();
+                const timeRaw = String(s.phanNhomTime || "").trim();
+            
+                const note = String(s.note || "");
+                if (!groupRaw || !teacher || !roomRaw) {
+                  const parts = note.split("|").map(p => p.trim());
+                  if (parts[0] && !teacher) {
+                    const m = parts[0].match(/Phân nhóm\s*-\s*(.+)$/i);
+                    if (m) teacher = m[1].trim();
+                  }
+                  if (parts[1]) {
+                    const gm = parts[1].match(/^(Nh[oó]m\s+[IVX0-9+\-\s]+?)(?:\s*[-–]\s*(.+))?$/i);
+                    if (gm) {
+                      if (!groupRaw) groupRaw = gm[1].trim();
+                      if (!roomRaw && gm[2]) roomRaw = gm[2].trim();
+                    }
+                  }
+                }
+                const groupCode = this.normalizePhanNhomCode(groupRaw);
+                return {
+                  groupCode,
+                  groupName: groupCode ? `Nhóm ${groupCode}` : "",
+                  room: this.normalizePhanNhomRoom(roomRaw, true),
+                  teacher,
+                  time: timeRaw
+                };
+              },
+            
+              matchStudentToPhanNhomGroupIndex(meta, groups) {
+                if (!Array.isArray(groups) || !groups.length) return -1;
+                const { groupCode, teacher, room } = meta;
+            
+                // 1) Khớp chính xác mã nhóm La Mã (I, II, III, IV, V, I+II...)
+                if (groupCode) {
+                  const exactIdx = groups.findIndex(g => this.normalizePhanNhomCode(g.name) === groupCode);
+                  if (exactIdx >= 0) return exactIdx;
+            
+                  // Tương thích dữ liệu cũ: nếu HS bị lưu nhầm "I+II" do lỗi đọc chéo cột nhưng lớp tách riêng "I" và "II"
+                  if (groupCode === "I+II" && teacher) {
+                    const byTeacherInSplit = groups.findIndex(g => {
+                      const gc = this.normalizePhanNhomCode(g.name);
+                      return (gc === "I" || gc === "II") && g.teacher && g.teacher.toLowerCase() === teacher.toLowerCase();
+                    });
+                    if (byTeacherInSplit >= 0) return byTeacherInSplit;
+                  }
+            
+                  // Hoặc nếu khung nhóm gộp "I+II" mà HS ghi "I" hoặc "II" cùng GV
+                  if (groupCode === "I" || groupCode === "II") {
+                    const combinedIdx = groups.findIndex(g => this.normalizePhanNhomCode(g.name) === "I+II");
+                    if (combinedIdx >= 0) {
+                      const cg = groups[combinedIdx];
+                      if (!teacher || !cg.teacher || cg.teacher.toLowerCase() === teacher.toLowerCase()) {
+                        return combinedIdx;
+                      }
+                    }
+                  }
+                }
+            
+                // 2) Khớp theo Giáo viên
+                if (teacher) {
+                  const byTeacher = groups.findIndex(g => g.teacher && g.teacher.toLowerCase() === teacher.toLowerCase());
+                  if (byTeacher >= 0) return byTeacher;
+                }
+            
+                // 3) Khớp theo Phòng (chỉ khi chưa có mã nhóm rõ ràng)
+                if (!groupCode && room) {
+                  const normR = this.normalizePhanNhomRoom(room, true);
+                  const byRoom = groups.findIndex(g => this.normalizePhanNhomRoom(g.room, true) === normR);
+                  if (byRoom >= 0) return byRoom;
+                }
+            
+                return -1;
+              },
+            
               /*
-               * Render panel hiển thị 3 lớp phân nhóm với danh sách học sinh theo nhóm/giáo viên.
-               * Gom học sinh theo tên giáo viên trong ghi chú ("Phân nhóm - Hưng/QA")
-               * rồi nhóm theo tên nhóm trong schedule (nếu có).
+               * Tổng hợp danh sách nhóm đầy đủ cho 1 lớp phân nhóm:
+               * - Kết hợp cấu hình đã lưu (phanNhomConfig) / nhóm đọc trực tiếp từ Excel (phanNhomGroupsFromExcel) / mặc định (PHAN_NHOM_DEFAULT_SCHEDULE)
+               * - Tự động tạo thêm thẻ cho MỌI nhóm phát sinh từ dữ liệu học sinh Excel (ví dụ Nhóm II, IV, V, VI...) để không bao giờ bị ẩn nhóm.
                */
+              getEffectivePhanNhomGroups(className) {
+                const classData = this.db ? this.db[className] : null;
+                const defaultSchedule = this.PHAN_NHOM_DEFAULT_SCHEDULE || {};
+                const defaultGroups = ((defaultSchedule[className] && defaultSchedule[className].groups) || [])
+                  .map(g => ({ ...g, room: this.normalizePhanNhomRoom(g.room, true) }));
+            
+                const findDefaultFallback = (code, teacher, idx) => {
+                  if (code) {
+                    const byCode = defaultGroups.find(d => this.normalizePhanNhomCode(d.name) === code);
+                    if (byCode) return byCode;
+                  }
+                  if (teacher) {
+                    const byTeacher = defaultGroups.find(d => d.teacher && d.teacher.toLowerCase() === teacher.toLowerCase());
+                    if (byTeacher) return byTeacher;
+                  }
+                  return defaultGroups[idx] || null;
+                };
+            
+                let groups = [];
+                if (classData && classData.phanNhomConfig && Array.isArray(classData.phanNhomConfig.groups) && classData.phanNhomConfig.groups.length) {
+                  groups = classData.phanNhomConfig.groups.map(g => ({
+                    name: g.name || "",
+                    room: this.normalizePhanNhomRoom(g.room, true),
+                    time: g.time || "",
+                    teacher: g.teacher || ""
+                  }));
+                } else if (classData && Array.isArray(classData.phanNhomGroupsFromExcel) && classData.phanNhomGroupsFromExcel.length) {
+                  groups = classData.phanNhomGroupsFromExcel.map((eg, idx) => {
+                    const code = this.normalizePhanNhomCode(eg.name);
+                    const fb = findDefaultFallback(code, eg.teacher, idx);
+                    return {
+                      name: code ? `Nhóm ${code}` : (eg.name || `Nhóm ${idx + 1}`),
+                      room: this.normalizePhanNhomRoom(eg.room || (fb && fb.room) || "", true),
+                      time: eg.time || (fb && fb.time) || "",
+                      teacher: eg.teacher || (fb && fb.teacher) || ""
+                    };
+                  });
+                } else {
+                  groups = defaultGroups.map(g => ({ ...g }));
+                }
+            
+                // Nếu trong phanNhomGroupsFromExcel có nhóm mới mà phanNhomConfig cũ chưa có -> tự bổ sung
+                if (classData && Array.isArray(classData.phanNhomGroupsFromExcel)) {
+                  classData.phanNhomGroupsFromExcel.forEach((eg, idx) => {
+                    const code = this.normalizePhanNhomCode(eg.name);
+                    if (!code) return;
+                    const exists = groups.some(g => this.normalizePhanNhomCode(g.name) === code);
+                    if (!exists) {
+                      const fb = findDefaultFallback(code, eg.teacher, idx);
+                      groups.push({
+                        name: `Nhóm ${code}`,
+                        room: this.normalizePhanNhomRoom(eg.room || (fb && fb.room) || "", true),
+                        time: eg.time || (fb && fb.time) || "",
+                        teacher: eg.teacher || (fb && fb.teacher) || ""
+                      });
+                    }
+                  });
+                }
+            
+                // Quét toàn bộ học sinh của lớp: nếu có HS thuộc nhóm chưa có thẻ (ví dụ Nhóm IV, Nhóm V, GV mới...) -> tự tạo thẻ nhóm mới!
+                const students = classData ? (classData.students || []) : [];
+                students.forEach(s => {
+                  const meta = this.extractStudentPhanNhomMeta(s);
+                  const matchedIdx = this.matchStudentToPhanNhomGroupIndex(meta, groups);
+                  if (matchedIdx < 0 && (meta.groupCode || meta.teacher)) {
+                    const fb = findDefaultFallback(meta.groupCode, meta.teacher, groups.length);
+                    groups.push({
+                      name: meta.groupName || `Nhóm ${groups.length + 1}`,
+                      room: meta.room || (fb && fb.room) || "",
+                      time: meta.time || (fb && fb.time) || "",
+                      teacher: meta.teacher || (fb && fb.teacher) || ""
+                    });
+                  }
+                });
+            
+                // Sắp xếp các thẻ nhóm theo thứ tự La Mã tự nhiên (I, I+II, II, III, IV, V, VI...)
+                groups.sort((a, b) => this.phanNhomSortWeight(a.name) - this.phanNhomSortWeight(b.name));
+                return groups;
+              },
+            
               renderPhanNhomPanel() {
                 try {
                 const container = this.dom.scheduleContainer;
                 if (!container) return;
                 const targets = ["CAN-L11", "WONDER", "WIN-L10"];
-                const defaultSchedule = this.PHAN_NHOM_DEFAULT_SCHEDULE || {};
-                // Khai báo allowEdit ở scope NGOÀI CÙNG để chắc chắn mọi forEach lồng đều thấy
-                const allowEdit = (this.currentRole === 'assistant' || this.scheduleAdminUnlocked);
+                const allowEdit = (this.role === 'assistant' || this.currentRole === 'assistant' || this.scheduleAdminUnlocked);
                 let totalAll = 0;
-
+            
                 let html = '<div id="phanNhomPanel">';
-                // Tổng HS phân nhóm
                 const totalPn = targets.reduce((sum, c) => {
                   const cd = this.db[c];
                   return sum + (cd && cd.students ? cd.students.length : 0);
                 }, 0);
                 if (totalPn === 0) {
                   html += `<div style="background:#fef2f2;padding:12px;border-radius:8px;margin-bottom:14px;border:1px solid #fecaca;color:#991b1b;">
-                    <strong>⚠️ Chưa có dữ liệu phân nhóm.</strong> Hãy tải file Excel có sheet "Phan nhom" để bổ sung HS vào các nhóm cố định bên dưới.
+                    <strong>⚠️ Chưa có dữ liệu phân nhóm.</strong> Hãy tải file Excel có sheet "Phan nhom" để bổ sung HS vào các nhóm bên dưới.
                   </div>`;
                 }
                 targets.forEach(className => {
                   const classData = this.db[className];
                   const students = classData ? (classData.students || []) : [];
-                  // Lấy khung nhóm cố định từ config. Nếu không có, fallback dùng 1 nhóm duy nhất.
-                  const fixedGroups = (defaultSchedule[className] && defaultSchedule[className].groups) || [];
-                  // Gom HS vào nhóm dựa trên:
-                  // 1. note: "Phân nhóm - GV | Nhóm I - T7-237" -> match tên nhóm
-                  // 2. teacher trong note -> match GV
-                  // 3. Nếu không match, xếp vào nhóm đầu tiên.
+                  const effectiveGroups = this.getEffectivePhanNhomGroups(className);
+            
                   const byGroup = new Map();
-                  fixedGroups.forEach((g, idx) => {
+                  effectiveGroups.forEach((g, idx) => {
                     byGroup.set(idx, { ...g, students: [] });
                   });
-                  if (!fixedGroups.length) {
+                  if (!effectiveGroups.length) {
                     byGroup.set(0, { name: "Chung", room: "", time: "", teacher: "", students: [] });
                   }
                   students.forEach(s => {
-                    // Ưu tiên 1: dùng phanNhomGroup đã lưu trong HS (cố định, không bị mất khi reload)
-                    // Ưu tiên 2: parse từ note
-                    // Ưu tiên 3: match theo GV
-                    // Ưu tiên 4: nhóm đầu tiên
-                    let noteTeacher = "";
-                    let noteGroup = "";
-                    // 1) Ưu tiên phanNhomGroup cố định
-                    if (s.phanNhomGroup) {
-                      noteGroup = s.phanNhomGroup;
-                    }
-                    if (s.phanNhomTeacher) {
-                      noteTeacher = s.phanNhomTeacher;
-                    }
-                    // 2) Nếu chưa có, parse từ note
-                    if (!noteGroup || !noteTeacher) {
-                      const note = String(s.note || "");
-                      const parts = note.split("|").map(p => p.trim());
-                      if (parts[0]) {
-                        const m = parts[0].match(/Phân nhóm\s*-\s*(.+)$/i);
-                        if (m && !noteTeacher) noteTeacher = m[1].trim();
-                      }
-                      if (parts[1]) {
-                        const gm = parts[1].match(/^Nhóm\s+([IVX0-9+\-]+)/i);
-                        if (gm && !noteGroup) noteGroup = gm[1].trim();
-                      }
-                    }
-                    // 3) Nếu vẫn chưa có group, thử lấy từ trường khác
-                    if (!noteGroup && s.phanNhomRoom) {
-                      // Tìm nhóm nào có phòng khớp
-                      const matchedByRoom = fixedGroups.findIndex(g => g.room === s.phanNhomRoom);
-                      if (matchedByRoom >= 0) {
-                        noteGroup = fixedGroups[matchedByRoom].name.replace(/^Nhóm\s+/i, "");
-                      }
-                    }
-                    // WRITE-BACK: lưu lại vào HS để lần render sau dùng luôn (cố định)
-                    if (noteGroup && !s.phanNhomGroup) {
-                      s.phanNhomGroup = noteGroup.startsWith("Nhóm ") ? noteGroup : "Nhóm " + noteGroup;
-                    }
-                    if (noteTeacher && !s.phanNhomTeacher) {
-                      s.phanNhomTeacher = noteTeacher;
-                    }
-                    // Tìm nhóm phù hợp nhất
-                    let matchedIdx = -1;
-                    if (noteGroup) {
-                      // Chuẩn hóa Roman: "I" -> "I", "II" -> "II", "1" -> "I"
-                      const norm = (s) => {
-                        const map = { "1": "I", "2": "II", "3": "III", "4": "IV", "5": "V", "6": "VI" };
-                        return map[s] || s.toUpperCase();
-                      };
-                      const wantRoman = norm(noteGroup.replace(/^Nhóm\s+/i, ""));
-                      matchedIdx = fixedGroups.findIndex(g => {
-                        const gm = String(g.name || "").match(/Nhóm\s+([IVX0-9+\-]+)/i);
-                        return gm && norm(gm[1]) === wantRoman;
-                      });
-                    }
-                    if (matchedIdx < 0 && noteTeacher) {
-                      // Match theo tên GV.
-                      matchedIdx = fixedGroups.findIndex(g => g.teacher && g.teacher.toLowerCase() === noteTeacher.toLowerCase());
-                    }
-                    if (matchedIdx < 0) matchedIdx = 0; // Mặc định nhóm đầu
+                    const meta = this.extractStudentPhanNhomMeta(s);
+                    let matchedIdx = this.matchStudentToPhanNhomGroupIndex(meta, effectiveGroups);
+                    if (matchedIdx < 0) matchedIdx = 0;
                     byGroup.get(matchedIdx).students.push(s);
                   });
                   // Tiêu đề lớp
@@ -4673,32 +4892,27 @@
                       <header class="phan-nhom-class-header">
                         <h2 class="phan-nhom-class-title">📚 ${this.esc(className)}</h2>
                         <div class="phan-nhom-class-meta">
-                          <span>👥 ${students.length} HS · ${fixedGroups.length} nhóm cố định</span>
+                          <span>👥 ${students.length} HS · ${effectiveGroups.length} nhóm</span>
                         </div>
                       </header>
                       <div class="phan-nhom-cards">`;
                   const groupEntries = Array.from(byGroup.values());
                   if (groupEntries.length === 0) {
-                    html += '<div class="empty">Chưa có khung nhóm cố định cho lớp này.</div>';
+                    html += '<div class="empty">Chưa có nhóm cho lớp này.</div>';
                   } else {
                     groupEntries.forEach((group, idx) => {
-                      // Tiêu đề nhóm: "Nhóm I+II - T1/58"
                       const displayName = group.room
                         ? `${group.name} - ${group.room}`
                         : group.name;
-                      // Render danh sách HS theo format giống Excel: STT + Tên
-                      // CSS .phan-nhom-students có ::before tự thêm STT, không cần thêm tay.
                       let listBody = '';
                       if (group.students.length === 0) {
                         listBody = `<li class="empty-li" style="color:#9ca3af;text-align:center;padding:12px;list-style:none;">(Chưa có HS)</li>`;
                       } else {
-                        group.students.forEach((s, sIdx) => {
+                        group.students.forEach((s) => {
                           const sUid = s.uid || s.uniqueKey || "";
                           const sName = this.esc(s.name || "");
-                          // Highlight HS mới: dùng class .is-new có sẵn (CSS nền vàng)
                           const isNew = /new|mới/i.test(String(s.note || "")) || /new|mới/i.test(sName);
                           const newClass = isNew ? ' is-new' : '';
-                          // Dùng String concatenation thay template literal để tránh lỗi ký tự đặc biệt
                           let liHtml = '<li class="' + newClass.trim() + '" data-pn-uid="' + this.esc(sUid) + '">';
                           liHtml += '<span class="pn-name" style="flex:1;">' + sName + '</span>';
                           if (allowEdit) {
@@ -4711,16 +4925,10 @@
                           listBody += liHtml;
                         });
                       }
-                      // Thông tin meta: GV + giờ (giống dòng header dưới tiêu đề Excel)
                       const teacherLine = group.teacher
                         ? '<span>👨‍🏫 <span class="pn-teacher-text">' + this.esc(group.teacher) + '</span></span>'
                         : '<span style="color:#9ca3af;">Chưa có GV</span>';
-                      const timeLine = group.time
-                        ? '<span>⏰ <span class="pn-time-text">' + this.esc(group.time) + '</span></span>'
-                        : '';
-                      // Dùng String concat để tránh lỗi template literal với ký tự đặc biệt
                       let articleHtml = '<article class="phan-nhom-group-card" id="pn-group-' + this.esc(className) + '-' + idx + '">';
-                      // Header: tên nhóm + badge HS + nút sửa (1 dòng) + dòng giờ (dòng 2)
                       articleHtml += '<header class="phan-nhom-group-head" style="display:flex;flex-direction:column;gap:4px;padding:10px 12px;border-bottom:2px solid rgba(251, 191, 36, 0.5);background:linear-gradient(135deg, rgba(251, 191, 36, 0.12) 0%, rgba(245, 158, 11, 0.05) 100%);border-radius:8px 8px 0 0;">';
                       articleHtml += '<div style="display:flex;align-items:center;justify-content:space-between;gap:6px;">';
                       articleHtml += '<h3 class="phan-nhom-group-name" style="margin:0;color:#fbbf24;font-size:1.05rem;font-weight:700;text-shadow:0 1px 3px rgba(251, 191, 36, 0.3);">' + this.esc(displayName) + '</h3>';
@@ -4730,12 +4938,10 @@
                         articleHtml += '<button class="pn-edit-group-btn" data-class="' + this.esc(className) + '" data-idx="' + idx + '" title="Sửa tên/phòng/GV" style="background:#7c3aed;color:white;border:none;border-radius:4px;padding:2px 6px;cursor:pointer;font-size:11px;">✎</button>';
                       }
                       articleHtml += '</span></div>';
-                      // Dòng giờ ngay dưới tên nhóm, trên vạch vàng
                       if (group.time) {
                         articleHtml += '<div style="display:flex;align-items:center;gap:6px;font-size:.85rem;color:#60a5fa;font-weight:600;text-shadow:0 1px 3px rgba(96, 165, 250, 0.4);">⏰ <span class="pn-time-text">' + this.esc(group.time) + '</span></div>';
                       }
                       articleHtml += '</header>';
-                      // Dòng GV (dưới vạch vàng)
                       articleHtml += '<div class="phan-nhom-group-meta" style="padding:6px 12px;font-size:.85rem;color:#9ca3af;display:flex;gap:14px;flex-wrap:nowrap;align-items:center;overflow:hidden;">';
                       articleHtml += teacherLine;
                       articleHtml += '</div>';
@@ -4749,10 +4955,8 @@
                 });
                 html += `</div>`;
                 container.innerHTML = html;
-
-                // Gắn event handler cho các nút Sửa nhóm / Chuyển nhóm / Xóa HS
+            
                 if (allowEdit) {
-                  // Nút Sửa nhóm (đổi tên, phòng, GV)
                   container.querySelectorAll('.pn-edit-group-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                       e.stopPropagation();
@@ -4761,7 +4965,6 @@
                       this.editPhanNhomGroup(className, idx);
                     });
                   });
-                  // Nút Chuyển nhóm (dropdown nổi)
                   container.querySelectorAll('.pn-move-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                       e.stopPropagation();
@@ -4770,7 +4973,6 @@
                       this.showMoveStudentPopup(className, uid);
                     });
                   });
-                  // Nút Xóa HS
                   container.querySelectorAll('.pn-del-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                       e.stopPropagation();
@@ -4780,70 +4982,57 @@
                     });
                   });
                 }
-
+            
                 } catch (err) {
                   console.error("LỖI renderPhanNhomPanel:", err);
                   if (typeof this.showToast === 'function') this.showToast("❌ Lỗi render phân nhóm: " + err.message, 5000);
                 }
-
-                // Hàm chuyển số sang La Mã.
-                function toRoman(num) {
-                  const map = [
-                    ["M", 1000], ["CM", 900], ["D", 500], ["CD", 400],
-                    ["C", 100], ["XC", 90], ["L", 50], ["XL", 40],
-                    ["X", 10], ["IX", 9], ["V", 5], ["IV", 4], ["I", 1]
-                  ];
-                  let result = "";
-                  for (const [letter, value] of map) {
-                    while (num >= value) {
-                      result += letter;
-                      num -= value;
-                    }
-                  }
-                  return result;
-                }
               },
-
+            
               /*
-               * Sửa thông tin nhóm: tên nhóm, phòng, GV, giờ.
-               * Dùng modal trong app thay prompt() để tránh bị browser chặn.
+               * Sửa thông tin nhóm: tên nhóm, phòng, GV, giờ (hỗ trợ cả nhóm tự động sinh từ Excel).
                */
               editPhanNhomGroup(className, groupIdx) {
-                const def = this.PHAN_NHOM_DEFAULT_SCHEDULE[className];
-                if (!def || !def.groups || !def.groups[groupIdx]) return;
-                const g = def.groups[groupIdx];
-                // Xóa modal cũ
+                const groups = this.getEffectivePhanNhomGroups(className);
+                if (!groups || !groups[groupIdx]) return;
+                const g = groups[groupIdx];
+                const oldCode = this.normalizePhanNhomCode(g.name);
                 const old = document.getElementById('pn-edit-modal');
                 if (old) old.remove();
-                // Tạo options cho dropdown Tên nhóm (I, II, III, IV, V, I+II, I+II+III...)
-                const groupNameOptions = ['I', 'II', 'III', 'IV', 'V', 'VI', 'I+II', 'I+II+III', 'I+II+III+IV'];
+            
+                const groupNameOptions = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'I+II', 'I+II+III', 'I+II+III+IV'];
+                if (oldCode && !groupNameOptions.includes(oldCode)) groupNameOptions.unshift(oldCode);
                 let nameOptionsHtml = '';
                 groupNameOptions.forEach(opt => {
-                  const selected = String(g.name || '').replace(/^Nhóm\s+/i, '') === opt ? ' selected' : '';
-                  nameOptionsHtml += '<option value="Nhóm ' + opt + '"' + selected + '>Nhóm ' + opt + '</option>';
+                  const selected = oldCode === opt ? ' selected' : '';
+                  nameOptionsHtml += '<option value="Nhóm ' + this.esc(opt) + '"' + selected + '>Nhóm ' + this.esc(opt) + '</option>';
                 });
-                // Dropdown phòng
-                const roomOptions = ['T1/58', 'T1/30', 'T2/60', 'T3/30', 'T6/237', 'T7/237', 'T1/56'];
+            
+                const roomOptions = ['', 'T1/58', 'T1/30', 'T1/56', 'T2/60', 'T3/30', 'T6/237', 'T7/237'];
+                const curRoom = this.normalizePhanNhomRoom(g.room || '', true);
+                if (curRoom && !roomOptions.includes(curRoom)) roomOptions.splice(1, 0, curRoom);
                 let roomOptionsHtml = '';
                 roomOptions.forEach(r => {
-                  const selected = g.room === r ? ' selected' : '';
-                  roomOptionsHtml += '<option value="' + this.esc(r) + '"' + selected + '>' + this.esc(r) + '</option>';
+                  const selected = curRoom === r ? ' selected' : '';
+                  const label = r || '(Chưa xếp phòng)';
+                  roomOptionsHtml += '<option value="' + this.esc(r) + '"' + selected + '>' + this.esc(label) + '</option>';
                 });
-                // Dropdown giờ
-                const timeOptions = ['7h30 - 9h00', '8h00 - 9h30', '8h30 - 10h00', '9h00 - 10h30', '9h30 - 11h00', '13h30 - 15h00', '15h00 - 16h30', '17h00 - 18h30'];
+            
+                const timeOptions = ['', '7h30 - 9h00', '8h00 - 9h30', '8h30 - 10h00', '9h00 - 10h30', '9h30 - 11h00', '13h30 - 15h00', '15h00 - 16h30', '17h00 - 18h30'];
+                const curTime = g.time || '';
+                if (curTime && !timeOptions.includes(curTime)) timeOptions.splice(1, 0, curTime);
                 let timeOptionsHtml = '';
                 timeOptions.forEach(t => {
-                  const selected = g.time === t ? ' selected' : '';
-                  timeOptionsHtml += '<option value="' + this.esc(t) + '"' + selected + '>' + this.esc(t) + '</option>';
+                  const selected = curTime === t ? ' selected' : '';
+                  const label = t || '(Chưa xếp giờ)';
+                  timeOptionsHtml += '<option value="' + this.esc(t) + '"' + selected + '>' + this.esc(label) + '</option>';
                 });
-                // Dropdown GV: dùng ds cố định + tên GV hiện tại (loại bỏ duplicate + keys ngắn)
+            
                 const fixedTeachers = ['Hưng/QA', 'Hà My/Trầm Anh', 'Mạnh Toàn', 'Bảo Anh', 'Quỳnh Anh', 'Trầm Anh', 'Hồng Ngọc', 'Bảo Anh + Trúc Anh', 'Hà My', 'Q Hưng + Trầm Anh', 'Trúc Anh'];
-                // Thêm GV hiện tại của nhóm nếu chưa có
                 const allTeachers = fixedTeachers.slice();
                 if (g.teacher && !allTeachers.some(t => t.toLowerCase() === g.teacher.toLowerCase())) {
                   allTeachers.unshift(g.teacher);
                 }
-                // Unique theo lowercase, giữ entry đầu tiên
                 const seen = new Set();
                 const uniqueTeachers = allTeachers.filter(t => {
                   if (!t || t.length < 2) return false;
@@ -4852,15 +5041,15 @@
                   seen.add(k);
                   return true;
                 });
-                let teacherOptionsHtml = '';
+                let teacherOptionsHtml = '<option value="">(Chưa xếp GV)</option>';
                 uniqueTeachers.forEach(t => {
                   const selected = (g.teacher || '').toLowerCase() === t.toLowerCase() ? ' selected' : '';
                   teacherOptionsHtml += '<option value="' + this.esc(t) + '"' + selected + '>' + this.esc(t) + '</option>';
                 });
+            
                 const modal = document.createElement('div');
                 modal.id = 'pn-edit-modal';
                 modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:10001;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);animation:fadeIn 0.2s ease;';
-                // Dùng String concat thay template literal để tránh lỗi ký tự đặc biệt
                 let modalInner = '<div style="background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);color:#f9fafb;padding:28px;border-radius:16px;min-width:420px;max-width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.6),0 0 0 1px rgba(251,191,36,0.2);border:1px solid rgba(251,191,36,0.3);">';
                 modalInner += '<h3 style="margin:0 0 18px;color:#fbbf24;font-size:20px;text-shadow:0 0 20px rgba(251,191,36,0.5);">✎ Sửa nhóm ' + this.esc(className) + '</h3>';
                 modalInner += '<div style="margin-bottom:14px;"><label style="display:block;margin-bottom:6px;font-size:13px;color:#9ca3af;font-weight:600;">📋 Tên nhóm:</label>';
@@ -4877,7 +5066,7 @@
                 modalInner += '</div></div>';
                 modal.innerHTML = modalInner;
                 document.body.appendChild(modal);
-                // Sự kiện
+            
                 document.getElementById('pn-edit-cancel').addEventListener('click', () => modal.remove());
                 modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
                 document.getElementById('pn-edit-save').addEventListener('click', () => {
@@ -4885,88 +5074,90 @@
                   const newRoom = document.getElementById('pn-edit-room').value;
                   const newTeacher = document.getElementById('pn-edit-teacher').value;
                   const newTime = document.getElementById('pn-edit-time').value;
-                  g.name = newName;
-                  g.room = newRoom;
-                  g.teacher = newTeacher;
-                  g.time = newTime;
-                  if (this.db[className]) {
-                    this.db[className].phanNhomConfig = JSON.parse(JSON.stringify(def));
+                  // Cập nhật các HS đang thuộc nhóm này sang thông tin nhóm mới
+                  const classData = this.db[className];
+                  if (classData && Array.isArray(classData.students)) {
+                    classData.students.forEach(s => {
+                      const meta = this.extractStudentPhanNhomMeta(s);
+                      if (this.matchStudentToPhanNhomGroupIndex(meta, groups) === groupIdx) {
+                        s.phanNhomGroup = newName;
+                        s.phanNhomRoom = this.normalizePhanNhomRoom(newRoom, false);
+                        s.phanNhomTeacher = newTeacher;
+                        s.phanNhomTime = newTime;
+                        let newNote = newTeacher ? `Phân nhóm - ${newTeacher}` : 'Phân nhóm';
+                        if (newName) {
+                          newNote += ` | ${newName}`;
+                          if (newRoom) newNote += ` - ${this.normalizePhanNhomRoom(newRoom, false)}`;
+                        }
+                        s.note = newNote;
+                      }
+                    });
                   }
-                  if (typeof this.saveToLocalStorage === 'function') this.saveToLocalStorage();
-                  if (typeof this.saveData === 'function') this.saveData();
+                  groups[groupIdx] = { name: newName, room: newRoom, teacher: newTeacher, time: newTime };
+                  if (this.PHAN_NHOM_DEFAULT_SCHEDULE[className]) {
+                    this.PHAN_NHOM_DEFAULT_SCHEDULE[className].groups = JSON.parse(JSON.stringify(groups));
+                  }
+                  if (classData) {
+                    classData.phanNhomConfig = { groups: JSON.parse(JSON.stringify(groups)) };
+                  }
+                  this.persistLocal();
+                  this.queueAttendanceSave(0);
                   modal.remove();
                   this.renderPhanNhomPanel();
                   if (typeof this.showToast === 'function') this.showToast('✅ Đã cập nhật nhóm');
                 });
               },
-
+            
               /*
                * Hiện popup nổi cho phép chọn nhóm đích để chuyển HS.
                */
               showMoveStudentPopup(className, studentUid) {
-                // Xóa popup cũ nếu có
                 const old = document.getElementById('pn-move-popup');
                 if (old) old.remove();
-                const def = this.PHAN_NHOM_DEFAULT_SCHEDULE[className];
-                if (!def || !def.groups) return;
+                const groups = this.getEffectivePhanNhomGroups(className);
+                if (!groups || !groups.length) return;
                 const classData = this.db[className];
                 if (!classData) return;
                 const student = (classData.students || []).find(s => (s.uid || s.uniqueKey) === studentUid);
                 if (!student) return;
-                // Xác định nhóm hiện tại của HS
-                const note = String(student.note || '');
-                let currentGroupIdx = 0;
-                const parts = note.split('|').map(p => p.trim());
-                if (parts[1]) {
-                  const gm = parts[1].match(/^Nhóm\s+([IVX0-9+\-]+)/i);
-                  if (gm) {
-                    const want = gm[1].toUpperCase();
-                    const found = def.groups.findIndex(gg => {
-                      const m = String(gg.name).match(/Nhóm\s+([IVX0-9+\-]+)/i);
-                      return m && m[1].toUpperCase() === want;
-                    });
-                    if (found >= 0) currentGroupIdx = found;
-                  }
-                }
+            
+                const meta = this.extractStudentPhanNhomMeta(student);
+                let currentGroupIdx = this.matchStudentToPhanNhomGroupIndex(meta, groups);
+                if (currentGroupIdx < 0) currentGroupIdx = 0;
+            
                 const popup = document.createElement('div');
                 popup.id = 'pn-move-popup';
                 popup.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.75);z-index:10000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);';
-                // Click vào backdrop (vùng đen bên ngoài modal) thì đóng
                 popup.addEventListener('click', (e) => {
-                  if (e.target === popup) {
-                    popup.remove();
-                  }
+                  if (e.target === popup) popup.remove();
                 });
-                // Tạo options dùng String concat - style giống box HS (nền đậm, chữ sáng)
+            
                 let optionsHtml = '';
-                def.groups.forEach((g, idx) => {
+                groups.forEach((g, idx) => {
                   const isCurrent = idx === currentGroupIdx;
-                  // Style giống box HS: nền đậm, chữ trắng nổi bật
                   if (isCurrent) {
-                    // Nhóm hiện tại: nền xanh lá đậm + chữ trắng
                     var bg = 'linear-gradient(135deg,#059669 0%,#10b981 100%)';
                     var borderColor = '#34d399';
                     var textColor = '#ffffff';
                     var iconColor = '#ffffff';
                     var checkMark = '✓';
                   } else {
-                    // Nhóm khác: nền xám đậm + chữ trắng sáng
                     var bg = '#1e293b';
                     var borderColor = '#475569';
                     var textColor = '#f1f5f9';
                     var iconColor = '#94a3b8';
                     var checkMark = '○';
                   }
-                  const labelText = g.name + '  ·  ' + g.room + '  ·  ' + (g.teacher || '');
+                  const labelParts = [g.name, g.room, g.teacher].filter(Boolean);
+                  const labelText = labelParts.join('  ·  ');
                   optionsHtml += '<button data-idx="' + idx + '" style="display:flex;align-items:center;width:100%;text-align:left;padding:12px 14px;margin:8px 0;border:2px solid ' + borderColor + ';border-radius:8px;background:' + bg + ';color:' + textColor + ';cursor:pointer;font-size:14px;font-weight:' + (isCurrent ? '700' : '600') + ';box-shadow:' + (isCurrent ? '0 0 12px rgba(16,185,129,0.4),inset 0 1px 0 rgba(255,255,255,0.15)' : '0 1px 3px rgba(0,0,0,0.2)') + ';transition:all 0.2s;text-shadow:' + (isCurrent ? '0 1px 2px rgba(0,0,0,0.3)' : 'none') + ';">';
                   optionsHtml += '<span style="display:inline-block;width:20px;color:' + iconColor + ';font-weight:bold;font-size:16px;">' + checkMark + '</span>';
                   optionsHtml += '<span style="flex:1;">' + this.esc(labelText) + '</span>';
                   optionsHtml += '</button>';
                 });
-                // Header - style giống modal sửa
+            
                 let popupInner = '<div style="background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);color:#f9fafb;padding:24px;border-radius:16px;min-width:400px;max-width:92%;box-shadow:0 20px 60px rgba(0,0,0,0.7),0 0 0 1px rgba(251,191,36,0.25);border:1px solid rgba(251,191,36,0.4);">';
                 popupInner += '<h3 style="margin:0 0 16px;color:#fbbf24;font-size:20px;text-shadow:0 0 20px rgba(251,191,36,0.5);">🔀 Chuyển nhóm cho HS</h3>';
-                // Box HS info - nền xanh nước biển, label + tên HS cùng 1 dòng
                 popupInner += '<div style="margin-bottom:16px;background:linear-gradient(135deg,#0891b2 0%,#0e7490 100%);padding:12px 14px;border-radius:8px;border:1px solid #06b6d4;box-shadow:0 0 12px rgba(6,182,212,0.3);">';
                 popupInner += '<div style="display:flex;align-items:center;gap:10px;flex-wrap:nowrap;">';
                 popupInner += '<div style="font-size:11px;color:#cffafe;text-transform:uppercase;letter-spacing:1px;font-weight:700;white-space:nowrap;">👤 HỌC SINH</div>';
@@ -4974,18 +5165,16 @@
                 popupInner += '</div>';
                 popupInner += '<div style="font-size:12px;color:#cffafe;margin-top:4px;">📚 Lớp: <b style="color:#ffffff;">' + this.esc(className) + '</b></div>';
                 popupInner += '</div>';
-                // Label + options - style giống modal sửa
                 popupInner += '<div style="margin-bottom:14px;">';
                 popupInner += '<label style="display:block;margin-bottom:8px;font-size:13px;color:#9ca3af;font-weight:600;">📋 Chọn nhóm đích:</label>';
                 popupInner += '<div style="max-height:280px;overflow-y:auto;">' + optionsHtml + '</div>';
                 popupInner += '</div>';
-                // Footer buttons - style giống modal sửa
                 popupInner += '<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px;">';
                 popupInner += '<button id="pn-move-cancel" style="padding:10px 20px;background:#374151;color:#d1d5db;border:1px solid #4b5563;border-radius:8px;cursor:pointer;font-weight:500;">Hủy</button>';
                 popupInner += '</div></div>';
                 popup.innerHTML = popupInner;
                 document.body.appendChild(popup);
-                // Sự kiện
+            
                 popup.querySelectorAll('button[data-idx]').forEach(b => {
                   b.addEventListener('click', () => {
                     const targetIdx = parseInt(b.getAttribute('data-idx'), 10);
@@ -4999,7 +5188,6 @@
                   e.stopPropagation();
                   popup.remove();
                 });
-                // ESC để đóng
                 const escHandler = (e) => {
                   if (e.key === 'Escape') {
                     popup.remove();
@@ -5008,46 +5196,39 @@
                 };
                 document.addEventListener('keydown', escHandler);
               },
-
+            
               /*
-               * Chuyển HS sang nhóm mới (cập nhật note).
+               * Chuyển HS sang nhóm mới (cập nhật note + đồng bộ Firebase).
                */
               movePhanNhomStudent(className, studentUid, targetGroupIdx) {
-                const def = this.PHAN_NHOM_DEFAULT_SCHEDULE[className];
-                if (!def || !def.groups || !def.groups[targetGroupIdx]) return;
-                const targetGroup = def.groups[targetGroupIdx];
+                const groups = this.getEffectivePhanNhomGroups(className);
+                if (!groups || !groups[targetGroupIdx]) return;
+                const targetGroup = groups[targetGroupIdx];
                 const classData = this.db[className];
                 if (!classData) return;
                 const student = (classData.students || []).find(s => (s.uid || s.uniqueKey) === studentUid);
                 if (!student) return;
-                // Tìm tên GV từ note cũ
-                const oldNote = String(student.note || '');
-                const parts = oldNote.split('|').map(p => p.trim());
-                let oldTeacher = targetGroup.teacher;
-                if (parts[0]) {
-                  const m = parts[0].match(/Phân nhóm\s*-\s*(.+)$/i);
-                  if (m) oldTeacher = m[1].trim();
-                }
-                // Cập nhật note
-                let newNote = `Phân nhóm - ${targetGroup.teacher}`;
+            
+                let newNote = targetGroup.teacher ? `Phân nhóm - ${targetGroup.teacher}` : 'Phân nhóm';
                 if (targetGroup.name) {
                   newNote += ` | ${targetGroup.name}`;
                   if (targetGroup.room) {
-                    newNote += ` - ${targetGroup.room}`;
+                    newNote += ` - ${this.normalizePhanNhomRoom(targetGroup.room, false)}`;
                   }
                 }
                 student.note = newNote;
                 student.phanNhomGroup = targetGroup.name;
-                student.phanNhomRoom = targetGroup.room;
-                student.phanNhomTeacher = targetGroup.teacher;
+                student.phanNhomRoom = this.normalizePhanNhomRoom(targetGroup.room, false);
+                student.phanNhomTeacher = targetGroup.teacher || "";
                 student.lastEditor = 'Phân nhóm';
                 student.lastEditTime = new Date().toISOString();
-                if (typeof this.saveToLocalStorage === 'function') this.saveToLocalStorage();
-                if (typeof this.saveData === 'function') this.saveData();
+                classData.phanNhomConfig = { groups: JSON.parse(JSON.stringify(groups)) };
+                this.persistLocal();
+                this.queueAttendanceSave(0);
                 this.renderPhanNhomPanel();
                 if (typeof this.showToast === 'function') this.showToast(`✅ Đã chuyển HS sang ${targetGroup.name}`);
               },
-
+            
               /*
                * Xóa HS khỏi lớp phân nhóm.
                */
@@ -5056,7 +5237,6 @@
                 if (!classData) return;
                 const student = (classData.students || []).find(s => (s.uid || s.uniqueKey) === studentUid);
                 if (!student) return;
-                // Dùng modal trong app
                 const old = document.getElementById('pn-del-modal');
                 if (old) old.remove();
                 const modal = document.createElement('div');
@@ -5077,14 +5257,14 @@
                 modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
                 document.getElementById('pn-del-confirm').addEventListener('click', () => {
                   classData.students = classData.students.filter(s => (s.uid || s.uniqueKey) !== studentUid);
-                  if (typeof this.saveToLocalStorage === 'function') this.saveToLocalStorage();
-                  if (typeof this.saveData === 'function') this.saveData();
+                  this.persistLocal();
+                  this.queueAttendanceSave(0);
                   modal.remove();
                   this.renderPhanNhomPanel();
                   if (typeof this.showToast === 'function') this.showToast(`🗑️ Đã xóa HS ${student.name}`);
                 });
               },
-
+            
               finishDraftIfComplete(item) {
                 if (item.isDraft && item.lopName && item.time && item.gvName) {
                   item.isDraft = false;
@@ -5226,7 +5406,7 @@
                   isExcused: row.state.isExcused,
                   absentAt: row.state.absentAt
                 }));
-
+            
                 return `
                   <section class="absent-box">
                     <div class="absent-head">
@@ -5235,7 +5415,7 @@
                     </div>
                     ${this.renderAbsentList(classKey, absentRows)}
                   </section>
-
+            
                   <section class="new-students-box">
                     <div class="new-students-head">
                       <h3 class="new-students-title">Học sinh mới</h3>
@@ -5249,7 +5429,7 @@
                         : '<div class="new-students-empty">Chưa có học sinh mới.</div>'}
                     </div>
                   </section>
-
+            
                   <div class="regular-students-title">Danh sách học sinh</div>
                   <div class="student-list">
                     ${view.regular.length
@@ -5331,7 +5511,7 @@
                   classes: new Set(Array.from(document.querySelectorAll(".class-card.active"), element => element.dataset.classToken))
                 };
               },
-
+            
               // ════════════════════════════════════════════════════════════════════
               //  MODULE 14: CLASS / LỚP HỌC - Render danh sách lớp & học sinh
               // ════════════════════════════════════════════════════════════════════
@@ -5343,11 +5523,11 @@
                   return;
                 }
                 this._lastRenderAll = now;
-
+            
                 const open = preserve ? this.captureOpenState() : { groups: new Set(), classes: new Set() };
                 const scrollY = window.scrollY;
                 const entries = this.sortedClassEntries();
-
+            
                 if (!entries.length) {
                   this.dom.mainContainer.innerHTML = '<div class="empty">Danh sách đang trống. Hãy chuyển sang chế độ Trợ giảng, mở khóa và tải file Excel.</div>';
                   this.applyAutoOpen();
@@ -5476,7 +5656,7 @@
                   const label = option || "-- Ghi chú --";
                   return `<option value="${this.esc(option)}" ${note === option ? "selected" : ""}>${this.esc(label)}</option>`;
                 }).join("");
-
+            
                 return `
                   <article class="student status-${isNew ? "new" : (absent ? "absent" : "present")}" id="${this.esc(idPrefix)}-${classToken}-${this.esc(student.uid)}" data-uid="${this.esc(student.uid)}">
                     <div class="student-top">
@@ -5523,22 +5703,22 @@
             
               handleAction(control) {
                 const action = control.dataset.action;
-
+            
                 if (action === "toggle-group") {
                   control.closest(".group")?.classList.toggle("active");
                   return;
                 }
-
+            
                 if (action === "toggle-day-summary") {
                   this.toggleDaySummaryPopup();
                   return;
                 }
-
+            
                 if (action === "call-teacher") {
                   this.callPhone(control.dataset.phone, control.dataset.name);
                   return;
                 }
-
+            
                 if (action === "toggle-class") {
                   control.closest(".class-card")?.classList.toggle("active");
                   return;
@@ -5554,7 +5734,7 @@
                   this.callPhone(control.dataset.phone);
                   return;
                 }
-
+            
                 if (action === "goto-phan-nhom") {
                   this.gotoPhanNhomStudent(
                     control.dataset.classKey,
@@ -5563,7 +5743,7 @@
                   );
                   return;
                 }
-
+            
                 if (action === "rc-call-parent") {
                   if (control.disabled) return;
                   if (!this.requireAssistant()) {
@@ -5573,7 +5753,7 @@
                   this.callPhone(control.dataset.phone, control.dataset.name);
                   return;
                 }
-
+            
                 if (action === "rc-call-teacher") {
                   if (control.disabled) return;
                   if (!this.requireAssistant()) {
@@ -5810,7 +5990,7 @@
               touchClass(classData) {
                 classData.lastUpdateTime = this.formatDateTime();
               },
-
+            
               /*
                * Cập nhật badge HSM/ĐỦ trên thẻ lớp mà không cần re-render toàn bộ
                * (tránh mất focus dropdown ghi chú).
@@ -5930,12 +6110,12 @@
               async copyAbsentReport(classKey, control = null, scheduleItem = null) {
                 const classData = this.db[classKey];
                 if (!classData || control?.disabled) return false;
-
+            
                 let className = classData.name;
                 let newStudents = [];
                 let absent = [];
                 let presentCount = 0;
-
+            
                 if (scheduleItem) {
                   // Copy theo đúng trạng thái điểm danh của thẻ lịch đang mở.
                   const view = this.cardAttendance(scheduleItem, classData);
@@ -6032,11 +6212,11 @@
                 const phoneKeyword = rawKeyword.replace(/\D/g, "");
                 this.clearSearch();
                 if (!keyword && !phoneKeyword) return;
-
+            
                 // Khai báo trước các hằng số dùng chung để tránh lỗi "temporal dead zone".
                 const phanNhomClasses = ["CAN-L11", "WONDER", "WIN-L10"];
                 const teacherPhoneMap = this.PHAN_NHOM_TEACHER_PHONE || {};
-
+            
                 const matches = [];
                 this.sortedClassEntries().forEach(([classKey, classData]) => {
                   classData.students.forEach(student => {
@@ -6050,7 +6230,7 @@
                   if (!silent) this.showToast("Không tìm thấy học sinh phù hợp.", true);
                   return;
                 }
-
+            
                 // ════════════════════════════════════════════════════════════════
                 // GỘP HS cùng tên trong cùng 1 lớp thành 1 card duy nhất.
                 // Ví dụ: "Ngô Việt Bách" xuất hiện 2 lần (lớp thường + phân nhóm)
@@ -6216,7 +6396,7 @@
                     m.statusClass = "new";
                   }
                 });
-
+            
                 this.dom.resultCount.textContent = `${mergedMatches.length} kết quả`;
                 // ════════════════════════════════════════════════════════════════
                 // SẮP XẾP: Ưu tiên HS có phân nhóm lên đầu, sau đó là HS lớp thường.
@@ -6380,7 +6560,7 @@
                   // Bỏ scrollIntoView vì giờ là popup nổi.
                 }
               },
-
+            
               /*
                * Bật/tắt timer tự ẩn popup kết quả tìm kiếm.
                * Nếu user ghim (pin) thì timer không chạy.
@@ -6404,14 +6584,14 @@
                   }
                 }, 100);
               },
-
+            
               stopSearchPopupTimer() {
                 if (this._searchPopupTimer) {
                   clearInterval(this._searchPopupTimer);
                   this._searchPopupTimer = null;
                 }
               },
-
+            
               hideSearchPopup() {
                 const popup = this.dom.searchResults;
                 if (!popup) return;
@@ -6422,7 +6602,7 @@
                   this.clearSearch();
                 }, 250);
               },
-
+            
               pinSearchPopup(pinned) {
                 const popup = this.dom.searchResults;
                 if (!popup) return;
@@ -6439,7 +6619,7 @@
                   this.startSearchPopupTimer();
                 }
               },
-
+            
               gotoStudent(classToken, uid) {
                 const entry = Object.entries(this.db).find(([key]) => this.token(key) === classToken);
                 if (!entry) return;
@@ -6463,7 +6643,7 @@
             
                 this.showToast(`Lớp ${classData.name} chưa được xếp vào lịch Thứ 2–Chủ nhật.`, true);
               },
-
+            
               /*
                * Mở tab "Phân nhóm" và cuộn tới học sinh cụ thể.
                * Được gọi từ kết quả tìm kiếm khi HS thuộc lớp phân nhóm.
@@ -6510,7 +6690,7 @@
                   }
                 }, 250);
               },
-
+            
               applyAutoOpen() {
                 if (this.autoOpenApplied) return;
                 const requested = new URLSearchParams(location.search).get("class");
@@ -6596,7 +6776,7 @@
                         actualName => String(actualName).trim().toUpperCase() === targetName
                       ))
                       .filter(Boolean);
-
+            
                     // Tìm sheet "Phan nhom" (phân nhóm) nếu có.
                     // Sheet này có cấu trúc 3 cột dọc: [Giáo viên phụ trách] | [Nhóm] | [Tên học sinh]
                     // Hệ thống sẽ gom học sinh từng nhóm vào lớp tương ứng với giáo viên phụ trách.
@@ -6605,14 +6785,14 @@
                       return app.PHAN_NHOM_SHEET_NAMES.some(target => app.fold(target) === normalized);
                     });
                     const hasPhanNhom = Boolean(phanNhomSheetName);
-
+            
                     if (sheetsToProcess.length === 0 && !hasPhanNhom) {
                       app.importInProgress = false;
                       alert(`Không tìm thấy sheet hợp lệ trong file Excel. Các sheet được đọc: ${app.TARGET_SHEETS.join(", ")}.`);
                       app.setProgress(0, false);
                       return;
                     }
-
+            
                     // ════════════════════════════════════════════════════════════════════
                     //  BẢO TOÀN DỮ LIỆU PHÂN NHÓM: Lưu 3 lớp phân nhóm cũ (nếu có)
                     //  để phục hồi sau khi import file Excel mới, tránh mất dữ liệu.
@@ -6625,7 +6805,7 @@
                         phanNhomBackup[name] = JSON.parse(JSON.stringify(app.db[name]));
                       }
                     });
-
+            
                     // Giống code gốc: tạo database hoàn toàn mới khi nạp file.
                     const importedDatabase = {};
                     const sheetStudentCounts = Object.fromEntries(
@@ -6641,12 +6821,12 @@
                       try {
                         if (currentSheetIdx >= totalSheets) {
                           app.setProgress(100, true);
-
+            
                           let totalStudentsCount = 0;
                           Object.keys(importedDatabase).forEach(classKey => {
                             totalStudentsCount += importedDatabase[classKey].students.length;
                           });
-
+            
                           /*
                            * Nếu có sheet "Phan nhom" trong file, xử lý nó để gom học sinh
                            * từng nhóm vào các lớp tương ứng (CAN-L11, WONDER, WIN-L10...).
@@ -6685,13 +6865,13 @@
                               phanNhomSummary = ` | Sheet "${phanNhomSheetName}" lỗi: ${pnError.message || "không rõ"}`;
                             }
                           }
-
+            
                           if (Object.keys(importedDatabase).length === 0 || totalStudentsCount === 0) {
                             throw new Error(
                               "Không lọc được học sinh. Kiểm tra tên lớp ở B, lịch học ở B và số điện thoại ở Q."
                             );
                           }
-
+            
                           /*
                            * Chỉ chuyển sang cấu trúc nội bộ SAU KHI code gốc đã lọc xong.
                            * normalizeDatabase chỉ bổ sung uid an toàn, không thay đổi danh sách đã lọc.
@@ -6708,12 +6888,16 @@
                           });
                           app.db = app.normalizeDatabase(importedDatabase);
                           Object.entries(app.db || {}).forEach(([cn, cd]) => {
+                            const isPnClass = PHAN_NHOM_CLASSES.includes(cn);
                             (cd.students || []).forEach(st => {
                               const key = st.uniqueKey || `${String(st.name || "").trim().toLowerCase()}_${st.phone || ""}`;
                               const old = keepAttendance[`${cn}|${key}`];
                               if (!old) return;
                               st.status = old.status;
-                              st.note = old.note;
+                              // Với lớp phân nhóm, note mới từ Excel chứa Nhóm/Phòng/GV mới nên KHÔNG ghi đè bằng note cũ
+                              if (!isPnClass && !/^Phân nhóm/i.test(String(st.note || ""))) {
+                                st.note = old.note;
+                              }
                               st.isExcused = old.isExcused;
                               st.isNew = old.isNew;
                               st.absentAt = old.absentAt;
@@ -6721,7 +6905,7 @@
                             });
                           });
                           app.filename = file.name;
-
+            
                           // ═══════════════════════════════════════════════════════════
                           //  PHỤC HỒI DỮ LIỆU PHÂN NHÓM: Nếu file Excel mới KHÔNG có
                           //  sheet "Phan nhom" hoặc lớp phân nhóm bị thiếu, ghép lại
@@ -6745,7 +6929,7 @@
                           app._lastSavedSchedule = "";
                           // Lưu ngay vào localStorage để F5 không bị mất
                           app.persistLocal();
-
+            
                           app.openAddForms.clear();
                           const scheduleNamesChanged = app.syncScheduleClassNamesWithDatabase();
                           app.initScheduleDropdowns();
@@ -6754,7 +6938,7 @@
                           app.queueAttendanceSave(0);
                           app.queueScheduleSave(0);
                           app.renderSchedule();
-
+            
                           // Nếu vừa nạp từ sheet phân nhóm, tự động mở nhóm THPT
                           // và mở sẵn các lớp phân nhóm để người dùng thấy ngay kết quả.
                           if (hasPhanNhom) {
@@ -6773,7 +6957,7 @@
                             });
                           }
                           app.renderAll(false);
-
+            
                           // Nếu có phân nhóm, tự động tạo thẻ lịch cho các lớp phân nhóm
                           // ở ngày Chủ nhật (cạnh nút Chủ nhật trên thanh lịch).
                           if (hasPhanNhom && phanNhomClassKeys.length) {
@@ -6787,7 +6971,7 @@
                             // Tự động chuyển sang tab "Phân nhóm" để người dùng thấy ngay danh sách.
                             setTimeout(() => app.showPhanNhomPanel(), 600);
                           }
-
+            
                           // Nếu có phân nhóm, cuộn xuống lớp phân nhóm đầu tiên và toast thông báo.
                           if (hasPhanNhom && phanNhomClassKeys.length) {
                             setTimeout(() => {
@@ -7078,19 +7262,19 @@
                   );
                 });
               },
-
+            
               // Còn dấu vết điểm danh nào trên các thẻ lịch không?
               hasAttendanceMarks() {
                 return Object.values(this.schedule).some(items =>
                   (items || []).some(item => this.cardHasMarks(item)));
               },
-
+            
               // Còn thẻ lịch nào đang bật "Đã điểm danh" không?
               hasScheduleCheckedMarks() {
                 return Object.values(this.schedule).some(items =>
                   (items || []).some(item => item?.isChecked));
               },
-
+            
               // Sang ngày mới: điểm danh của các thứ vẫn được GIỮ NGUYÊN.
               // Mỗi thẻ lịch giữ điểm danh riêng của mình, chỉ mất khi hết Chủ nhật.
             
@@ -7205,7 +7389,7 @@
                 this.firebase = api;
                 if (this.initialized) this.connectFirebase();
               },
-
+            
               // ════════════════════════════════════════════════════════════════════
               //  MODULE 16: FIREBASE - Kết nối, đồng bộ realtime với Firestore
               // ════════════════════════════════════════════════════════════════════
@@ -7251,7 +7435,7 @@
                   this.setSync("Không tải được Firebase; đang dùng dữ liệu cục bộ.", "error");
                 } finally {
                   this.firebaseLoadFinished = true;
-
+            
                   // Chuyển đổi mô hình dữ liệu: đẩy lên sau khi đã ghép dữ liệu Firebase.
                   if (this.pendingModelMigration) this.finishModelMigration();
                   this.ensureWeeklyReset();
@@ -7298,31 +7482,31 @@
                   return;
                 }
                 this._lastApplyRemote = now;
-
+            
                 // Bản rỗng từ máy khác không được xóa danh sách lớp đang có trên máy này.
                 const incomingDb = this.normalizeDatabase(payload.database || {});
                 if (!Object.keys(incomingDb).length && Object.keys(this.db).length) {
                   return;
                 }
-
+            
                 // Máy này còn thay đổi CHƯA đẩy xong lên Firebase: không để bản cũ trên
                 // Firebase ghi đè (đây cũng là một nguyên nhân điểm danh "biến mất" sau khi tải lại).
                 if (this.firebaseLoadFinished && this.pendingAttendanceSave) return;
-
+            
                 const remoteResetKey = String(payload.nightResetKey || "");
                 // Khi bản reset đang chờ đẩy lên Firebase, bỏ qua snapshot cũ hơn.
                 if (this.pendingResetKey && remoteResetKey < this.pendingResetKey) return;
                 if (this.pendingResetKey && remoteResetKey >= this.pendingResetKey) {
                   this.pendingResetKey = "";
                 }
-
+            
                 const remoteString = JSON.stringify(incomingDb);
                 const localString = JSON.stringify(this.db);
                 const resetKeyChanged = String(payload.nightResetKey || "") !== String(this.meta.nightResetKey || "");
-
+            
                 this.filename = String(payload.filename || "");
                 this.meta.nightResetKey = String(payload.nightResetKey || "");
-
+            
                 if (remoteString !== localString) {
                   // BẢO TOÀN DỮ LIỆU PHÂN NHÓM: Nếu local có 1 trong 3 lớp phân nhóm
                   // (CAN-L11, WONDER, WIN-L10) mà remote KHÔNG có -> giữ nguyên local
@@ -7371,9 +7555,9 @@
                 } else if (resetKeyChanged) {
                   this.persistLocal();
                 }
-
+            
               },
-
+            
               /*
                * So sánh 2 database xem có khác nhau về CẤU TRÚC hay không
                * (bỏ qua các thay đổi nhỏ như note, excused, isNew).
@@ -7385,6 +7569,8 @@
                 if (localKeys.length !== remoteKeys.length) return true;
                 for (const key of localKeys) {
                   if (!remote[key]) return true;
+                  if (JSON.stringify(local[key].phanNhomConfig || null) !== JSON.stringify(remote[key].phanNhomConfig || null)) return true;
+                  if (JSON.stringify(local[key].phanNhomGroupsFromExcel || null) !== JSON.stringify(remote[key].phanNhomGroupsFromExcel || null)) return true;
                   const lStudents = local[key].students || [];
                   const rStudents = remote[key].students || [];
                   if (lStudents.length !== rStudents.length) return true;
@@ -7394,6 +7580,8 @@
                     if (!rs) return true;
                     if ((ls.name || "") !== (rs.name || "")) return true;
                     if ((ls.phone || "") !== (rs.phone || "")) return true;
+                    if ((ls.phanNhomGroup || "") !== (rs.phanNhomGroup || "")) return true;
+                    if ((ls.phanNhomRoom || "") !== (rs.phanNhomRoom || "")) return true;
                   }
                 }
                 return false;
@@ -7444,7 +7632,7 @@
                 }));
                 return set;
               },
-
+            
               findScheduleCard(uid) {
                 for (const list of Object.values(this.schedule || {})) {
                   const found = (list || []).find(card => card && card.uid === uid);
@@ -7452,7 +7640,7 @@
                 }
                 return null;
               },
-
+            
               // Gộp 3 chiều cho một thẻ: base = bản server đã xác nhận, local = máy này, remote = server.
               // Trường nào máy này KHÔNG đổi so với base thì lấy giá trị mới của server;
               // trường nào máy này ĐÃ đổi thì giữ thay đổi của máy này. Điểm danh gộp theo từng học sinh.
@@ -7478,7 +7666,7 @@
                 });
                 return out;
               },
-
+            
               // Đọc lịch hiện có trên Firebase và gộp vào máy này trước khi ghi đè.
               buildMergedSchedule(remote) {
                 const base = this._scheduleBase || {};
@@ -7516,7 +7704,7 @@
                 }));
                 return result;
               },
-
+            
               adoptMergedSchedule(merged) {
                 const changed = JSON.stringify(merged) !== JSON.stringify(this.schedule);
                 this.schedule = merged;
@@ -7525,7 +7713,7 @@
                   this.renderSchedule();
                 }
               },
-
+            
               queueScheduleSave(delay = 300) {
                 this.pendingScheduleSave = true;
                 clearTimeout(this.scheduleSaveTimer);
@@ -7637,7 +7825,7 @@
                 out.students = result;
                 return out;
               },
-
+            
               buildMergedDatabase(remote) {
                 const base = this._dbBase || {};
                 const clone = value => JSON.parse(JSON.stringify(value));
@@ -7661,7 +7849,7 @@
                 });
                 return out;
               },
-
+            
               adoptMergedDatabase(merged) {
                 const changed = JSON.stringify(merged) !== JSON.stringify(this.db);
                 this.db = merged;
@@ -7670,7 +7858,7 @@
                   this.renderAll(true);
                 }
               },
-
+            
               flushRemoteSave() {
                 if (!this.firebase) {
                   // Không đẩy được thì bỏ cờ chờ, tránh bỏ qua dữ liệu realtime của máy khác.
@@ -7679,13 +7867,13 @@
                   this.setSync("Đã lưu trên thiết bị; chưa kết nối Firebase.", "error");
                   return;
                 }
-
+            
                 const payload = {
                   database: JSON.parse(JSON.stringify(this.db)),
                   filename: this.filename || "",
                   nightResetKey: this.meta.nightResetKey || ""
                 };
-
+            
                 // KIỂM TRA: nếu dữ liệu không có thay đổi thực sự so với lần lưu trước,
                 // BỎ QUA - không gửi lên Firebase. Tránh spam "Đang lưu/Đã lưu" liên tục.
                 const payloadString = JSON.stringify(payload);
@@ -7694,7 +7882,7 @@
                   this.setSync("Không có thay đổi mới, bỏ qua lưu Firebase.", "ok");
                   return;
                 }
-
+            
                 this.saveQueue = this.saveQueue
                   .catch(() => undefined)
                   .then(async () => {
@@ -7732,7 +7920,7 @@
               },
             
               /* ===== AN TOÀN DỮ LIỆU: lưu trữ – tự tải lại – sao lưu ra file ===== */
-
+            
               // Trình duyệt có THỰC SỰ ghi nhớ dữ liệu sau khi tải lại trang không?
               // (khung xem trước sandbox, chế độ ẩn danh, chặn cookie trang web, hết dung lượng… đều không)
               checkStorageHealth() {
@@ -7748,7 +7936,7 @@
                 }
                 return this.storageOk;
               },
-
+            
               markStorageBroken() {
                 if (this.storageOk === false && this.storageWarned) return;
                 this.storageOk = false;
@@ -7759,17 +7947,17 @@
                   this.showToast("Không lưu được dữ liệu trên thiết bị này. Đừng tải lại trang để tránh mất điểm danh.", true);
                 }
               },
-
+            
               updateStorageWarning() {
                 if (!this.dom || !this.dom.storageWarn) return;
                 this.dom.storageWarn.hidden = this.storageOk;
               },
-
+            
               // Có thay đổi cục bộ nào chưa đẩy xong lên Firebase không?
               hasUnsavedChanges() {
                 return Boolean(this.pendingAttendanceSave || this.pendingScheduleSave);
               },
-
+            
               // Lưu cục bộ trước, chờ đẩy Firebase xong (tối đa 6 giây) rồi mới tải lại trang.
               reloadSafely() {
                 this.persistLocal();
@@ -7802,9 +7990,9 @@
                   }
                 }, 400);
               },
-
+            
               /* ===== SAO LƯU RA FILE (dùng được cả khi trình duyệt không lưu được dữ liệu) ===== */
-
+            
               exportBackup() {
                 const payload = {
                   app: "so-do-diem-danh",
@@ -7836,7 +8024,7 @@
                 if (isBlobUrl) setTimeout(() => URL.revokeObjectURL(url), 5000);
                 this.showToast("Đã xuất bản lưu. Hãy giữ file này để khôi phục khi cần.");
               },
-
+            
               async importBackup(file) {
                 if (!file) return;
                 try {
@@ -7868,7 +8056,7 @@
                   this.importInProgress = false;
                 }
               },
-
+            
               setSync(text, state = "busy") {
                 if (!this.dom) return;
                 // Bỏ qua nếu text và state giống hệt lần trước, tránh
@@ -7884,7 +8072,7 @@
                 this.dom.syncText.textContent = text;
                 this.dom.syncLine.className = `sync-line ${state}`;
               },
-
+            
               // ════════════════════════════════════════════════════════════════════
               //  MODULE 17: UI HELPERS - Toast, setSync, các tiện ích giao diện
               // ════════════════════════════════════════════════════════════════════
@@ -7910,7 +8098,7 @@
             };
             
             window.AttendanceApp = AttendanceApp;
-
+            
             // ══ Không vẽ lại khi người dùng đang mở dropdown (select) ══
             // Vẽ lại làm dropdown ghi chú tự đóng. Nếu đang mở, hoãn vẽ lại đến khi đóng.
             (function () {
@@ -8005,7 +8193,7 @@
                   return written;
                 });
               },
-
+            
               async transactSchedule(mutator) {
                 return runTransaction(firestore, async transaction => {
                   const snapshot = await transaction.get(scheduleRef);
@@ -8017,7 +8205,7 @@
                   return written;
                 });
               },
-
+            
               async loadSchedule() {
                 const snapshot = await getDoc(scheduleRef);
                 if (!snapshot.exists()) return null;
@@ -8054,6 +8242,9 @@
             window.AttendanceApp.attachFirebase(firebaseApi);
         </script>
 
+        <script>
+            (function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a50953ff29010464',t:'MTc5MzAxNjMxNA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
+        </script>
     </body>
 
 </html>
