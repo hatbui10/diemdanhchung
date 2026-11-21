@@ -280,11 +280,6 @@
               display: none !important;
             }
 
-            .upload-actions #restoreDefaultBtn {
-              width: 100%;
-              max-width: 300px;
-            }
-            
             .file-status {
               min-height: 20px;
               margin-top: 9px;
@@ -1884,6 +1879,174 @@
               color: #fff !important;
               background: linear-gradient(135deg, #00e9ff, #ff2688) !important;
             }
+            .xep-lop-lock-tab {
+              color: var(--muted) !important;
+              border-color: var(--line) !important;
+              background: transparent !important;
+              box-shadow: none !important;
+            }
+            .xep-lop-lock-tab:hover { border-color: var(--cyan) !important; color: var(--cyan) !important; }
+            .xep-lop-tab {
+              color: var(--yellow) !important;
+              border-color: var(--yellow) !important;
+              background: linear-gradient(135deg, rgba(255, 213, 74, .18), rgba(255, 158, 26, .12)) !important;
+              box-shadow: 0 0 10px rgba(255, 213, 74, .22);
+            }
+            .xep-lop-tab.active {
+              color: #171000 !important;
+              background: linear-gradient(135deg, #ffd54a, #ff9f1c) !important;
+              box-shadow: 0 0 14px rgba(255, 213, 74, .45);
+            }
+            #xepLopPanel {
+              padding: 10px 4px 24px;
+              display: flex;
+              flex-direction: column;
+              gap: 14px;
+            }
+            .xep-lop-head {
+              display: flex;
+              flex-wrap: wrap;
+              align-items: baseline;
+              justify-content: space-between;
+              gap: 8px;
+              padding: 6px 2px 10px;
+              border-bottom: 1px solid var(--line);
+            }
+            .xep-lop-title {
+              margin: 0;
+              color: #ffd54a;
+              font-size: 1.25rem;
+              font-weight: 900;
+              text-shadow: 0 0 14px rgba(255, 213, 74, .35);
+              letter-spacing: .3px;
+            }
+            .xep-lop-sub {
+              margin: 0;
+              color: var(--muted);
+              font-size: .82rem;
+              font-weight: 600;
+            }
+            .xep-lop-grid {
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+              gap: 12px;
+            }
+            .xep-lop-day {
+              background: var(--panel-2);
+              border: 1px solid var(--line);
+              border-radius: 12px;
+              padding: 10px;
+              min-height: 130px;
+              max-height: 68vh;
+              overflow-y: auto;
+              display: flex;
+              flex-direction: column;
+              gap: 8px;
+            }
+            .xep-lop-day.is-today {
+              border-color: var(--cyan);
+              box-shadow: 0 0 16px rgba(0, 233, 255, .22);
+            }
+            .xep-lop-day-head {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              gap: 6px;
+              border-bottom: 1px solid var(--line);
+              padding-bottom: 6px;
+            }
+            .xep-lop-day-name {
+              color: #fff;
+              font-weight: 800;
+              font-size: .95rem;
+              display: flex;
+              align-items: center;
+              gap: 6px;
+            }
+            .xep-lop-today-badge {
+              background: linear-gradient(135deg, #00e9ff, #18c9dc);
+              color: #04121a;
+              font-size: .62rem;
+              font-weight: 900;
+              padding: 2px 7px;
+              border-radius: 99px;
+              letter-spacing: .3px;
+            }
+            .xep-lop-day-count {
+              color: var(--cyan);
+              font-size: .78rem;
+              font-weight: 700;
+            }
+            .xep-lop-empty {
+              color: var(--muted);
+              font-size: .82rem;
+              padding: 12px 4px;
+              text-align: center;
+              border: 1px dashed var(--line);
+              border-radius: 8px;
+            }
+            .xep-lop-class-list {
+              display: flex;
+              flex-direction: column;
+              gap: 6px;
+            }
+            .xep-lop-class-btn {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              width: 100%;
+              padding: 7px 9px;
+              background: rgba(0, 233, 255, .05);
+              border: 1px solid var(--line);
+              border-radius: 8px;
+              color: #fff;
+              text-align: left;
+              font-size: .84rem;
+              font-weight: 700;
+              line-height: 1.25;
+              cursor: pointer;
+              transition: all .12s ease;
+            }
+            .xep-lop-class-btn:hover:not(:disabled) {
+              border-color: var(--cyan);
+              background: rgba(0, 233, 255, .14);
+            }
+            .xep-lop-class-btn.is-on {
+              border-color: var(--green);
+              background: rgba(37, 232, 121, .14);
+              box-shadow: inset 0 0 0 1px rgba(37, 232, 121, .35);
+            }
+            .xep-lop-class-btn:disabled { opacity: .42; cursor: not-allowed; }
+            .xep-lop-class-icon {
+              width: 20px;
+              flex: 0 0 auto;
+              text-align: center;
+              font-weight: 900;
+              font-size: .95rem;
+            }
+            .xep-lop-class-btn.is-on .xep-lop-class-icon { color: var(--green); }
+            .xep-lop-class-btn:not(.is-on) .xep-lop-class-icon { color: var(--yellow); }
+            .xep-lop-class-name { flex: 1; min-width: 0; }
+            .xep-lop-lock-note {
+              color: var(--yellow);
+              font-size: .74rem;
+              font-weight: 800;
+              padding: 0 3px 4px;
+            }
+            .xep-lop-baseline-hint {
+              margin: 6px 0 0;
+              color: #ffd54a;
+              font-size: .78rem;
+              font-weight: 700;
+              opacity: .85;
+            }
+            .xep-lop-default-btn {
+              white-space: nowrap;
+              font-weight: 800;
+              align-self: flex-end;
+              cursor: pointer;
+            }
+            .xep-lop-default-btn:disabled { opacity: .45; cursor: not-allowed; }
             #phanNhomPanel {
               padding: 6px 4px 18px;
               display: flex;
@@ -2249,6 +2412,7 @@
             <button type="button" id="scheduleAuthBtn" class="btn btn-outline schedule-admin-control">🔐 Mở khóa xếp lịch</button>
             <button type="button" id="uploadPanelToggleBtn" class="btn btn-outline assistant-only">🔐 Mở khóa tải Excel</button>
             <button type="button" id="clearScheduleCardDayBtn" class="btn btn-outline clear-day-btn schedule-admin-control">🗑 Xóa ngày</button>
+            <button type="button" id="removeNoTeacherCardsBtn" class="btn btn-outline clear-day-btn schedule-admin-control">🗑 Xoá lớp chưa có GV</button>
         </div>
 
         <section id="uploadCard" class="card upload-card assistant-only" aria-labelledby="uploadTitle" hidden>
@@ -2261,7 +2425,6 @@
             <div id="uploadActions" class="upload-actions" hidden>
                 <button type="button" id="chooseExcelBtn" class="btn btn-primary">📂 Chọn file Excel</button>
                 <button type="button" id="clearAttendanceBtn" class="btn btn-danger" hidden>Xóa điểm danh cũ</button>
-                <button type="button" id="restoreDefaultBtn" class="btn btn-success" hidden>🔁 Khôi phục mặc định</button>
             </div>
             <input id="excelFileInput" type="file" accept=".xlsx,.xls" hidden>
             <div id="fileStatus" class="file-status">Chưa mở khóa chức năng tải file.</div>
@@ -2303,6 +2466,8 @@
                 <button type="button" class="day-tab" data-schedule-day="thu7">Thứ 7</button>
                 <button type="button" class="day-tab" data-schedule-day="cn">Chủ nhật</button>
                 <button type="button" id="phanNhomTabBtn" class="day-tab phan-nhom-tab" data-schedule-day="phanNhom" hidden>📋 Phân nhóm</button>
+                <button type="button" id="xepLopLockBtn" class="day-tab xep-lop-lock-tab" data-action="open-xep-lop" title="Mở tab Xếp lớp bằng mật khẩu">🔐 Xếp lớp</button>
+                <button type="button" id="xepLopTabBtn" class="day-tab xep-lop-tab" data-schedule-day="xepLop" hidden>📋 Xếp lớp</button>
                 <button type="button" id="addScheduleCardBtn" class="day-tab add-card-btn schedule-admin-control" hidden>➕ Thêm thẻ lớp</button>
             </div>
 
@@ -2593,15 +2758,9 @@
                 { name: "Teacher Emma", phone: "0123456788" },
                 { name: "Teacher David", phone: "0123456787" }
               ],
-              CLASS_CATALOG: [
-                "Skykid", "Smartkid", "Cloudkid", "Ozon 2+3", "Gold 2+3", "Mickey",
-                "Oxford4a", "Quest4", "Cambridge", "King", "Galaxy", "Kind5", "Like5",
-                "Apolo", "Smile6", "Evic6", "Paris6", "Mar6", "Good6", "Star6",
-                "Ila7", "Moon7", "Delta7", "Kid7", "Bossvip", "Happy8", "High8",
-                "Hope8", "Sun8", "Supervip", "Sea9", "Big9", "Clc9", "Super9",
-                "TRY9", "Cloud10", "Win10", "Try10", "E10-WIN-IELTS", "Can11",
-                "Ocean11", "Ielt Wonderful 12", "Athena12"
-              ],
+              // Toàn bộ tên lớp trong catalog được lấy từ các lớp trong thẻ lịch (xem getScheduleCardClassNames).
+              // Không còn danh sách cấu hình sẵn — khi chưa có Excel và chưa có thẻ lịch, dropdown sẽ trống.
+              CLASS_CATALOG: [],
               LOCAL_DB_KEY: "big_classes_database",
               LOCAL_FILENAME_KEY: "big_classes_filename",
               LOCAL_RESET_KEY: "attendance_night_reset_key",
@@ -2611,12 +2770,11 @@
               DATA_MODEL_KEY: "attendance_data_model",
               DATA_MODEL_VERSION: "card-attendance-v1",
               // Bản lưu mặc định: tự chụp phiên làm việc mỗi 24 giờ, dùng cho nút "Khôi phục mặc định".
-              DEFAULT_BACKUP_KEY: "big_classes_default_backup",
-              DEFAULT_BACKUP_INTERVAL_MS: 24 * 60 * 60 * 1000,
+              XEP_LOP_BASELINE_KEY: "xep_lop_default_baseline",
               STORAGE_PROBE_KEY: "attendance_storage_probe",
               // Bản chụp tự động ngay TRƯỚC khi hệ thống đặt lại điểm danh đầu tuần (để hoàn tác được).
-              PRE_RESET_BACKUP_KEY: "attendance_pre_reset_snapshot",
               UPLOAD_UI_PASSWORD: "123456",
+              XEP_LOP_PASSWORD: "hung94",
               NOTE_OPTIONS: ["", "Đi muộn cần kiểm tra lại ", "Đi muộn","Nghỉ thứ 6","Chỉ học thứ 3","Chỉ học thứ 4","Chưa có nhu cầu đi học", "Không nghe máy", "Nghỉ hôm nay", "Nghỉ tuần này", "Phản ánh chất lượng", "Xin nghỉ hẳn", "Ốm đau", "Học sinh mới"],
             
               db: {},
@@ -2628,6 +2786,7 @@
               sundaySessionFilter: "",
               scheduleClassOptions: [],
               scheduleAdminUnlocked: false,
+              xepLopUnlocked: false,
               expandedScheduleCards: new Set(),
               openScheduleAddForms: new Set(),
               openScheduleEditForms: new Set(),
@@ -2639,7 +2798,6 @@
               pendingModelMigration: false,
               attendanceRetryTimer: null,
               scheduleRetryTimer: null,
-              defaultBackupTimer: null,
               filename: "",
               role: "teacher",
               firebase: null,
@@ -2712,7 +2870,6 @@
                 this.checkStorageHealth();
                 this.updateStorageWarning();
                 this.loadLocal();
-                this.startDefaultBackupTimer();
                 this.syncScheduleClassNamesWithDatabase();
                 this.initScheduleDropdowns();
                 this.role = this.storageGet("sessionStorage", "attendance_role") || "teacher";
@@ -2751,7 +2908,6 @@
                   uploadActions: document.getElementById("uploadActions"),
                   chooseExcelBtn: document.getElementById("chooseExcelBtn"),
                   clearAttendanceBtn: document.getElementById("clearAttendanceBtn"),
-                  restoreDefaultBtn: document.getElementById("restoreDefaultBtn"),
                   excelFileInput: document.getElementById("excelFileInput"),
                   fileStatus: document.getElementById("fileStatus"),
                   progressWrap: document.getElementById("progressWrap"),
@@ -2771,7 +2927,10 @@
                   scheduleContainer: document.getElementById("scheduleContainer"),
                   addScheduleCardBtn: document.getElementById("addScheduleCardBtn"),
                   phanNhomTabBtn: document.getElementById("phanNhomTabBtn"),
+                  xepLopTabBtn: document.getElementById("xepLopTabBtn"),
+                  xepLopLockBtn: document.getElementById("xepLopLockBtn"),
                   clearScheduleCardDayBtn: document.getElementById("clearScheduleCardDayBtn"),
+                  removeNoTeacherCardsBtn: document.getElementById("removeNoTeacherCardsBtn"),
                   allClassesDetails: document.getElementById("allClassesDetails"),
                   mainContainer: document.getElementById("mainContainer"),
                   toast: document.getElementById("toast")
@@ -2797,10 +2956,6 @@
                 this.dom.clearAttendanceBtn.addEventListener("click", () => {
                   if (!this.requireAssistantAndUnlock()) return;
                   this.manualResetAttendance();
-                });
-                this.dom.restoreDefaultBtn.addEventListener("click", () => {
-                  if (!this.requireAssistantAndUnlock()) return;
-                  this.restoreDefaultBackup();
                 });
                 this.dom.excelFileInput.addEventListener("change", event => this.importExcel(event.target.files[0]));
                 this.dom.searchBtn.addEventListener("click", () => this.runSearch({ scroll: true, silent: false }));
@@ -2848,12 +3003,15 @@
                 this.dom.scheduleAuthBtn.addEventListener("click", () => this.toggleScheduleAdmin());
                 this.dom.addScheduleCardBtn.addEventListener("click", () => this.addBlankScheduleCard());
                 this.dom.clearScheduleCardDayBtn.addEventListener("click", () => this.clearCurrentScheduleDay());
+                if (this.dom.removeNoTeacherCardsBtn) this.dom.removeNoTeacherCardsBtn.addEventListener("click", () => this.removeScheduleCardsWithoutTeacher());
                 this.dom.scheduleDayTabs.addEventListener("click", event => {
                   const button = event.target.closest("[data-schedule-day]");
                   if (!button) return;
                   const day = button.dataset.scheduleDay;
                   if (day === "phanNhom") {
                     this.showPhanNhomPanel();
+                  } else if (day === "xepLop") {
+                    this.showXepLopPanel();
                   } else {
                     this.changeScheduleDay(day);
                   }
@@ -2980,6 +3138,60 @@
                 this.dom.fileStatus.style.color = this.uploadUnlocked ? "var(--green)" : "var(--yellow)";
               },
             
+              /*
+               * Đồng bộ tên lớp của các thẻ lịch với dropdown tên lớp trong thẻ xếp lịch.
+               * - Với thẻ có tên lớp không khớp danh sách lớp Excel (ví dụ tên gộp "CLOUD-KID MG+1 Nhung", "STAR-L6 Thanh Thảo"),
+               *   lần lượt cắt cụm thừa ở cuối cho đến khi khớp → dùng tên lớp canonical.
+               * - Không khớp → giữ nguyên (báo qua file status / toast nếu cần).
+               * - Không fuzzy-match: chỉ khớp chính xác (không phân biệt hoa/thường) hoặc khớp normalize
+               *   (dấu cách/gạch ngang/dấu chấm) hoặc prefix cắt.
+               */
+              normalizeScheduleCardNames() {
+                if (!this.schedule) return;
+                const canonical = new Set();
+                Object.entries(this.db || {}).forEach(([key, data]) => {
+                  const name = String((data && data.name) || key || "").trim();
+                  if (name) canonical.add(name);
+                });
+                if (!canonical.size) return;
+                const normByCanonical = new Map();
+                for (const n of canonical) normByCanonical.set(this.normalizeClassName(n), n);
+
+                const matchCanonical = (rawName) => {
+                  const trimmed = String(rawName || "").trim();
+                  if (!trimmed) return "";
+                  if (canonical.has(trimmed)) return trimmed;
+                  const norm = this.normalizeClassName(trimmed);
+                  if (norm && normByCanonical.has(norm)) return normByCanonical.get(norm);
+                  const tokens = trimmed.split(/\s+/);
+                  for (let i = tokens.length; i >= 1; i--) {
+                    const prefix = tokens.slice(0, i).join(" ");
+                    if (canonical.has(prefix)) return prefix;
+                    const prefixNorm = this.normalizeClassName(prefix);
+                    if (prefixNorm && normByCanonical.has(prefixNorm)) return normByCanonical.get(prefixNorm);
+                  }
+                  return "";
+                };
+
+                Object.keys(this.SCHEDULE_DAYS).forEach(day => {
+                  const list = Array.isArray(this.schedule?.[day]) ? this.schedule[day] : [];
+                  if (!list.length) return;
+                  let changed = false;
+                  const nextList = list.map(item => {
+                    if (!item) return item;
+                    const newName = matchCanonical(item.lopName);
+                    if (!newName) return item;
+                    if (newName === String(item.lopName || "").trim()) return item;
+                    changed = true;
+                    return Object.assign({}, item, {
+                      lopName: newName,
+                      lopLink: `https://hatbui10.github.io/diemdanh/?class=${encodeURIComponent(newName)}`
+                    });
+                  });
+                  if (changed) this.schedule[day] = nextList;
+                });
+              },
+
               loadLocal() {
                 try {
                   const raw = this.storageGet("localStorage", this.LOCAL_DB_KEY);
@@ -2990,6 +3202,7 @@
                   const rawSchedule = this.storageGet("localStorage", this.SCHEDULE_LOCAL_KEY);
                   this.schedule = this.normalizeSchedule(rawSchedule ? JSON.parse(rawSchedule) : null);
                   this.migrateToCardAttendance();
+                  this.normalizeScheduleCardNames();
                   this.setSync(raw ? "Đã tải dữ liệu tạm trên thiết bị." : "Chưa có dữ liệu điểm danh cục bộ.", "busy");
                 } catch (error) {
                   console.error("Lỗi đọc dữ liệu cục bộ:", error);
@@ -3700,22 +3913,73 @@
                 });
               },
             
+              /*
+               * Liệt kê các lớp theo đúng thứ tự xuất hiện đầu tiên trong thẻ lịch (không trùng).
+               * Tên lớp nhất quán (đúng tên canonical theo db) được dùng để thay thế catalog.
+               * Ưu tiên trùng khớp exact/normalize/prefix-cut giống normalizeScheduleCardNames.
+               */
+              getScheduleCardClassNames() {
+                const names = [];
+                const seen = new Set();
+                if (!this.schedule) return names;
+                const canonical = new Set();
+                Object.entries(this.db || {}).forEach(([key, data]) => {
+                  const name = String((data && data.name) || key || "").trim();
+                  if (name) canonical.add(name);
+                });
+                const normByCanonical = new Map();
+                for (const n of canonical) normByCanonical.set(this.normalizeClassName(n), n);
+                const canonicalize = (rawName) => {
+                  const trimmed = String(rawName || "").trim();
+                  if (!trimmed) return "";
+                  if (canonical.has(trimmed)) return trimmed;
+                  const norm = this.normalizeClassName(trimmed);
+                  if (norm && normByCanonical.has(norm)) return normByCanonical.get(norm);
+                  const tokens = trimmed.split(/\s+/);
+                  for (let i = tokens.length; i >= 1; i--) {
+                    const prefix = tokens.slice(0, i).join(" ");
+                    if (canonical.has(prefix)) return prefix;
+                    const prefixNorm = this.normalizeClassName(prefix);
+                    if (prefixNorm && normByCanonical.has(prefixNorm)) return normByCanonical.get(prefixNorm);
+                  }
+                  return trimmed;
+                };
+
+                Object.keys(this.SCHEDULE_DAYS).forEach(day => {
+                  const list = Array.isArray(this.schedule?.[day]) ? this.schedule[day] : [];
+                  list.forEach(item => {
+                    if (!item) return;
+                    const raw = String(item.lopName || "").trim();
+                    if (!raw) return;
+                    const name = canonical.size ? canonicalize(raw) : raw;
+                    if (seen.has(name)) return;
+                    seen.add(name);
+                    names.push(name);
+                  });
+                });
+                return names;
+              },
+
               initScheduleDropdowns() {
                 /*
-                 * Danh sách lớp cho dropdown trong thẻ:
-                 * Khi đã nạp Excel, CHỈ dùng tên lớp chính xác từ Excel.
-                 * Danh sách cấu hình sẵn chỉ được dùng khi database chưa có lớp nào.
+                 * Catalog được thay thế toàn bộ bằng các lớp trong thẻ lịch (canonical) + tên lớp Excel.
+                 * Thẻ lịch trước, Excel bổ sung sau, dedupe — tên trong dropdown/xếp lịch
+                 * luôn giống tên hiển thị trong thẻ lịch, không trùng và không lẫn tên giáo viên.
                  */
+                // Catalog được thay thế toàn bộ bằng các lớp trong thẻ lịch (canonical) + tên lớp Excel.
+                // Thẻ lịch trước, Excel bổ sung sau, dedupe — tên trong dropdown/xếp lịch
+                // luôn giống tên hiển thị trong thẻ lịch, không trùng và không lẫn tên giáo viên.
+                const cardClassNames = this.getScheduleCardClassNames();
                 const excelClassNames = this.sortedClassEntries()
                   .map(([classKey, classData]) => String(classData.name || classKey).trim())
                   .filter(Boolean);
-                const sourceNames = excelClassNames.length ? excelClassNames : this.CLASS_CATALOG;
-            
                 const seenExactNames = new Set();
-                this.scheduleClassOptions = sourceNames.filter(name => {
-                  if (seenExactNames.has(name)) return false;
-                  seenExactNames.add(name);
-                  return true;
+                this.scheduleClassOptions = [];
+                [...cardClassNames, ...excelClassNames].forEach(name => {
+                  const trimmed = String(name || "").trim();
+                  if (!trimmed || seenExactNames.has(trimmed)) return;
+                  seenExactNames.add(trimmed);
+                  this.scheduleClassOptions.push(trimmed);
                 });
               },
             
@@ -3793,6 +4057,14 @@
                 return false;
               },
             
+              /*
+               * Điều kiện thay đổi lớp/lịch: phải có tab Xếp lớp (mật khẩu hung94) và chế độ sửa lịch.
+               * _scheduleEditingUnlocked không bao giờ tự mở — chỉ mở khi mật khẩu được nhập đúng.
+               */
+              scheduleEditingUnlocked() {
+                return Boolean(this.xepLopUnlocked && this.scheduleAdminUnlocked);
+              },
+
               toggleScheduleAdmin() {
                 if (this.role !== "assistant") {
                   this.showToast("Chỉ Trợ giảng mới được mở khóa xếp lịch.", true);
@@ -3905,7 +4177,7 @@
                 const requestedItem = (this.schedule[day] || []).find(item => item.uid === openUid);
                 if (requestedItem) this.expandedScheduleCards.add(requestedItem.uid);
                 this.sundaySessionFilter = day === "cn"
-                  ? (requestedItem && this.parseStartHour(requestedItem.time) >= 12 ? "chieu" : "sang")
+                  ? (requestedItem ? (this.parseStartHour(requestedItem.time) >= 12 ? "chieu" : "sang") : "sang")
                   : "";
                 this.dom.scheduleDayTabs.querySelectorAll("[data-schedule-day]").forEach(button => {
                   button.classList.toggle("active", button.dataset.scheduleDay === day);
@@ -3929,6 +4201,8 @@
               syncScheduleDayWithToday({ silent = false } = {}) {
                 const today = this.todayScheduleDayKey();
                 this.todayDayStamp = this.todayDayStampValue();
+                // Không tự nhảy tab khi người dùng đang xem panel tùy biến (Phân nhóm/Xếp lớp).
+                if (this.currentScheduleDay === "phanNhom" || this.currentScheduleDay === "xepLop") return false;
                 if (this.currentScheduleDay === today) return false;
                 this.changeScheduleDay(today);
                 if (!silent) this.showToast(`Đã chuyển sang ${this.SCHEDULE_DAYS[today]} (hôm nay).`);
@@ -4046,39 +4320,6 @@
                 return `${day.getFullYear()}-${pad(day.getMonth() + 1)}-${pad(day.getDate())}`;
               },
 
-              /* Bản chụp dữ liệu ngay trước khi hệ thống tự đặt lại điểm danh đầu tuần.
-                 Nhờ nó mà "tuần mới" vẫn có đường lùi: bấm "🔁 Khôi phục mặc định" là lấy lại được. */
-              savePreResetSnapshot() {
-                try {
-                  const snapshot = {
-                    savedAt: Date.now(),
-                    reason: "đầu tuần mới",
-                    database: JSON.parse(JSON.stringify(this.db)),
-                    schedule: JSON.parse(JSON.stringify(this.schedule)),
-                    filename: this.filename || "",
-                    nightResetKey: this.meta.nightResetKey || "",
-                    attendanceWeekKey: String(this.meta.attendanceWeekKey || "")
-                  };
-                  this.storageSet("localStorage", this.PRE_RESET_BACKUP_KEY, JSON.stringify(snapshot));
-                } catch (error) {
-                  console.error("Không chụp được bản trước khi đặt lại:", error);
-                }
-              },
-
-              loadPreResetSnapshot() {
-                try {
-                  const raw = this.storageGet("localStorage", this.PRE_RESET_BACKUP_KEY);
-                  if (!raw) return null;
-                  const parsed = JSON.parse(raw);
-                  const savedAt = Number(parsed?.savedAt);
-                  if (!parsed || typeof parsed !== "object" || !Number.isFinite(savedAt) || savedAt <= 0) return null;
-                  return parsed;
-                } catch (error) {
-                  console.error("Lỗi đọc bản chụp trước khi đặt lại:", error);
-                  return null;
-                }
-              },
-
               // Hết tuần (qua ngày Chủ nhật): toàn bộ các thứ trong tuần về trạng thái chưa điểm danh.
               // LƯU Ý QUAN TRỌNG: chỉ xoá khi BIẾT CHẮC mốc tuần cũ (khác tuần này).
               // Nếu mốc tuần cũ trống (máy mới mở bản này lần đầu, mở bằng trình duyệt khác,
@@ -4172,6 +4413,46 @@
                 return hour >= 0 && hour <= 23 ? hour : null;
               },
             
+              /*
+               * Sắp xếp các thẻ lớp trong ngày theo thứ tự kiểm tra::
+               *   0) Lớp chưa có tên giáo viên (gvName/foreignTeacherName) → xếp xuống cuối cùng
+               *   1) Nhà: 237 → 58 → 30 → 158 (nhà không nằm trong danh sách → xếp cuối)
+               *   2) Trong nhà: tầng nhỏ → tầng lớn (tầng nhỏ phía trên, tầng lớn phía dưới)
+               *   3) Cùng phòng (cùng nhà+tầng) khác giờ: xếp cái giờ lớn hơn xuống dưới cùng
+               * Không đổi dữ liệu — chỉ sắp xếp list hiển thị.
+               */
+              sortScheduleDayList(list) {
+                const BUILDING_ORDER = ["237", "58", "30", "158"];
+                const buildingIndex = item => {
+                  const b = String(item && item.building || "").trim();
+                  const idx = BUILDING_ORDER.indexOf(b);
+                  return idx === -1 ? 50 : idx;
+                };
+                const floorValue = item => {
+                  const n = parseInt(String(item && item.floor || "").trim(), 10);
+                  return Number.isFinite(n) ? n : 9999;
+                };
+                const timeHour = item => {
+                  const hour = this.parseStartHour(item && item.time);
+                  return hour === null ? 24 : hour;
+                };
+                const hasTeacher = item => Boolean(
+                  String(item && (item.gvName || item.teacherName || item.foreignTeacherName || item.gvNuocNgoai) || "").trim()
+                );
+                return [...list].sort((a, b) => {
+                  // Các lớp chưa có tên giáo viên xếp xuống cuối cùng (sau tất cả lớp có giáo viên).
+                  const ta = hasTeacher(a) ? 0 : 1;
+                  const tb = hasTeacher(b) ? 0 : 1;
+                  if (ta !== tb) return ta - tb;
+                  const bi = buildingIndex(a) - buildingIndex(b);
+                  if (bi !== 0) return bi;
+                  const fi = floorValue(a) - floorValue(b);
+                  if (fi !== 0) return fi;
+                  // Cùng phòng: giờ nhỏ ở trên, giờ lớn xuống dưới cùng.
+                  return timeHour(a) - timeHour(b);
+                });
+              },
+
               // Thẻ trước 12h thuộc buổi sáng, từ 12h trở đi thuộc buổi chiều.
               // Thẻ chưa xếp ca học hiện ở cả hai buổi để không bị "mất" khi đang lọc.
               itemMatchesSession(item, session) {
@@ -4180,16 +4461,67 @@
                 return session === "sang" ? startHour < 12 : startHour >= 12;
               },
             
-              // Bấm buổi đang chọn thì tắt lọc, quay về hiện tất cả lớp của ngày.
+              // Bấm buổi sáng/chiều để chuyển sang buổi đó — không còn chế độ hiện cả ngày.
               setSundaySessionFilter(session) {
                 if (this.currentScheduleDay !== "cn") return;
-                this.sundaySessionFilter = this.sundaySessionFilter === session ? "" : session;
+                // Không còn chế độ "hiện cả ngày": buổi chiều đổi sang buổi chiều, buổi sáng đổi sang buổi sáng.
+                this.sundaySessionFilter = session;
                 this.expandedScheduleCards.clear();
                 this.openScheduleAddForms.clear();
                 this.openScheduleEditForms.clear();
                 this.renderSchedule();
               },
             
+              /*
+               * Xoá COMPLETELY (toàn bộ, các thứ) các thẻ lịch chưa có tên giáo viên.
+               * - Giữ lại thẻ có giáo viên (GV thường hoặc GV là người nước ngoài).
+               * - Yêu cầu mật khẩu quản lý lịch học + xác nhận với danh sách lớp sắp bị xóa.
+               * - Sau khi xóa: dọn trạng thái mở rộng/thêm/sửa, lưu lại, render lại.
+               */
+              removeScheduleCardsWithoutTeacher() {
+                const password = prompt("Nhập mật khẩu quản lý lịch học:");
+                if (password === null) return;
+                if (password !== this.UPLOAD_UI_PASSWORD) {
+                  this.showToast("Mật khẩu quản lý lịch học không chính xác.", true);
+                  return;
+                }
+                // Tính danh sách keep/removed trước — CHƯA thay đổi this.schedule cho đến khi user xác nhận.
+                const removed = [];
+                const newSchedule = {};
+                Object.keys(this.SCHEDULE_DAYS).forEach(day => {
+                  const list = Array.isArray(this.schedule?.[day]) ? this.schedule[day] : [];
+                  const keep = [];
+                  list.forEach(item => {
+                    const teacherName = String(item?.gvName || "").trim();
+                    const foreignName = String(item?.foreignTeacherName || "").trim();
+                    if (!teacherName && !foreignName) {
+                      removed.push({ day, item });
+                    } else {
+                      keep.push(item);
+                    }
+                  });
+                  newSchedule[day] = keep;
+                });
+                if (!removed.length) {
+                  this.showToast("Không có lớp nào thiếu giáo viên — không cần xóa.", false);
+                  return;
+                }
+                let detail = removed.slice(0, 10).map(entry => `${this.SCHEDULE_DAYS[entry.day]}: ${entry.item.lopName || "chưa đặt tên"}`).join("\n");
+                if (removed.length > 10) detail += `\n… và ${removed.length - 10} lớp khác.`;
+                if (!confirm(`Sẽ xóa ${removed.length} lớp chưa có giáo viên:\n${detail}\n\nBạn có chắc?`)) return;
+                // Thay đổi this.schedule chỉ SAU khi user xác nhận.
+                this.schedule = newSchedule;
+                removed.forEach(({ item }) => {
+                  const uid = item?.uid;
+                  if (!uid) return;
+                  this.expandedScheduleCards.delete(uid);
+                  this.openScheduleAddForms.delete(uid);
+                  this.openScheduleEditForms.delete(uid);
+                });
+                this._hasPendingAdminScheduleEdit = true;
+                this.commitSchedule(`Đã xóa ${removed.length} lớp chưa có giáo viên.`);
+              },
+
               clearCurrentScheduleDay() {
                 // Nút "Xóa ngày" luôn hiển thị ở chế độ Trợ giảng nhưng bắt buộc nhập mật khẩu quản lý trước khi xóa.
                 const password = prompt("Nhập mật khẩu quản lý lịch học:");
@@ -4209,7 +4541,7 @@
               },
             
               deleteScheduleItem(uid) {
-                if (!this.scheduleAdminUnlocked) {
+                if (!this.scheduleEditingUnlocked()) {
                   this.showToast("Bạn chưa mở khóa chế độ sửa lịch.", true);
                   return;
                 }
@@ -4236,14 +4568,25 @@
                 this._lastRenderSchedule = now;
                 // Nút "Thêm thẻ lớp" chỉ xuất hiện khi đã mở khóa chế độ sửa lịch.
                 // Nút "Xóa ngày" luôn hiển thị ở chế độ Trợ giảng (bấm vào sẽ yêu cầu nhập mật khẩu quản lý).
-                if (this.dom.addScheduleCardBtn) this.dom.addScheduleCardBtn.hidden = !this.scheduleAdminUnlocked;
+                if (this.dom.addScheduleCardBtn) this.dom.addScheduleCardBtn.hidden = !this.scheduleEditingUnlocked();
                 // Nút "Phân nhóm" chỉ hiện khi database có ít nhất 1 lớp phân nhóm.
                 if (this.dom.phanNhomTabBtn) {
                   this.dom.phanNhomTabBtn.hidden = !this.hasPhanNhomData();
                 }
+                if (this.dom.xepLopTabBtn) {
+                  this.dom.xepLopTabBtn.hidden = !this.xepLopUnlocked;
+                }
+                if (this.dom.xepLopLockBtn) {
+                  this.dom.xepLopLockBtn.hidden = Boolean(this.xepLopUnlocked);
+                }
                 // Nếu đang ở tab "Phân nhóm" thì render panel riêng.
                 if (this.currentScheduleDay === "phanNhom") {
                   this.renderPhanNhomPanel();
+                  return;
+                }
+                // Nếu đang ở tab "Xếp lớp" thì render panel riêng.
+                if (this.currentScheduleDay === "xepLop") {
+                  this.renderXepLopPanel();
                   return;
                 }
                 // Sub-tab Buổi sáng / Buổi chiều chỉ hiện khi đang xem Chủ nhật.
@@ -4258,10 +4601,14 @@
                 // Giữ nguyên thứ tự thêm: lớp xếp sau luôn nằm dưới lớp đã xếp trước.
                 let list = [...(this.schedule[this.currentScheduleDay] || [])];
             
-                // Chủ nhật có thể lọc theo buổi; thẻ chưa xếp ca học hiện ở cả hai buổi để không bị "mất".
+                // Chủ nhật lọc theo buổi (mặc định: buổi sáng); thẻ chưa xếp ca học luôn hiện.
                 if (this.currentScheduleDay === "cn" && this.sundaySessionFilter) {
                   list = list.filter(item => this.itemMatchesSession(item, this.sundaySessionFilter));
                 }
+
+                // Xếp các thẻ theo các nhà (237 → 58 → 30 → 158), tầng nhỏ trên → tầng lớn dưới,
+                // cùng phòng giờ lớn hơn xuống dưới cùng — để dễ kiểm tra.
+                list = this.sortScheduleDayList(list);
             
                 if (!list.length) {
                   const fullCount = (this.schedule[this.currentScheduleDay] || []).length;
@@ -4308,8 +4655,8 @@
                           <span class="attendance-indicator" aria-hidden="true" ${isAttended ? "" : "hidden"}>✓</span>
                         </button>
                         <div class="schedule-card-tools" ${expanded ? "" : "hidden"}>
-                          ${this.scheduleAdminUnlocked && !isDraft ? `<button type="button" class="schedule-edit-toggle schedule-admin-control" data-action="schedule-toggle-edit" title="Sửa nhanh: giáo viên, lớp, phòng, thời gian">${isEditing ? "✓ Xong" : "✎ Sửa"}</button>` : ""}
-                          ${this.scheduleAdminUnlocked ? '<button type="button" class="schedule-delete schedule-admin-control" data-action="schedule-delete" title="Xóa lịch">✕</button>' : ""}
+                          ${this.scheduleEditingUnlocked() && !isDraft ? `<button type="button" class="schedule-edit-toggle schedule-admin-control" data-action="schedule-toggle-edit" title="Sửa nhanh: giáo viên, lớp, phòng, thời gian">${isEditing ? "✓ Xong" : "✎ Sửa"}</button>` : ""}
+                          ${this.scheduleEditingUnlocked() ? '<button type="button" class="schedule-delete schedule-admin-control" data-action="schedule-delete" title="Xóa lịch">✕</button>' : ""}
                         </div>
                       </div>
             
@@ -4379,11 +4726,11 @@
                 const foreignOptions = this.FOREIGN_TEACHERS.map((teacher, index) => ({ value: String(index), label: teacher.name }));
                 const currentRoom = item.floor && item.building ? `T${item.floor}-${item.building}` : "";
             
-                const field = (label, fieldName, options, current, placeholder = "") => `
+                const field = (label, fieldName, options, current, placeholder = "", allowCustom = true) => `
             <div class="schedule-field">
               <label>${this.esc(label)}</label>
               <select data-change="schedule-edit" data-edit="${fieldName}">
-                ${this.editSelectOptions(options, current, placeholder)}
+                ${this.editSelectOptions(options, current, placeholder, allowCustom)}
               </select>
             </div>`;
             
@@ -4393,7 +4740,7 @@
                       <div class="schedule-form-grid">
             ${field("Thứ", "day", dayOptions, this.currentScheduleDay)}
             ${field("Ca học", "time", timeOptions, item.time, "-- Chưa chọn ca --")}
-            ${field("Lớp học", "class", classOptions, item.lopName, "-- Chưa chọn lớp --")}
+            ${field("Lớp học", "class", classOptions, item.lopName, "-- Chưa chọn lớp --", false)}
             ${field("Giáo viên", "teacher", teacherOptions, this.teacherSelectValue(item), "-- Chưa chọn giáo viên --")}
             ${field("Giáo viên nước ngoài", "foreignTeacher", foreignOptions, this.foreignTeacherSelectValue(item), "-- Không chọn --")}
             ${field("Tòa nhà / Phòng", "room", roomOptions, currentRoom, "-- Chưa xếp phòng --")}
@@ -4411,10 +4758,10 @@
                 return index >= 0 ? String(index) : String(item.foreignTeacherName || "");
               },
             
-              editSelectOptions(options, current, placeholder = "") {
+              editSelectOptions(options, current, placeholder = "", allowCustom = true) {
                 const safeCurrent = String(current ?? "");
                 let list = options.slice();
-                if (safeCurrent && !list.some(option => option.value === safeCurrent)) {
+                if (allowCustom && safeCurrent && !list.some(option => option.value === safeCurrent)) {
                   list.push({ value: safeCurrent, label: `${safeCurrent} (tùy chỉnh)` });
                 }
                 const placeholderHtml = placeholder
@@ -4426,7 +4773,7 @@
               },
             
               addBlankScheduleCard() {
-                if (!this.scheduleAdminUnlocked) {
+                if (!this.scheduleEditingUnlocked()) {
                   this.showToast("Bạn cần mở khóa chế độ sửa lịch trước.", true);
                   return;
                 }
@@ -4500,6 +4847,646 @@
                 setTimeout(() => {
                   document.getElementById("phanNhomPanel")?.scrollIntoView({ behavior: "smooth", block: "start" });
                 }, 80);
+              },
+
+              /*
+               * Chuyển sang tab "Xếp lớp" (đứng cạnh tab Phân nhóm): bảng xem + xếp toàn bộ
+               * lịch Thứ 2 → Chủ nhật, cập nhật cùng dữ liệu với các tab ngày.
+               */
+              showXepLopPanel() {
+                this.currentScheduleDay = "xepLop";
+                this.sundaySessionFilter = "";
+                // Ẩn sub-tab buổi sáng/chiều: bảng Xếp lớp xem cả tuần, không lọc buổi.
+                if (this.dom.sundaySessionTabs) this.dom.sundaySessionTabs.hidden = true;
+                // Làm mới trạng thái mở rộng/thêm/sửa để panel luôn sạch.
+                this.expandedScheduleCards.clear();
+                this.openScheduleAddForms.clear();
+                this.openScheduleEditForms.clear();
+                // Cập nhật visual tab đang active.
+                if (this.dom.scheduleDayTabs) {
+                  this.dom.scheduleDayTabs.querySelectorAll("[data-schedule-day]").forEach(btn => {
+                    btn.classList.toggle("active", btn.dataset.scheduleDay === "xepLop");
+                  });
+                }
+                this.renderSchedule();
+                setTimeout(() => {
+                  document.getElementById("xepLopPanel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }, 80);
+              },
+
+              /*
+               * Lớp được coi là "có giáo viên" khi có ít nhất một trong các tín hiệu sau:
+               *   1) lớp Excel mang teacher (vd sheet SV/2-12),
+               *   2) bất kỳ nhóm phân nhóm của lớp nào có giáo viên,
+               *   3) bất kỳ thẻ lịch của lớp nào có tên giáo viên.
+               * Dùng để lọc các lớp không có giáo viên khỏi tab Xếp lớp.
+               */
+              classHasTeacher(name) {
+                const wanted = this.normalizeClassName(name);
+                if (!wanted) return false;
+
+                let entry = null;
+                try { entry = this.findClassEntryByName(name); } catch (_) { entry = null; }
+                if (entry) {
+                  const classData = entry[1];
+                  if (String((classData && classData.teacher) || "").trim()) return true;
+                  const groups = [
+                    ...(Array.isArray(classData && classData.phanNhomGroupsFromExcel) ? classData.phanNhomGroupsFromExcel : []),
+                    ...(Array.isArray((classData && classData.phanNhomConfig) && classData.phanNhomConfig.groups) ? classData.phanNhomConfig.groups : [])
+                  ];
+                  if (groups.some(group => String((group && group.teacher) || "").trim())) return true;
+                }
+
+                // Tên lớp nhúng tên giáo viên (vd "ATHENA-L12 Mai Ly", "WIN - L10/Thu Hà",
+                // "WONDERFUL L12 Thu Hà", "CLOUD-KID MG+1 Nhung"). Lưu ý KHÔNG tách lớp/GV ở đây —
+                // chỉ dùng để quyết định lớp có giáo viên và được giữ trong tab Xếp lớp.
+                if (this._teacherNameInClassName(name)) return true;
+
+                const schedule = this.schedule || {};
+                for (const day of Object.keys(schedule)) {
+                  const list = Array.isArray(schedule[day]) ? schedule[day] : [];
+                  for (const item of list) {
+                    if (!item) continue;
+                    if (this.normalizeClassName(item.lopName) !== wanted) continue;
+                    if (String(item.gvName || "").trim()) return true;
+                  }
+                }
+                return false;
+              },
+
+              /*
+               * Kiểm tra tên lớp có chứa tên giáo viên nhúng trong tên lớp hay không.
+               * Cách phát hiện (CHỈ dùng để lọc lớp có giáo viên trong tab Xếp lớp):
+               *   (a) chuỗi tên giáo viên đầy đủ xuất hiện trong tên lớp, HOẶc
+               *   (b) từ cuối của tên lớp trùng với từ cuối của tên một giáo viên
+               *       trong danh sách TEACHERS (vd "Thu Hà", "Mai Ly", "Nhung").
+               * KHÔNG tách lớp/GV — không dùng cho việc đọc file Excel.
+               */
+              _teacherNameInClassName(name) {
+                const raw = String(name || "").trim();
+                if (!raw) return false;
+                const folded = this.fold(raw);
+                const candidates = (this.TEACHERS || [])
+                  .map(teacher => String(teacher && teacher.name || "").trim())
+                  .filter(Boolean);
+                const foldedWords = folded.split(/[^a-z0-9]+/).filter(Boolean);
+                const lastNameWord = foldedWords[foldedWords.length - 1] || "";
+                for (const candidate of candidates) {
+                  const foldedCandidate = this.fold(candidate);
+                  if (!foldedCandidate) continue;
+                  if (folded.includes(foldedCandidate)) return true;
+                  const candidateWords = foldedCandidate.split(/\s+/).filter(Boolean);
+                  const lastCandidateWord = candidateWords.length ? candidateWords[candidateWords.length - 1] : "";
+                  if (lastCandidateWord && lastCandidateWord.length >= 2 && lastNameWord && lastCandidateWord === lastNameWord) return true;
+                }
+                return false;
+              },
+
+              /*
+               * Trả về số lớp (grade) trong tên lớp — 1 = lớp 1, 12 = lớp 12.
+               * Trả về 0 nếu tên lớp không có grade (xếp cuối cùng).
+               */
+              classGrade(name) {
+                const raw = String(name || "").trim();
+                if (!raw) return 0;
+                const afterL = raw.match(/[Ll]\s*[-:]?\s*(\d{1,2})/);
+                const plain = afterL || raw.match(/\b(\d{1,2})\b/);
+                if (!plain) return 0;
+                const n = parseInt(plain[1], 10);
+                return Number.isFinite(n) && n >= 1 && n <= 12 ? n : 0;
+              },
+
+              /*
+               * Panel "Xếp lớp": một cột cho mỗi ngày. Liệt kê các lớp Excel và cho chọn
+               * một lớp vào ngày tương ứng. Chỉ cho sửa khi đã mở khóa xếp lịch.
+               */
+              renderXepLopPanel() {
+                const container = this.dom.scheduleContainer;
+                if (!container) return;
+                const order = Object.keys(this.SCHEDULE_DAYS);
+                const today = this.todayScheduleDayKey();
+                const allowEdit = this.scheduleEditingUnlocked();
+                const rawExcelNames = (this.scheduleClassOptions || [])
+                  .map(name => String(name || "").trim())
+                  .filter(Boolean);
+                // Loại bỏ theo tên chính xác (KHÔNG theo normalize) để khỏi bỏ nhầm "CAN - L11".
+                // Loại: "WIN-L10", "CAN-L11" (dạng trần) và "WONDER".
+                const excludedNames = new Set(["win-l10", "can-l11", "wonder"]);
+                const afterExclusion = rawExcelNames.filter(raw => {
+                  const key = String(raw || "").trim().toLowerCase();
+                  return !excludedNames.has(key);
+                });
+                // Chỉ giữ các lớp có giáo viên — lớp không có giáo viên bị bỏ khỏi tab Xếp lớp.
+                // Sắp xếp theo số lớp (cấp/grade) tăng dần từ 1 đến 12, lớp không có grade xếp cuối cùng.
+                const excelNames = afterExclusion
+                  .filter(name => this.classHasTeacher(name))
+                  .slice()
+                  .sort((a, b) => {
+                    const ga = this.classGrade(a);
+                    const gb = this.classGrade(b);
+                    const na = ga === 0 ? 999 : ga;
+                    const nb = gb === 0 ? 999 : gb;
+                    if (na !== nb) return na - nb;
+                    return a.localeCompare(b, "vi");
+                  });
+                const excelNameSet = new Set(excelNames);
+                const hiddenCount = rawExcelNames.length - excelNames.length;
+                const totalScheduled = order.reduce((sum, day) => {
+                  const list = Array.isArray(this.schedule?.[day]) ? this.schedule[day] : [];
+                  const dayClasses = new Set();
+                  list.forEach(item => {
+                    const n = String(item?.lopName || "").trim();
+                    if (n && excelNameSet.has(n)) dayClasses.add(n);
+                  });
+                  return sum + dayClasses.size;
+                }, 0);
+
+                // Bản lưu mặc định của tab Xếp lớp (chỉ trạng thái các lớp đã xếp).
+                const baseline = this.loadXepLopDefaultBaseline();
+                const baselineHint = baseline
+                  ? `💾 Đã lưu mặc định lúc ${this.formatDateTime(new Date(Number(baseline.savedAt)))} — bấm nút này để khôi phục trạng thái các lớp như lúc đầu.`
+                  : "💾 Chưa lưu mặc định — bấm nút này để lưu trạng thái các lớp hiện tại.";
+
+                let html = `<div id="xepLopPanel" class="xep-lop-panel">`;
+                html += `<header class="xep-lop-head"><div>`;
+                html += `<h2 class="xep-lop-title">📋 Xếp lớp — Thứ 2 → Chủ nhật</h2>`;
+                html += `<p class="xep-lop-sub">Chọn lớp sẽ xếp vào mỗi ngày · ${excelNames.length} lớp${hiddenCount ? ` (${hiddenCount} lớp bị ẩn: chưa có giáo viên hoặc đã loại bỏ)` : ""} · ${totalScheduled} lớp đang được xếp — ${allowEdit ? "✅ đang mở khóa xếp lịch — bấm lớp để chọn/bỏ khỏi ngày" : "chưa mở khóa — bấm khóa xếp lịch để sửa"}</p>`;
+                html += `<p class="xep-lop-baseline-hint">${this.esc(baselineHint)}</p>`;
+                html += `</div>`;
+                if (!allowEdit) {
+                  html += `<span class="xep-lop-lock-note">🔓 Bấm nút “🔐 Mở khóa xếp lịch” ở trên để chọn lớp</span>`;
+                }
+                html += `<button type="button" id="xepLopDefaultBtn" class="btn btn-success xep-lop-default-btn" ${allowEdit ? "" : "disabled"} title="${allowEdit ? "Lần đầu bấm: lưu trạng thái các lớp làm mặc định. Các lần sau: khôi phục lớp như lúc đầu được xếp." : "Chưa mở khóa xếp lịch — mở khóa trước khi lưu/khôi phục mặc định"}">💾 Lưu mặc định</button>`;
+                html += `</header>`;
+
+                if (!excelNames.length) {
+                  const filteredOut = rawExcelNames.length > 0;
+                  html += `<div class="xep-lop-empty">${filteredOut
+                    ? `Không còn lớp nào để xếp. Các lớp đã bị loại bỏ hoặc chưa có giáo viên — muốn giữ lớp nào thì thêm giáo viên cho lớp đó rồi kiểm tra lại tab Xếp lớp.`
+                    : `Chưa có lớp nào. Hãy tải file Excel trước, hoặc xếp lớp vào thẻ lịch trước.`}</div>`;
+                  html += `</div>`;
+                  container.innerHTML = html;
+                  return;
+                }
+
+                html += `<div class="xep-lop-grid">`;
+
+                order.forEach(day => {
+                  const label = this.SCHEDULE_DAYS[day];
+                  const list = Array.isArray(this.schedule?.[day]) ? this.schedule[day] : [];
+                  const scheduled = new Set(list.map(item => String(item?.lopName || "").trim()).filter(name => name && excelNameSet.has(name)));
+                  const isToday = day === today;
+                  html += `<section class="xep-lop-day${isToday ? " is-today" : ""}" data-day="${day}">`;
+                  html += `<header class="xep-lop-day-head"><span class="xep-lop-day-name">${this.esc(label)}${isToday ? '<span class="xep-lop-today-badge">Hôm nay</span>' : ""}</span><span class="xep-lop-day-count">${scheduled.size}/${excelNames.length} lớp</span></header>`;
+                  html += `<div class="xep-lop-class-list">`;
+                  excelNames.forEach(name => {
+                    const on = scheduled.has(name);
+                    html += `<button type="button" class="xep-lop-class-btn${on ? " is-on" : ""}" data-day="${day}" data-class="${this.esc(name)}" ${allowEdit ? "" : "disabled"} title="${on ? "Gỡ lớp khỏi ngày này" : "Xếp lớp vào ngày này"}" aria-pressed="${on ? "true" : "false"}">`;
+                    html += `<span class="xep-lop-class-icon">${on ? "✓" : "➕"}</span>`;
+                    html += `<span class="xep-lop-class-name">${this.esc(name)}</span>`;
+                    html += `</button>`;
+                  });
+                  html += `</div>`;
+                  html += `</section>`;
+                });
+
+                html += `</div>`;
+                html += `</div>`;
+                container.innerHTML = html;
+                this.bindXepLopPanelEvents();
+              },
+
+              /*
+               * Mở khóa tab "Xếp lớp" bằng mật khẩu riêng (mặc định "hung94").
+               * Sau khi nhập đúng, tab Xếp lớp hiện ra và được tự động chuyển đến.
+               */
+              openXepLopLock() {
+                if (this.xepLopUnlocked) {
+                  this.showXepLopPanel();
+                  return;
+                }
+                const app = this;
+                this.showPasswordModal({
+                  title: "🔓 Mở tab Xếp lớp",
+                  description: "Nhập mật khẩu Xếp lớp để hiện tab xếp lịch cho Thứ 2 → Chủ nhật.",
+                  placeholder: "Nhập mật khẩu...",
+                  password: this.XEP_LOP_PASSWORD,
+                  onSuccess: () => {
+                    app.xepLopUnlocked = true;
+                    // Mở tab Xếp lớp cũng mở chế độ sửa lịch (lớp ở các thứ/chủ nhật).
+                    app.scheduleAdminUnlocked = true;
+                    if (app.dom.scheduleAuthBtn) app.dom.scheduleAuthBtn.textContent = "🔒 Khóa xếp lịch";
+                    if (app.dom.xepLopTabBtn) app.dom.xepLopTabBtn.hidden = false;
+                    if (app.dom.xepLopLockBtn) app.dom.xepLopLockBtn.hidden = true;
+                    app.showToast("✅ Đã mở tab Xếp lớp. Các lớp Thứ 2 → Chủ nhật được lưu mặc định.");
+                    app.showXepLopPanel();
+                  }
+                });
+              },
+
+              /*
+               * Gắn sự kiện cho nút chọn lớp trong panel "Xếp lớp" (chọn/bỏ một lớp khỏi một ngày).
+               */
+              bindXepLopPanelEvents() {
+                const container = this.dom.scheduleContainer;
+                if (!container) return;
+                container.querySelectorAll(".xep-lop-class-btn").forEach(btn => {
+                  btn.addEventListener("click", () => {
+                    const day = String(btn.dataset.day || "").trim();
+                    const className = String(btn.dataset.class || "").trim();
+                    if (!day || !className || !this.SCHEDULE_DAYS[day]) return;
+                    this.toggleXepLopClass(day, className);
+                  });
+                });
+                const defaultBtn = container.querySelector("#xepLopDefaultBtn");
+                if (defaultBtn && !defaultBtn.disabled) {
+                  defaultBtn.addEventListener("click", () => this.saveXepLopDefaultBaseline());
+                }
+              },
+
+              /*
+               * Thêm / gỡ 1 lớp khỏi đúng 1 ngày.
+               */
+              toggleXepLopClass(day, className) {
+                if (!this.scheduleEditingUnlocked()) return;
+                if (!this.SCHEDULE_DAYS[day]) return;
+                const name = String(className || "").trim();
+                if (!name) return;
+                const list = Array.isArray(this.schedule?.[day]) ? this.schedule[day] : [];
+                const existing = list.find(item => item && String(item.lopName || "").trim() === name);
+                if (existing) {
+                  // Đã xếp vào ngày này -> hỏi rồi gỡ (kèm cảnh báo nếu có điểm danh).
+                  const hasMarks = this.cardHasMarks(existing);
+                  if (hasMarks && !confirm(`Lớp "${name}" ở ${this.SCHEDULE_DAYS[day]} đang có điểm danh. Gỡ lớp sẽ mất dữ liệu điểm danh của thẻ này. Bạn vẫn muốn gỡ?`)) {
+                    return;
+                  }
+                  this.schedule[day] = list.filter(entry => entry !== existing);
+                  this.expandedScheduleCards.delete(existing.uid);
+                  this.openScheduleAddForms.delete(existing.uid);
+                  this.openScheduleEditForms.delete(existing.uid);
+                  this._hasPendingAdminScheduleEdit = true;
+                  this.commitSchedule(`Đã gỡ lớp "${name}" khỏi ${this.SCHEDULE_DAYS[day]}.`);
+                  return;
+                }
+                this.addScheduleCardForDay(day, name);
+              },
+
+              /*
+               * Đọc sheet "L" trong file Excel và xếp lớp cho từng thứ.
+               * - Tìm sheet "L" (không phân biệt hoa/thường) trong workbook.
+               * - Quét vùng A2:P75 (hàng 2 → 75, cột A → P).
+               * - Ô được tô màu (có fill nền) ở cột lớp của 1 thứ (Thứ 2 → Chủ nhật) là lớp được xếp.
+               * - Time/GV đọc từ ô bên phải cùng hàng; tầng đọc từ cột B cùng hàng;
+               *   lớp không có trong ngày sẽ được ghi thành thẻ lịch (draft nếu thiếu ca/GV).
+               * - Bỏ qua ô không tô màu, ô rỗng, hoặc lớp đã có sẵn trong ngày (không trùng).
+               * Kết quả: { found, added, skipped, days: { thu2: n, ... } }
+               */
+              /*
+               * Tách tên lớp + tên giáo viên khỏi dòng tiêu đề lớp ở sheet SV/2-12.
+               * Dòng tiêu đề dạng "{TÊN LỚP} {TEITH VIÊN}" (ví dụ "SVIP L8+9 Lê Thu Hà",
+               * "GOLD L2+3 Thắm") — bỏ tên giáo viên ra, chỉ giữ tên lớp để khỏi lẫn vào thẻ lịch.
+               * Nếu không tìm thấy tên GV trong danh sách (TEACHERS) thì giữ nguyên (không bỏ sót).
+               */
+              parseClassHeaderCell(text) {
+                const raw = String(text || "").trim();
+                if (!raw) return { className: "", teacher: "" };
+                const candidates = (this.TEACHERS || [])
+                  .map(teacher => String(teacher?.name || "").trim())
+                  .filter(Boolean);
+                let best = null;
+                for (const name of candidates) {
+                  const idx = raw.toLowerCase().indexOf(name.toLowerCase());
+                  if (idx === -1) continue;
+                  if (!best || name.length > best.name.length) best = { name, index: idx };
+                }
+                if (!best) return { className: raw, teacher: "" };
+                const prefix = raw.slice(0, best.index).replace(/[-–—\s]+$/, "").trim();
+                if (!prefix) return { className: raw, teacher: "" };
+                return { className: prefix, teacher: best.name };
+              },
+
+              applyScheduleFromSheetL(workbook) {
+                const summary = { found: false, added: 0, skipped: 0, days: {}, noTeacher: 0, noTeacherNames: [], unmatched: [] };
+                if (!workbook || !Array.isArray(workbook.SheetNames) || !workbook.Sheets) return summary;
+
+                const sheetName = workbook.SheetNames.find(name => {
+                  const folded = this.fold(String(name || "").trim());
+                  return folded === "l";
+                });
+                if (!sheetName) return summary;
+                const ws = workbook.Sheets[sheetName];
+                if (!ws) return summary;
+                summary.found = true;
+
+                // Cột lớp của từng thứ. Cột con bên phải (cùng hàng) chứa ca + GV.
+                const classColToDay = { 2: "thu2", 4: "thu3", 6: "thu4", 8: "thu5", 10: "thu6", 12: "thu7", 14: "cn" };
+
+                // Range A2:P75 → 0-indexed columns 0..15, rows 1..74
+                const startRow = 1;
+                const endRow = 74;
+                const startCol = 0;
+                const endCol = 15;
+
+                const getCell = (colIdx, rowIdx) => {
+                  const ref = XLSX.utils.encode_cell({ c: colIdx, r: rowIdx });
+                  return ws[ref] || null;
+                };
+
+                const getCellValue = (cell) => {
+                  if (!cell) return "";
+                  const value = cell.w !== undefined && cell.w !== null ? cell.w : cell.v;
+                  return String(value ?? "").trim();
+                };
+
+                // Trả về màu nền (rgb) của ô, hoặc null nếu ô không tô màu.
+                const getCellFillArgb = (cell) => {
+                  if (!cell) return null;
+                  const style = cell.s;
+                  if (!style) return null;
+                  // SheetJS cellStyles:true → .s là object fill trực tiếp
+                  if (typeof style === "object" && style !== null) {
+                    const patternType = style.patternType;
+                    const fg = style.fgColor;
+                    if (patternType && patternType !== "none" && fg) {
+                      const rgb = fg.rgb || (fg.indexed !== undefined ? `indexed:${fg.indexed}` : null) || (fg.theme !== undefined ? `theme:${fg.theme}` : null);
+                      if (rgb && !/^(ffffffff|ffffff|00ffffff|00000000|0)$/i.test(String(rgb))) return String(rgb);
+                      return null;
+                    }
+                    // fallback: fill có dạng index → tra trong wb.Styles
+                    const fillIdx = style.fillId ?? style.fillid;
+                    if (fillIdx !== null && fillIdx !== undefined && workbook.Styles?.Fills) {
+                      const fill = workbook.Styles.Fills[fillIdx];
+                      if (fill && fill.patternType && fill.patternType !== "none" && fill.fgColor?.rgb
+                        && !/^(ffffffff|ffffff|00ffffff|00000000|0)$/i.test(String(fill.fgColor.rgb))) {
+                        return String(fill.fgColor.rgb);
+                      }
+                    }
+                    return null;
+                  }
+                  // SheetJS cũ: .s là số index của style
+                  if (workbook.Styles) {
+                    const xf = workbook.Styles.CellXf?.[style] ?? workbook.Styles.CellXfs?.[style];
+                    const fillIdx = xf?.fillId ?? xf?.fillid;
+                    if (fillIdx !== null && fillIdx !== undefined && workbook.Styles.Fills) {
+                      const fill = workbook.Styles.Fills[fillIdx];
+                      if (fill && fill.patternType && fill.patternType !== "none" && fill.fgColor?.rgb
+                        && !/^(ffffffff|ffffff|00ffffff|00000000|0)$/i.test(String(fill.fgColor.rgb))) {
+                        return String(fill.fgColor.rgb);
+                      }
+                    }
+                  }
+                  return null;
+                };
+
+                Object.keys(ws).forEach(addr => {
+                  const match = /^([A-Z]+)([0-9]+)$/.exec(addr);
+                  if (!match) return;
+                  const colIdx = XLSX.utils.decode_col(match[1]);
+                  const rowIdx = parseInt(match[2], 10) - 1;
+                  if (colIdx < startCol || colIdx > endCol || rowIdx < startRow || rowIdx > endRow) return;
+                  const day = classColToDay[colIdx];
+                  if (!day) return;  // cột không phải cột lớp của thứ nào (A, B, ô time,...)
+                  const cell = ws[addr];
+                  const fill = getCellFillArgb(cell);
+                  if (!fill) return;  // không tô → ô trắng / ô gạch chéo trống
+                  const cellText = getCellValue(cell);
+                  if (!cellText) return;
+
+                  // Đọc ô ca+GV bên phải; và tầng từ cột B cùng hàng.
+                  const timeCell = getCell(colIdx + 1, rowIdx);
+                  const tangCell = getCell(1, rowIdx);
+                  const { time, teacher } = this.parseSheetLTimeCell(getCellValue(timeCell));
+                  const { floor, building } = this.parseSheetLTang(getCellValue(tangCell));
+
+                  // Chỉ xếp các ô có TÊN GIÁO VIÊN cạnh tên lớp. Ô không có tên GV → bỏ qua.
+                  const teacherName = String(teacher || "").trim();
+                  if (!teacherName) {
+                    summary.noTeacher = (summary.noTeacher || 0) + 1;
+                    summary.noTeacherNames = summary.noTeacherNames || [];
+                    summary.noTeacherNames.push(`${String(cellText || "?").trim()} · ${this.SCHEDULE_DAYS[day]}`);
+                    return;
+                  }
+
+                  // Đối chiều tên lớp với dropdown tên lớp trong thẻ xếp lịch (danh sách lớp Excel).
+                  // Ưu tiên khớp chính xác (không phân biệt hoa/thường) hoặc khớp theo dấu chấm/số —
+                  // KHÔNG dùng fuzzy để tránh nhầm lớp (vd "E8-HIGH" không được tính như "E8-HIGH (Lại)").
+                  const cellKey = String(cellText || "").trim();
+                  const cellKeyNorm = typeof this.normalizeClassName === "function" ? this.normalizeClassName(cellKey) : cellKey.toLowerCase();
+                  let canonicalName = "";
+                  for (const [key, data] of Object.entries(this.db || {})) {
+                    const name = String((data && data.name) || key || "").trim();
+                    if (!name) continue;
+                    if (name.toLowerCase() === cellKey.toLowerCase()) { canonicalName = name; break; }
+                    if (typeof this.normalizeClassName === "function" && this.normalizeClassName(name) === cellKeyNorm) { canonicalName = name; break; }
+                  }
+                  // Không khớp danh sách lớp trong dropdown → bỏ qua để tránh thẻ "(tùy chỉnh)" sai lệch.
+                  if (!canonicalName) {
+                    summary.unmatched = summary.unmatched || [];
+                    summary.unmatched.push(`${cellKey} · ${this.SCHEDULE_DAYS[day]}`);
+                    return;
+                  }
+                  const name = canonicalName;
+
+                  // Không thêm bản trùng hoàn toàn (cùng lớp + cùng tầng + cùng ca) trong ngày này.
+                  // Cho phép cùng một lớp xuất hiện nhiều lần trong một thứ nhưng ở tầng/ca khác nhau,
+                  // và trả lại file cũ khi nạp lại.
+                  const list = Array.isArray(this.schedule?.[day]) ? this.schedule[day] : [];
+                  const wantNorm = typeof this.normalizeClassName === "function" ? this.normalizeClassName(name) : name.trim().toLowerCase();
+                  const isDup = list.some(card =>
+                    (typeof this.normalizeClassName === "function" ? this.normalizeClassName(card?.lopName) : String(card?.lopName || "").trim().toLowerCase()) === wantNorm
+                    && String(card?.floor || "").trim() === String(floor || "").trim()
+                    && String(card?.building || "").trim() === String(building || "").trim()
+                    && String(card?.time || "").trim() === String(time || "").trim()
+                  );
+                  if (isDup) {
+                    summary.skipped++;
+                    return;
+                  }
+                  const item = this.createDraftScheduleCard(day, name);
+                  item.time = time || "";
+                  item.gvName = teacherName;
+                  item.floor = floor;
+                  item.building = building;
+                  // Thẻ có lớp + ca + GV → coi như đã xếp đầy đủ (bỏ nháp).
+                  if (item.lopName && item.time && item.gvName) item.isDraft = false;
+                  if (!Array.isArray(this.schedule[day])) this.schedule[day] = [];
+                  this.schedule[day].push(item);
+                  summary.added++;
+                  summary.days[day] = (summary.days[day] || 0) + 1;
+                });
+
+                if (summary.added > 0) {
+                  this._hasPendingAdminScheduleEdit = true;
+                }
+                return summary;
+              },
+
+              /*
+               * Đọc "ca+GV" từ 1 ô time trong sheet L (vd "Nhung 18h45", "18h30 Thu Phương").
+               * Trả về { time: "18h45", teacher: "Nhung" }.
+               */
+              parseSheetLTimeCell(raw) {
+                const text = String(raw || "").replace(/\s+/g, " ").trim();
+                if (!text) return { time: "", teacher: "" };
+                const match = text.match(/(\d{1,2})\s*h\s*(\d{2})/i);
+                if (!match) return { time: "", teacher: text };
+                const time = `${match[1]}h${match[2]}`;
+                const teacher = text.replace(match[0], " ").replace(/\s+/g, " ").trim();
+                return { time, teacher };
+              },
+
+              /*
+               * Đọc tầng từ cột B của sheet L (vd "Tầng 4-237", "Tầng 1-1/158", "Tầng 3-30 MAX").
+               * Trả về { floor: "4", building: "237" }.
+               */
+              parseSheetLTang(raw) {
+                const text = String(raw || "").trim();
+                if (!text) return { floor: "", building: "" };
+                const parts = text.replace(/^tầng\s*/i, "").trim().split("-");
+                const floor = (parts[0] || "").trim();
+                const building = parts.slice(1).join("-").trim().replace(/^[-\s]+/, "");
+                return { floor, building };
+              },
+
+              /*
+               * Tạo 1 thẻ lịch nháp cho 1 ngày + 1 lớp Excel (dùng chung cho Xếp lớp và khôi phục mặc định).
+               */
+              createDraftScheduleCard(day, className) {
+                const name = String(className || "").trim();
+                return {
+                  uid: this.newUid(),
+                  isDraft: true,
+                  time: "",
+                  lopName: name,
+                  lopLink: name ? `https://hatbui10.github.io/diemdanh/?class=${encodeURIComponent(name)}` : "",
+                  gvName: "",
+                  gvPhone: "",
+                  foreignTeacherName: "",
+                  foreignTeacherPhone: "",
+                  building: "",
+                  floor: "",
+                  isChecked: false,
+                  att: {},
+                  attTime: "",
+                  lastUpdateTime: ""
+                };
+              },
+
+              addScheduleCardForDay(day, className) {
+                if (!this.scheduleEditingUnlocked()) return;
+                if (!this.SCHEDULE_DAYS[day]) return;
+                if (!Array.isArray(this.schedule[day])) this.schedule[day] = [];
+                const name = String(className || "").trim();
+                if (!name) return;
+                this.schedule[day].push(this.createDraftScheduleCard(day, name));
+                this._hasPendingAdminScheduleEdit = true;
+                this.commitSchedule(`Đã thêm lớp "${name}" vào ${this.SCHEDULE_DAYS[day]}. Hãy chọn ca học và giáo viên trong thẻ.`);
+              },
+
+              /*
+               * Đọc danh sách lớp (đã xếp) trong đúng 1 thứ theo thứ tự thẻ, không trùng nhau.
+               */
+              getScheduledClassNamesForDay(day) {
+                const list = Array.isArray(this.schedule?.[day]) ? this.schedule[day] : [];
+                const seen = new Set();
+                const names = [];
+                list.forEach(card => {
+                  const name = String(card?.lopName || "").trim();
+                  if (!name || seen.has(name)) return;
+                  seen.add(name);
+                  names.push(name);
+                });
+                return names;
+              },
+
+              /*
+               * Đọc bản lưu mặc định của Xếp lớp (chỉ trạng thái các lớp: ngày → danh sách lớp).
+               */
+              loadXepLopDefaultBaseline() {
+                try {
+                  const raw = this.storageGet("localStorage", this.XEP_LOP_BASELINE_KEY);
+                  if (!raw) return null;
+                  const parsed = JSON.parse(raw);
+                  const savedAt = Number(parsed?.savedAt);
+                  if (!parsed || typeof parsed !== "object" || !Number.isFinite(savedAt) || savedAt <= 0) return null;
+                  const days = parsed.days && typeof parsed.days === "object" ? parsed.days : null;
+                  if (!days) return null;
+                  return { savedAt, days };
+                } catch (error) {
+                  console.error("Lỗi đọc bản lưu mặc định Xếp lớp:", error);
+                  return null;
+                }
+              },
+
+              /*
+               * Nút "💾 Lưu mặc định" trong tab Xếp lớp — hoạt động 2 lần:
+               *  - Lần đầu bấm: lưu trạng thái các lớp hiện tại (ngày → danh sách lớp) làm MẶC ĐỊNH.
+               *  - Các lần sau bấm: khôi phục trạng thái các lớp đúng như lúc đầu (lần bấm đầu tiên).
+               * Bản lưu chỉ ghi trạng thái các lớp, không chạm vào điểm danh/giáo viên/ca học.
+               */
+              saveXepLopDefaultBaseline() {
+                if (!this.scheduleEditingUnlocked()) {
+                  this.showToast("Bạn cần mở khóa chế độ sửa lịch trước.", true);
+                  return;
+                }
+                const existing = this.loadXepLopDefaultBaseline();
+                if (!existing) {
+                  const days = {};
+                  Object.keys(this.SCHEDULE_DAYS).forEach(day => {
+                    days[day] = this.getScheduledClassNamesForDay(day);
+                  });
+                  const snapshot = { savedAt: Date.now(), days };
+                  try {
+                    this.storageSet("localStorage", this.XEP_LOP_BASELINE_KEY, JSON.stringify(snapshot));
+                  } catch (error) {
+                    console.error("Không lưu được mặc định Xếp lớp:", error);
+                    this.showToast("Không thể lưu bản lưu mặc định.", true);
+                    return;
+                  }
+                  this.showToast("💾 Đã lưu trạng thái các lớp làm mặc định. Các lần bấm sau sẽ khôi phục trạng thái lớp lúc đầu.");
+                  this.renderXepLopPanel();
+                  return;
+                }
+                this.restoreXepLopDefaultBaseline(existing);
+              },
+
+              /*
+               * Khôi phục trạng thái lớp (ngày → danh sách lớp) như lúc đầu đã xếp.
+               * Giữ lại các thẻ có sẵn có trùng lớp nằm trong mặc định (giữ điểm danh, ca học, giáo viên);
+               * gỡ thẻ lớp không còn trong mặc định; thêm thẻ mới nếu lớp mặc định bị thiếu.
+               */
+              restoreXepLopDefaultBaseline(baseline) {
+                if (!baseline || typeof baseline !== "object") return;
+                const days = baseline.days && typeof baseline.days === "object" ? baseline.days : {};
+                const nextSchedule = {};
+                Object.keys(this.SCHEDULE_DAYS).forEach(day => {
+                  const baselineNames = (Array.isArray(days[day]) ? days[day] : [])
+                    .map(name => String(name || "").trim())
+                    .filter(Boolean);
+                  const currentList = Array.isArray(this.schedule?.[day]) ? [...this.schedule[day]] : [];
+                  const kept = currentList.filter(card => {
+                    const name = String(card?.lopName || "").trim();
+                    return name && baselineNames.includes(name);
+                  });
+                  const keptNames = new Set(kept.map(card => String(card.lopName || "").trim()));
+                  const fresh = baselineNames
+                    .filter(name => !keptNames.has(name))
+                    .map(name => this.createDraftScheduleCard(day, name));
+                  nextSchedule[day] = [...kept, ...fresh];
+                });
+                // Bỏ các thẻ đã bị gỡ khỏi các set mở rộng/thêm/sửa đang mở.
+                const keepUids = new Set();
+                Object.values(nextSchedule).forEach(list => list.forEach(card => keepUids.add(card.uid)));
+                [this.expandedScheduleCards, this.openScheduleAddForms, this.openScheduleEditForms].forEach(set => {
+                  if (!(set instanceof Set)) return;
+                  [...set].forEach(uid => { if (!keepUids.has(uid)) set.delete(uid); });
+                });
+                this.schedule = nextSchedule;
+                this._hasPendingAdminScheduleEdit = true;
+                this.persistLocal();
+                this.renderSchedule();
+                this.queueScheduleSave();
+                this.showToast("↩ Đã khôi phục trạng thái các lớp như lúc đầu được xếp.");
               },
 
               /*
@@ -5195,7 +6182,7 @@
               },
             
               applyScheduleEdit(control) {
-                if (!this.scheduleAdminUnlocked) return;
+                if (!this.scheduleEditingUnlocked()) return;
             
                 const scheduleCard = control.closest(".schedule-card");
                 const uid = scheduleCard ? scheduleCard.dataset.scheduleUid : "";
@@ -5423,6 +6410,7 @@
               },
             
               commitSchedule(message) {
+                this.normalizeScheduleCardNames();
                 this.persistLocal();
                 this.renderSchedule();
                 this.queueScheduleSave();
@@ -5643,6 +6631,11 @@
                   return;
                 }
 
+                if (action === "open-xep-lop") {
+                  this.openXepLopLock();
+                  return;
+                }
+
                 if (action === "toggle-class") {
                   control.closest(".class-card")?.classList.toggle("active");
                   return;
@@ -5724,7 +6717,7 @@
                 }
             
                 if (action === "schedule-toggle-edit") {
-                  if (!this.scheduleAdminUnlocked) {
+                  if (!this.scheduleEditingUnlocked()) {
                     this.showToast("Bạn cần mở khóa chế độ sửa lịch trước.", true);
                     return;
                   }
@@ -6829,6 +7822,13 @@
                             });
                           });
                           app.filename = file.name;
+                          // ── Sheet "L": đọc màu và xếp lớp vào các thứ (Thứ 2 → Chủ nhật) ──
+                          let sheetLSummary = null;
+                          try {
+                            sheetLSummary = app.applyScheduleFromSheetL(workbook);
+                          } catch (sheetLError) {
+                            console.error("Lỗi đọc sheet L khi nạp Excel:", sheetLError);
+                          }
 
                           // ═══════════════════════════════════════════════════════════
                           //  PHỤC HỒI DỮ LIỆU PHÂN NHÓM: Nếu file Excel mới KHÔNG có
@@ -6878,10 +7878,8 @@
                           }
                           app.renderAll(false);
 
-                          // Chỉ chuyển sang tab "Phân nhóm" để xem danh sách, KHÔNG tự tạo thẻ lịch Chủ nhật.
-                          if (hasPhanNhom && phanNhomClassKeys.length) {
-                            setTimeout(() => app.showPhanNhomPanel(), 600);
-                          }
+                          // KHÔNG tự chuyển tab sau khi nạp: giữ lịch Chủ nhật và các tab thứ khác
+                          // hiển thị nguyên vẹn. Phân nhóm chỉ mở khi người dùng chủ động bấm tab "📋 Phân nhóm".
 
                           // Nếu có phân nhóm, cuộn xuống lớp phân nhóm đầu tiên và toast thông báo.
                           if (hasPhanNhom && phanNhomClassKeys.length) {
@@ -6930,10 +7928,28 @@
                             if (!existingSheetNames.has(sheetName)) return `Sheet ${sheetName}: không có trong file`;
                             return `Sheet ${sheetName}: ${sheetStudentCounts[sheetName]} học sinh / ${sheetClassNames[sheetName].size} lớp`;
                           }).join(" | ");
+                          // Sheet L: đọc màu và xếp lớp vào các thứ (Thứ 2 → Chủ nhật).
+                          const dayOrder = Object.keys(app.SCHEDULE_DAYS);
+                          const sheetLLine = sheetLSummary && sheetLSummary.found
+                            ? (sheetLSummary.added
+                              ? `Sheet "L": đã xếp ${sheetLSummary.added} lớp (${dayOrder.filter(day => sheetLSummary.days[day]).map(day => `${app.SCHEDULE_DAYS[day]} × ${sheetLSummary.days[day]}`).join(", ")}) vào các thứ.`
+                              : `Sheet "L": không có lớp mới để xếp (bỏ qua ${sheetLSummary.skipped} lớp đã có sẵn).`)
+                            : "";
+                          const sheetLNotes = [];
+                          if (sheetLSummary && sheetLSummary.unmatched && sheetLSummary.unmatched.length) {
+                            sheetLNotes.push(`Không khớp danh sách lớp trong thẻ xếp lịch: ${sheetLSummary.unmatched.join(", ")} — đã bỏ qua.`);
+                          }
+                          if (sheetLSummary && sheetLSummary.noTeacher) {
+                            sheetLNotes.push(`Bỏ qua ${sheetLSummary.noTeacher} ô không có tên giáo viên: ${sheetLSummary.noTeacherNames.slice(0, 6).join(", ")}${sheetLSummary.noTeacherNames.length > 6 ? " …" : ""}.`);
+                          }
+                          const sheetLNotesLine = sheetLNotes.length ? `\n${sheetLNotes.join(" ")}` : "";
                           app.dom.fileStatus.textContent =
                             `✅ Tổng cộng ${totalStudentsCount} học sinh từ các sheet ${[...existingSheetNames].join(", ")}, ` +
-                            `${Object.keys(importedDatabase).length} lớp. ${firebaseMessage}.${phanNhomSummary}\n${sheetSummary}`;
-                          app.showToast("Nạp và lọc file Excel thành công.");
+                            `${Object.keys(importedDatabase).length} lớp. ${firebaseMessage}.${phanNhomSummary}\n${sheetSummary}` +
+                            (sheetLLine ? `\n${sheetLLine}` : "") + sheetLNotesLine;
+                          app.showToast(sheetLSummary && sheetLSummary.added
+                            ? "Nạp Excel và xếp lớp từ sheet L thành công."
+                            : "Nạp và lọc file Excel thành công.");
                           setTimeout(() => app.setProgress(100, false), 1500);
                           return;
                         }
@@ -6957,6 +7973,7 @@
             
                           let detectedClassName = "";
                           let detectedSchedule = "";
+                          let detectedTeacherName = "";
                           let previousText = "";
                           let readingStudents = false;
             
@@ -6999,7 +8016,13 @@
             
                             if (isSchedule) {
                               if (previousText) {
-                                detectedClassName = previousText;
+                                // Sheet SV/2-12 lưu lớp dạng "{TÊN LỚP} {Tên GV}" (vd "SVIP L8+9 Lê Thu Hà").
+                                // Tách tên GV ra, chỉ giữ tên lớp — tránh hiện thẻ lịch "SVIP L8+9 Lê Thu Hà".
+                                const parsedClass = this.parseClassHeaderCell(previousText);
+                                detectedClassName = parsedClass.className || previousText;
+                                detectedTeacherName = parsedClass.teacher || "";
+                              } else {
+                                detectedTeacherName = "";
                               }
                               detectedSchedule = cellB;
                               readingStudents = true;
@@ -7013,6 +8036,7 @@
                                   importedDatabase[currentClassKey] = {
                                     sheet: normalizedSheetName,
                                     schedule: detectedSchedule,
+                                    teacher: detectedTeacherName || "",
                                     isFull: false,
                                     lastTime: "",
                                     students: []
@@ -7192,98 +8216,6 @@
             
               
             
-              /* ===== BẢN LƯU MẶC ĐỊNH (tự lưu mỗi 24h) ===== */
-            
-              loadDefaultBackup() {
-                try {
-                  const raw = this.storageGet("localStorage", this.DEFAULT_BACKUP_KEY);
-                  if (!raw) return null;
-                  const parsed = JSON.parse(raw);
-                  const savedAt = Number(parsed?.savedAt);
-                  if (!parsed || typeof parsed !== "object" || !Number.isFinite(savedAt) || savedAt <= 0) return null;
-                  return parsed;
-                } catch (error) {
-                  console.error("Lỗi đọc bản lưu mặc định:", error);
-                  return null;
-                }
-              },
-            
-              saveDefaultBackup() {
-                const hasClasses = Object.keys(this.db).length > 0;
-                const hasSchedule = Object.values(this.schedule || {}).some(list => (list || []).length);
-                // Không chụp bản lưu khi chưa có dữ liệu, tránh "mặc định" là dữ liệu trống.
-                if (!hasClasses && !hasSchedule) return false;
-                const snapshot = {
-                  savedAt: Date.now(),
-                  database: JSON.parse(JSON.stringify(this.db)),
-                  filename: this.filename || "",
-                  nightResetKey: this.meta.nightResetKey || "",
-                  attendanceWeekKey: this.meta.attendanceWeekKey || "",
-                  schedule: JSON.parse(JSON.stringify(this.schedule))
-                };
-                this.storageSet("localStorage", this.DEFAULT_BACKUP_KEY, JSON.stringify(snapshot));
-                return true;
-              },
-            
-              maybeSaveDefaultBackup() {
-                const now = Date.now();
-                const existing = this.loadDefaultBackup();
-                if (existing && now - Number(existing.savedAt) < this.DEFAULT_BACKUP_INTERVAL_MS) return;
-                this.saveDefaultBackup();
-              },
-            
-              startDefaultBackupTimer() {
-                if (this.defaultBackupTimer) clearInterval(this.defaultBackupTimer);
-                this.maybeSaveDefaultBackup();
-                // Trang mở liên tục thì cứ 1 giờ kiểm tra lại; đủ 24 giờ là tự lưu bản mặc định mới.
-                this.defaultBackupTimer = setInterval(() => this.maybeSaveDefaultBackup(), 60 * 60 * 1000);
-              },
-            
-              restoreDefaultBackup() {
-                // Chọn bản MỚI NHẤT trong 2 loại: bản lưu mặc định 24 giờ và bản chụp
-                // ngay trước khi hệ thống tự đặt lại đầu tuần.
-                const candidates = [this.loadDefaultBackup(), this.loadPreResetSnapshot()].filter(Boolean);
-                const backup = candidates.sort((a, b) => Number(b.savedAt) - Number(a.savedAt))[0] || null;
-                if (!backup) {
-                  this.showToast("Chưa có bản lưu mặc định để khôi phục. Hệ thống sẽ tự lưu bản lưu mỗi 24 giờ khi có dữ liệu.", true);
-                  return;
-                }
-                const sourceLabel = backup.reason
-                  ? `bản chụp tự động trước khi đặt lại (${backup.reason})`
-                  : "bản lưu mặc định 24 giờ";
-            
-                const when = this.formatDateTime(new Date(Number(backup.savedAt)));
-                const backupDb = this.normalizeDatabase(backup.database || {});
-                const backupSchedule = this.normalizeSchedule(backup.schedule || null);
-                const classCount = Object.keys(backupDb).length;
-                const studentCount = Object.values(backupDb).reduce(
-                  (sum, classData) => sum + (Array.isArray(classData.students) ? classData.students.length : 0),
-                  0
-                );
-            
-                if (!confirm(
-                  `Khôi phục về ${sourceLabel}, lúc ${when}\n(${classCount} lớp, ${studentCount} học sinh).\nToàn bộ dữ liệu hiện tại sẽ được thay bằng dữ liệu của bản lưu. Tiếp tục?`
-                )) return;
-            
-                this.db = backupDb;
-                this.filename = String(backup.filename || "");
-                this.meta.nightResetKey = String(backup.nightResetKey || "");
-                this.meta.attendanceWeekKey = this.weekStampValue();
-                this.schedule = backupSchedule;
-                this._hasPendingAdminScheduleEdit = true;
-                this.expandedScheduleCards.clear();
-                this.openScheduleAddForms.clear();
-                this.openScheduleEditForms.clear();
-                this.openAddForms.clear();
-                this.syncScheduleClassNamesWithDatabase();
-                this.initScheduleDropdowns();
-                this.persistLocal();
-                this.renderSchedule();
-                this.renderAll(false);
-                this.queueAttendanceSave(0);
-                this.queueScheduleSave(0);
-                this.showToast(`Đã khôi phục về bản lưu mặc định lúc ${when}.`);
-              },
             
               commit(message) {
                 this.persistLocal();
@@ -7368,8 +8300,6 @@
                   }
                 );
             
-                // Sau khi Firebase đồng bộ xong, kiểm tra lại bản lưu mặc định để không chụp dữ liệu cũ.
-                this.maybeSaveDefaultBackup();
               },
             
               applyRemote(payload) {
@@ -8187,6 +9117,6 @@
             window.AttendanceApp.attachFirebase(firebaseApi);
         </script>
 
-    </body>
+    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5e0df48adda0ed0',t:'MTc5NTI3NjQ1OA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5e0df48adda0ed0',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
