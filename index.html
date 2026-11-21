@@ -2412,7 +2412,6 @@
             <button type="button" id="scheduleAuthBtn" class="btn btn-outline schedule-admin-control">🔐 Mở khóa xếp lịch</button>
             <button type="button" id="uploadPanelToggleBtn" class="btn btn-outline assistant-only">🔐 Mở khóa tải Excel</button>
             <button type="button" id="clearScheduleCardDayBtn" class="btn btn-outline clear-day-btn schedule-admin-control">🗑 Xóa ngày</button>
-            <button type="button" id="removeNoTeacherCardsBtn" class="btn btn-outline clear-day-btn schedule-admin-control">🗑 Xoá lớp chưa có GV</button>
         </div>
 
         <section id="uploadCard" class="card upload-card assistant-only" aria-labelledby="uploadTitle" hidden>
@@ -2930,7 +2929,6 @@
                   xepLopTabBtn: document.getElementById("xepLopTabBtn"),
                   xepLopLockBtn: document.getElementById("xepLopLockBtn"),
                   clearScheduleCardDayBtn: document.getElementById("clearScheduleCardDayBtn"),
-                  removeNoTeacherCardsBtn: document.getElementById("removeNoTeacherCardsBtn"),
                   allClassesDetails: document.getElementById("allClassesDetails"),
                   mainContainer: document.getElementById("mainContainer"),
                   toast: document.getElementById("toast")
@@ -3003,7 +3001,6 @@
                 this.dom.scheduleAuthBtn.addEventListener("click", () => this.toggleScheduleAdmin());
                 this.dom.addScheduleCardBtn.addEventListener("click", () => this.addBlankScheduleCard());
                 this.dom.clearScheduleCardDayBtn.addEventListener("click", () => this.clearCurrentScheduleDay());
-                if (this.dom.removeNoTeacherCardsBtn) this.dom.removeNoTeacherCardsBtn.addEventListener("click", () => this.removeScheduleCardsWithoutTeacher());
                 this.dom.scheduleDayTabs.addEventListener("click", event => {
                   const button = event.target.closest("[data-schedule-day]");
                   if (!button) return;
@@ -4062,7 +4059,7 @@
                * _scheduleEditingUnlocked không bao giờ tự mở — chỉ mở khi mật khẩu được nhập đúng.
                */
               scheduleEditingUnlocked() {
-                return Boolean(this.xepLopUnlocked && this.scheduleAdminUnlocked);
+                return Boolean(this.scheduleAdminUnlocked);
               },
 
               toggleScheduleAdmin() {
@@ -4073,6 +4070,16 @@
 
                 if (this.scheduleAdminUnlocked) {
                   this.scheduleAdminUnlocked = false;
+                  this.xepLopUnlocked = false;
+                  // Khóa xếp lịch: ẩn tab Xếp lớp và chuyển về tab ngày hiện tại.
+                  if (this.currentScheduleDay === "xepLop") {
+                    this.currentScheduleDay = this.todayScheduleDayKey();
+                    if (this.dom.scheduleDayTabs) {
+                      this.dom.scheduleDayTabs.querySelectorAll("[data-schedule-day]").forEach(button => {
+                        button.classList.toggle("active", button.dataset.scheduleDay === this.currentScheduleDay);
+                      });
+                    }
+                  }
                   this.dom.scheduleAuthBtn.textContent = "🔐 Mở khóa xếp lịch";
                   this.renderSchedule();
                   return;
@@ -4415,10 +4422,11 @@
             
               /*
                * Sắp xếp các thẻ lớp trong ngày theo thứ tự kiểm tra::
-               *   0) Lớp chưa có tên giáo viên (gvName/foreignTeacherName) → xếp xuống cuối cùng
-               *   1) Nhà: 237 → 58 → 30 → 158 (nhà không nằm trong danh sách → xếp cuối)
-               *   2) Trong nhà: tầng nhỏ → tầng lớn (tầng nhỏ phía trên, tầng lớn phía dưới)
-               *   3) Cùng phòng (cùng nhà+tầng) khác giờ: xếp cái giờ lớn hơn xuống dưới cùng
+               *   0) Ca 2 (tối 19h30 trở đi — vd E11-OCEAN 20h00, E11-CAN 19h30) → xếp xuống dưới cùng
+               *   1) Lớp chưa có tên giáo viên (gvName/foreignTeacherName) → xếp xuống cuối
+               *   2) Nhà: 237 → 58 → 30 → 158 (nhà không nằm trong danh sách → xếp cuối)
+               *   3) Trong nhà: tầng nhỏ → tầng lớn (tầng nhỏ phía trên, tầng lớn phía dưới)
+               *   4) Cùng phòng (cùng nhà+tầng) khác giờ: xếp cái giờ lớn hơn xuống dưới cùng
                * Không đổi dữ liệu — chỉ sắp xếp list hiển thị.
                */
               sortScheduleDayList(list) {
@@ -4436,10 +4444,26 @@
                   const hour = this.parseStartHour(item && item.time);
                   return hour === null ? 24 : hour;
                 };
+                // Thời gian ca học dạng số (vd "19h30" → 19.5, "20h00" → 20).
+                const timeValue = item => {
+                  const match = String(item && item.time || "").match(/(\d{1,2})\s*h\s*(\d{0,2})?/i);
+                  if (!match) return null;
+                  const h = parseInt(match[1], 10);
+                  const min = match[2] ? parseInt(match[2], 10) : 0;
+                  return h + min / 60;
+                };
+                // Ca 2 (tối 19h30 trở đi) → xếp xuống dưới cùng, sau tất cả các lớp khác.
+                const isCa2 = item => {
+                  const t = timeValue(item);
+                  return t !== null && t >= 19.5;
+                };
                 const hasTeacher = item => Boolean(
                   String(item && (item.gvName || item.teacherName || item.foreignTeacherName || item.gvNuocNgoai) || "").trim()
                 );
                 return [...list].sort((a, b) => {
+                  // Lớp Ca 2 (tối 19h30 trở đi) xếp xuống dưới cùng — sau tất cả các lớp khác.
+                  const ca2 = (isCa2(a) ? 1 : 0) - (isCa2(b) ? 1 : 0);
+                  if (ca2 !== 0) return ca2;
                   // Các lớp chưa có tên giáo viên xếp xuống cuối cùng (sau tất cả lớp có giáo viên).
                   const ta = hasTeacher(a) ? 0 : 1;
                   const tb = hasTeacher(b) ? 0 : 1;
@@ -4472,55 +4496,6 @@
                 this.renderSchedule();
               },
             
-              /*
-               * Xoá COMPLETELY (toàn bộ, các thứ) các thẻ lịch chưa có tên giáo viên.
-               * - Giữ lại thẻ có giáo viên (GV thường hoặc GV là người nước ngoài).
-               * - Yêu cầu mật khẩu quản lý lịch học + xác nhận với danh sách lớp sắp bị xóa.
-               * - Sau khi xóa: dọn trạng thái mở rộng/thêm/sửa, lưu lại, render lại.
-               */
-              removeScheduleCardsWithoutTeacher() {
-                const password = prompt("Nhập mật khẩu quản lý lịch học:");
-                if (password === null) return;
-                if (password !== this.UPLOAD_UI_PASSWORD) {
-                  this.showToast("Mật khẩu quản lý lịch học không chính xác.", true);
-                  return;
-                }
-                // Tính danh sách keep/removed trước — CHƯA thay đổi this.schedule cho đến khi user xác nhận.
-                const removed = [];
-                const newSchedule = {};
-                Object.keys(this.SCHEDULE_DAYS).forEach(day => {
-                  const list = Array.isArray(this.schedule?.[day]) ? this.schedule[day] : [];
-                  const keep = [];
-                  list.forEach(item => {
-                    const teacherName = String(item?.gvName || "").trim();
-                    const foreignName = String(item?.foreignTeacherName || "").trim();
-                    if (!teacherName && !foreignName) {
-                      removed.push({ day, item });
-                    } else {
-                      keep.push(item);
-                    }
-                  });
-                  newSchedule[day] = keep;
-                });
-                if (!removed.length) {
-                  this.showToast("Không có lớp nào thiếu giáo viên — không cần xóa.", false);
-                  return;
-                }
-                let detail = removed.slice(0, 10).map(entry => `${this.SCHEDULE_DAYS[entry.day]}: ${entry.item.lopName || "chưa đặt tên"}`).join("\n");
-                if (removed.length > 10) detail += `\n… và ${removed.length - 10} lớp khác.`;
-                if (!confirm(`Sẽ xóa ${removed.length} lớp chưa có giáo viên:\n${detail}\n\nBạn có chắc?`)) return;
-                // Thay đổi this.schedule chỉ SAU khi user xác nhận.
-                this.schedule = newSchedule;
-                removed.forEach(({ item }) => {
-                  const uid = item?.uid;
-                  if (!uid) return;
-                  this.expandedScheduleCards.delete(uid);
-                  this.openScheduleAddForms.delete(uid);
-                  this.openScheduleEditForms.delete(uid);
-                });
-                this._hasPendingAdminScheduleEdit = true;
-                this.commitSchedule(`Đã xóa ${removed.length} lớp chưa có giáo viên.`);
-              },
 
               clearCurrentScheduleDay() {
                 // Nút "Xóa ngày" luôn hiển thị ở chế độ Trợ giảng nhưng bắt buộc nhập mật khẩu quản lý trước khi xóa.
@@ -4573,11 +4548,12 @@
                 if (this.dom.phanNhomTabBtn) {
                   this.dom.phanNhomTabBtn.hidden = !this.hasPhanNhomData();
                 }
+                // Tab Xếp lớp chỉ hiện khi đã mở khóa xếp lịch; khi khóa thì ẩn đi.
                 if (this.dom.xepLopTabBtn) {
-                  this.dom.xepLopTabBtn.hidden = !this.xepLopUnlocked;
+                  this.dom.xepLopTabBtn.hidden = !this.scheduleAdminUnlocked;
                 }
                 if (this.dom.xepLopLockBtn) {
-                  this.dom.xepLopLockBtn.hidden = Boolean(this.xepLopUnlocked);
+                  this.dom.xepLopLockBtn.hidden = this.scheduleAdminUnlocked;
                 }
                 // Nếu đang ở tab "Phân nhóm" thì render panel riêng.
                 if (this.currentScheduleDay === "phanNhom") {
@@ -4868,6 +4844,8 @@
                     btn.classList.toggle("active", btn.dataset.scheduleDay === "xepLop");
                   });
                 }
+                // Ép vẽ lại panel — tránh rate-limit 1000ms làm panel không hiện lại khi bấm lần thứ 2.
+                this._lastRenderSchedule = 0;
                 this.renderSchedule();
                 setTimeout(() => {
                   document.getElementById("xepLopPanel")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -5061,7 +5039,7 @@
                * Sau khi nhập đúng, tab Xếp lớp hiện ra và được tự động chuyển đến.
                */
               openXepLopLock() {
-                if (this.xepLopUnlocked) {
+                if (this.scheduleAdminUnlocked) {
                   this.showXepLopPanel();
                   return;
                 }
@@ -8018,7 +7996,7 @@
                               if (previousText) {
                                 // Sheet SV/2-12 lưu lớp dạng "{TÊN LỚP} {Tên GV}" (vd "SVIP L8+9 Lê Thu Hà").
                                 // Tách tên GV ra, chỉ giữ tên lớp — tránh hiện thẻ lịch "SVIP L8+9 Lê Thu Hà".
-                                const parsedClass = this.parseClassHeaderCell(previousText);
+                                const parsedClass = app.parseClassHeaderCell(previousText);
                                 detectedClassName = parsedClass.className || previousText;
                                 detectedTeacherName = parsedClass.teacher || "";
                               } else {
@@ -9117,6 +9095,6 @@
             window.AttendanceApp.attachFirebase(firebaseApi);
         </script>
 
-    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5e0df48adda0ed0',t:'MTc5NTI3NjQ1OA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5e0df48adda0ed0',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5e0f9a7eb1c855c',t:'MTc5NTI3NzUzOA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5e0f9a7eb1c855c',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
