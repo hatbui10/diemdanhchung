@@ -2055,6 +2055,36 @@
               font-weight: 800;
               cursor: pointer;
             }
+            .xep-lop-student-chip {
+              margin-left: auto;
+              font-size: 10px;
+              font-weight: 800;
+              padding: 1px 6px;
+              border-radius: 9px;
+              white-space: nowrap;
+              background: rgba(255, 255, 255, .07);
+              border: 1px solid var(--line);
+              color: var(--muted);
+            }
+            .xep-lop-class-btn.is-on .xep-lop-student-chip {
+              background: rgba(34, 197, 94, 0.15);
+              border-color: rgba(34, 197, 94, 0.3);
+              color: #4ade80;
+            }
+            .xep-lop-close-btn {
+              white-space: nowrap;
+              font-weight: 800;
+              cursor: pointer;
+              padding: 9px 12px !important;
+              background: transparent;
+              border: 1px solid var(--line);
+              color: var(--muted);
+              border-radius: 7px;
+            }
+            .xep-lop-close-btn:hover {
+              color: #ffb0b0;
+              border-color: #ff8080;
+            }
             .xep-lop-default-btn:disabled,
             .xep-lop-restore-btn:disabled { opacity: .45; cursor: not-allowed; }
             #phanNhomPanel {
@@ -2475,7 +2505,7 @@
                 <button type="button" class="day-tab" data-schedule-day="thu7">Thứ 7</button>
                 <button type="button" class="day-tab" data-schedule-day="cn">Chủ nhật</button>
                 <button type="button" id="phanNhomTabBtn" class="day-tab phan-nhom-tab" data-schedule-day="phanNhom" hidden>📋 Phân nhóm</button>
-                <button type="button" id="xepLopLockBtn" class="day-tab xep-lop-lock-tab" data-action="open-xep-lop" title="Mở tab Xếp lớp bằng mật khẩu">🔐 Xếp lớp</button>
+                <button type="button" id="xepLopLockBtn" class="day-tab xep-lop-lock-tab" data-action="open-xep-lop" title="Mở tab Xếp lớp bằng mật khẩu" hidden>🔐 Xếp lớp</button>
                 <button type="button" id="xepLopTabBtn" class="day-tab xep-lop-tab" data-schedule-day="xepLop" hidden>📋 Xếp lớp</button>
                 <button type="button" id="addScheduleCardBtn" class="day-tab add-card-btn schedule-admin-control" hidden>➕ Thêm thẻ lớp</button>
             </div>
@@ -4564,8 +4594,9 @@
                 if (this.dom.xepLopTabBtn) {
                   this.dom.xepLopTabBtn.hidden = !this.scheduleAdminUnlocked;
                 }
+                // Tab khóa "🔐 Xếp lớp" ẩn hoàn toàn: chỉ hiện tab Xếp lớp khi đã mở khóa xếp lịch.
                 if (this.dom.xepLopLockBtn) {
-                  this.dom.xepLopLockBtn.hidden = this.scheduleAdminUnlocked;
+                  this.dom.xepLopLockBtn.hidden = true;
                 }
                 // Nếu đang ở tab "Phân nhóm" thì render panel riêng.
                 if (this.currentScheduleDay === "phanNhom") {
@@ -4865,6 +4896,34 @@
               },
 
               /*
+               * Đóng tab Xếp lớp → quay về tab ngày hiện tại (sau khi dùng xong).
+               * Tab Xếp lớp vẫn hiện (mật khẩu vẫn còn mở); chỉ đóng panel.
+               */
+              closeXepLopPanel() {
+                this.currentScheduleDay = this.todayScheduleDayKey();
+                if (this.dom.scheduleDayTabs) {
+                  this.dom.scheduleDayTabs.querySelectorAll("[data-schedule-day]").forEach(btn => {
+                    btn.classList.toggle("active", btn.dataset.scheduleDay === this.currentScheduleDay);
+                  });
+                }
+                this._lastRenderSchedule = 0;
+                this.renderSchedule();
+              },
+
+              /*
+               * Số học sinh trong lớp (đọc trực tiếp từ dữ liệu lớp hiện tại).
+               */
+              _xepLopClassStudentCount(name) {
+                try {
+                  const entry = this.findClassEntryByName(name);
+                  const students = entry && entry[1] && Array.isArray(entry[1].students) ? entry[1].students : [];
+                  return students.length;
+                } catch (_) {
+                  return 0;
+                }
+              },
+
+              /*
                * Lớp được coi là "có giáo viên" khi có ít nhất một trong các tín hiệu sau:
                *   1) lớp Excel mang teacher (vd sheet SV/2-12),
                *   2) bất kỳ nhóm phân nhóm của lớp nào có giáo viên,
@@ -4991,10 +5050,20 @@
                   return sum + dayClasses.size;
                 }, 0);
 
-                // Bản lưu mặc định của tab Xếp lớp (chỉ trạng thái các lớp đã xếp).
+                // Bản lưu mặc định của tab Xếp lớp (trạng thái các lớp đã xếp + điểm danh).
                 const baseline = this.loadXepLopDefaultBaseline();
+                // Tính tổng học sinh trong bản lưu (thông tin bổ sung).
+                let baselineStudentTotal = 0;
+                if (baseline && baseline.days) {
+                  Object.values(baseline.days).forEach(list => {
+                    (Array.isArray(list) ? list : []).forEach(item => {
+                      const n = item && typeof item === "object" ? Number(item.studentCount || 0) : 0;
+                      if (Number.isFinite(n)) baselineStudentTotal += n;
+                    });
+                  });
+                }
                 const baselineHint = baseline
-                  ? `💾 Đã lưu mặc định lúc ${this.formatDateTime(new Date(Number(baseline.savedAt)))} — bấm 🔄 Khôi phục mặc định để khôi phục trạng thái các lớp.`
+                  ? `💾 Đã lưu mặc định lúc ${this.formatDateTime(new Date(Number(baseline.savedAt)))} — bấm 🔄 Khôi phục mặc định để khôi phục trạng thái các lớp${baselineStudentTotal ? ` (${baselineStudentTotal} HS)` : ""}.`
                   : "💾 Chưa lưu mặc định — bấm 💾 Lưu mặc định để lưu trạng thái các lớp hiện tại.";
 
                 let html = `<div id="xepLopPanel" class="xep-lop-panel">`;
@@ -5008,7 +5077,8 @@
                 }
                 html += `<div class="xep-lop-default-actions">`;
                 html += `<button type="button" id="xepLopDefaultBtn" class="btn btn-success xep-lop-default-btn" ${allowEdit && !baseline ? "" : "disabled"} title="${allowEdit ? (baseline ? "Đã lưu mặc định — bấm 🔄 Khôi phục mặc định để đưa trạng thái các lớp lại đúng như bản mặc định." : "Lưu trạng thái các lớp hiện tại làm mặc định.") : "Chưa mở khóa xếp lịch — mở khóa trước khi lưu mặc định"}">💾 Lưu mặc định</button>`;
-                html += `<button type="button" id="xepLopRestoreBtn" class="btn btn-outline xep-lop-restore-btn" ${allowEdit && baseline ? "" : "disabled"} title="${allowEdit ? (baseline ? "Khôi phục trạng thái các lớp từ bản mặc định đã lưu." : "Chưa có bản mặc định để khôi phục.") : "Chưa mở khóa xếp lịch — mở khóa trước khi khôi phục"}">🔄 Khôi phục mặc định</button>`;
+                html += `<button type="button" id="xepLopRestoreBtn" class="btn btn-warning xep-lop-restore-btn" ${allowEdit && baseline ? "" : "disabled"} title="${allowEdit ? (baseline ? "Khôi phục trạng thái các lớp từ bản mặc định đã lưu." : "Chưa có bản mặc định để khôi phục.") : "Chưa mở khóa xếp lịch — mở khóa trước khi khôi phục"}">🔄 Khôi phục mặc định</button>`;
+                html += `<button type="button" id="xepLopCloseBtn" class="btn xep-lop-close-btn" title="Đóng tab Xếp lớp và quay về thứ hiện tại">✕</button>`;
                 html += `</div>`;
                 html += `</header>`;
 
@@ -5035,9 +5105,11 @@
                   html += `<div class="xep-lop-class-list">`;
                   excelNames.forEach(name => {
                     const on = scheduled.has(name);
+                    const studentCount = this._xepLopClassStudentCount(name);
                     html += `<button type="button" class="xep-lop-class-btn${on ? " is-on" : ""}" data-day="${day}" data-class="${this.esc(name)}" ${allowEdit ? "" : "disabled"} title="${on ? "Gỡ lớp khỏi ngày này" : "Xếp lớp vào ngày này"}" aria-pressed="${on ? "true" : "false"}">`;
                     html += `<span class="xep-lop-class-icon">${on ? "✓" : "➕"}</span>`;
                     html += `<span class="xep-lop-class-name">${this.esc(name)}</span>`;
+                    html += `<span class="xep-lop-student-chip">${studentCount} HS</span>`;
                     html += `</button>`;
                   });
                   html += `</div>`;
@@ -5099,6 +5171,10 @@
                 const restoreBtn = container.querySelector("#xepLopRestoreBtn");
                 if (restoreBtn && !restoreBtn.disabled) {
                   restoreBtn.addEventListener("click", () => this.restoreXepLopDefaultBaselineClick());
+                }
+                const closeBtn = container.querySelector("#xepLopCloseBtn");
+                if (closeBtn) {
+                  closeBtn.addEventListener("click", () => this.closeXepLopPanel());
                 }
               },
 
@@ -5435,7 +5511,17 @@
                 }
                 const days = {};
                 Object.keys(this.SCHEDULE_DAYS).forEach(day => {
-                  days[day] = this.getScheduledClassNamesForDay(day);
+                  const list = Array.isArray(this.schedule?.[day]) ? this.schedule[day] : [];
+                  const seen = new Set();
+                  const cards = [];
+                  list.forEach(card => {
+                    const name = String(card?.lopName || "").trim();
+                    if (!name || seen.has(name)) return;
+                    seen.add(name);
+                    const captured = this.captureXepLopBaselineCard(card);
+                    if (captured) cards.push(captured);
+                  });
+                  days[day] = cards;
                 });
                 const snapshot = { savedAt: Date.now(), days };
                 try {
@@ -5493,19 +5579,41 @@
                 if (!baseline || typeof baseline !== "object") return;
                 const days = baseline.days && typeof baseline.days === "object" ? baseline.days : {};
                 const nextSchedule = {};
+                let restoredCards = 0;
                 Object.keys(this.SCHEDULE_DAYS).forEach(day => {
-                  const baselineNames = (Array.isArray(days[day]) ? days[day] : [])
-                    .map(name => String(name || "").trim())
-                    .filter(Boolean);
-                  const currentList = Array.isArray(this.schedule?.[day]) ? [...this.schedule[day]] : [];
-                  const kept = currentList.filter(card => {
-                    const name = String(card?.lopName || "").trim();
-                    return name && baselineNames.includes(name);
+                  const rawCards = Array.isArray(days[day]) ? days[day] : [];
+                  // Hỗ trợ v1 (tên lớp string) + v2 (object đầy đủ).
+                  const baselineByName = new Map();
+                  rawCards.forEach(item => {
+                    let name = "";
+                    let snap = null;
+                    if (item && typeof item === "object") {
+                      name = String(item.name || item.lopName || "").trim();
+                      snap = item;
+                    } else {
+                      name = String(item || "").trim();
+                      snap = { name };
+                    }
+                    if (name && !baselineByName.has(name)) baselineByName.set(name, snap);
                   });
-                  const keptNames = new Set(kept.map(card => String(card.lopName || "").trim()));
-                  const fresh = baselineNames
-                    .filter(name => !keptNames.has(name))
-                    .map(name => this.createDraftScheduleCard(day, name));
+                  const currentList = Array.isArray(this.schedule?.[day]) ? [...this.schedule[day]] : [];
+                  // Giữ nguyên các thẻ hiện có (không xóa) — phục hồi attendance/trạng thái từ bản lưu nếu khớp tên lớp.
+                  const kept = currentList.map(card => {
+                    const name = String(card?.lopName || "").trim();
+                    const snap = name ? baselineByName.get(name) : null;
+                    if (!snap) return card;
+                    restoredCards++;
+                    return this.restoreXepLopBaselineCardState(card, snap);
+                  });
+                  const keptNames = new Set(kept.map(card => String(card?.lopName || "").trim()).filter(Boolean));
+                  // Thêm thẻ mới cho các lớp có trong bản lưu mà hiện chưa có.
+                  const fresh = [];
+                  baselineByName.forEach((snap, name) => {
+                    if (keptNames.has(name)) return;
+                    const newCard = this.buildXepLopBaselineCard(day, snap);
+                    if (newCard) { fresh.push(newCard); restoredCards++; }
+                  });
+                  // Thứ tự giữ nguyên thứ tự các thẻ hiện có + thẻ mới thêm vào cuối ngày.
                   nextSchedule[day] = [...kept, ...fresh];
                 });
                 // Bỏ các thẻ đã bị gỡ khỏi các set mở rộng/thêm/sửa đang mở.
@@ -5520,7 +5628,108 @@
                 this.persistLocal();
                 this.renderSchedule();
                 this.queueScheduleSave();
-                this.showToast("↩ Đã khôi phục trạng thái các lớp như lúc đầu được xếp.");
+                this.showToast(`↩ Đã khôi phục trạng thái các lớp như lúc lưu mặc định (${restoredCards} lớp)`);
+              },
+
+              /*
+               * Bản lưu mặc định: lấy snapshot của 1 thẻ lịch (tên lớp + attendance + thông tin lớp).
+               * Trả về { name, isChecked, isDraft, att, attTime, time, gvName, gvPhone,
+               *         foreignTeacherName, foreignTeacherPhone, building, floor, studentCount }.
+               */
+              captureXepLopBaselineCard(card) {
+                const name = String(card?.lopName || "").trim();
+                if (!name) return null;
+                let studentCount = 0;
+                try {
+                  const entry = this.findClassEntryByName(name);
+                  if (entry && entry[1] && Array.isArray(entry[1].students)) studentCount = entry[1].students.length;
+                } catch (_) { /* không đọc được lớp — để 0 */ }
+                const att = {};
+                Object.entries(card?.att || {}).forEach(([uid, raw]) => {
+                  if (!uid || !raw || typeof raw !== "object") return;
+                  const status = raw.status === "absent" ? "absent" : "present";
+                  const note = String(raw.note || "").trim();
+                  const isExcused = Boolean(raw.isExcused);
+                  const isNew = Boolean(raw.isNew);
+                  if (status === "present" && !note && !isExcused && !isNew) return;
+                  const absentAt = Number(raw.absentAt);
+                  att[uid] = { status, note, isExcused, isNew, absentAt: status === "absent" ? (Number.isFinite(absentAt) && absentAt > 0 ? absentAt : Date.now()) : null };
+                });
+                return {
+                  name,
+                  isChecked: Boolean(card?.isChecked),
+                  isDraft: Boolean(card?.isDraft),
+                  att,
+                  attTime: String(card?.attTime || ""),
+                  time: String(card?.time || ""),
+                  gvName: String(card?.gvName || ""),
+                  gvPhone: String(card?.gvPhone || ""),
+                  foreignTeacherName: String(card?.foreignTeacherName || ""),
+                  foreignTeacherPhone: String(card?.foreignTeacherPhone || ""),
+                  building: String(card?.building || ""),
+                  floor: String(card?.floor || ""),
+                  lastUpdateTime: String(card?.lastUpdateTime || ""),
+                  studentCount
+                };
+              },
+
+              /*
+               * Phục hồi trạng thái 1 thẻ lịch hiện có theo snapshot (giữ nguyên uid/thẻ).
+               */
+              restoreXepLopBaselineCardState(card, snap) {
+                const name = String(snap?.name || card?.lopName || "").trim();
+                const att = {};
+                Object.entries(snap?.att || {}).forEach(([uid, raw]) => {
+                  if (!uid || !raw || typeof raw !== "object") return;
+                  att[uid] = { ...raw };
+                });
+                return {
+                  uid: String(card?.uid || this.newUid()),
+                  isDraft: snap?.isDraft === true,
+                  lopName: name,
+                  lopLink: name ? `https://hatbui10.github.io/diemdanh/?class=${encodeURIComponent(name)}` : "",
+                  time: String(snap?.time || ""),
+                  gvName: String(snap?.gvName || ""),
+                  gvPhone: String(snap?.gvPhone || ""),
+                  foreignTeacherName: String(snap?.foreignTeacherName || ""),
+                  foreignTeacherPhone: String(snap?.foreignTeacherPhone || ""),
+                  building: String(snap?.building || ""),
+                  floor: String(snap?.floor || ""),
+                  isChecked: Boolean(snap?.isChecked),
+                  att,
+                  attTime: String(snap?.attTime || ""),
+                  lastUpdateTime: String(snap?.lastUpdateTime || card?.lastUpdateTime || "")
+                };
+              },
+
+              /*
+               * Tạo thẻ lịch mới từ snapshot trong bản lưu (dùng khi lớp thiếu trong ngày hiện tại).
+               */
+              buildXepLopBaselineCard(day, snap) {
+                const name = String(snap?.name || "").trim();
+                if (!name) return null;
+                const att = {};
+                Object.entries(snap?.att || {}).forEach(([uid, raw]) => {
+                  if (!uid || !raw || typeof raw !== "object") return;
+                  att[uid] = { ...raw };
+                });
+                return {
+                  uid: this.newUid(),
+                  isDraft: snap?.isDraft === true,
+                  lopName: name,
+                  lopLink: `https://hatbui10.github.io/diemdanh/?class=${encodeURIComponent(name)}`,
+                  time: String(snap?.time || ""),
+                  gvName: String(snap?.gvName || ""),
+                  gvPhone: String(snap?.gvPhone || ""),
+                  foreignTeacherName: String(snap?.foreignTeacherName || ""),
+                  foreignTeacherPhone: String(snap?.foreignTeacherPhone || ""),
+                  building: String(snap?.building || ""),
+                  floor: String(snap?.floor || ""),
+                  isChecked: Boolean(snap?.isChecked),
+                  att,
+                  attTime: String(snap?.attTime || ""),
+                  lastUpdateTime: String(snap?.lastUpdateTime || "")
+                };
               },
 
               /*
@@ -5531,8 +5740,39 @@
                 if (!raw || typeof raw !== "object") return null;
                 const savedAt = Number(raw.savedAt);
                 if (!Number.isFinite(savedAt) || savedAt <= 0) return null;
-                const days = raw.days && typeof raw.days === "object" ? raw.days : null;
-                if (!days) return null;
+                const rawDays = raw.days && typeof raw.days === "object" ? raw.days : null;
+                if (!rawDays) return null;
+                // Duyệt từng ngày, lấy tên lớp + số học sinh + thông tin lớp (bản v1: chỉ tên lớp).
+                const days = {};
+                Object.keys(rawDays).forEach(day => {
+                  const list = Array.isArray(rawDays[day]) ? rawDays[day] : [];
+                  days[day] = list.map(item => {
+                    // v2: object đầy đủ (tên lớp + số học sinh + attendance + thông tin ca học/GV/phòng).
+                    if (item && typeof item === "object") {
+                      const name = String(item.name || item.lopName || "").trim();
+                      if (!name) return null;
+                      return {
+                        name,
+                        studentCount: Number.isFinite(Number(item.studentCount)) ? Math.max(0, Math.floor(Number(item.studentCount))) : 0,
+                        isChecked: Boolean(item.isChecked),
+                        isDraft: Boolean(item.isDraft),
+                        att: item.att && typeof item.att === "object" ? item.att : {},
+                        attTime: String(item.attTime || ""),
+                        time: String(item.time || ""),
+                        gvName: String(item.gvName || ""),
+                        gvPhone: String(item.gvPhone || ""),
+                        foreignTeacherName: String(item.foreignTeacherName || ""),
+                        foreignTeacherPhone: String(item.foreignTeacherPhone || ""),
+                        building: String(item.building || ""),
+                        floor: String(item.floor || ""),
+                        lastUpdateTime: String(item.lastUpdateTime || "")
+                      };
+                    }
+                    // v1: chỉ tên lớp (string).
+                    const name = String(item || "").trim();
+                    return name ? { name, studentCount: 0, isChecked: false, isDraft: false, att: {}, attTime: "", time: "", gvName: "", gvPhone: "", foreignTeacherName: "", foreignTeacherPhone: "", building: "", floor: "", lastUpdateTime: "" } : null;
+                  }).filter(card => card && card.name);
+                });
                 return { savedAt, days };
               },
 
@@ -9245,6 +9485,6 @@
             window.AttendanceApp.attachFirebase(firebaseApi);
         </script>
 
-    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5e1142bfbb2853f',t:'MTc5NTI3ODYyNA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5e1142bfbb2853f',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5e120e518b2f51a',t:'MTc5NTI3OTE0NQ=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5e120e518b2f51a',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
