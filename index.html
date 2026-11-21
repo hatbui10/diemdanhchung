@@ -2040,13 +2040,23 @@
               font-weight: 700;
               opacity: .85;
             }
+            .xep-lop-default-actions {
+              display: flex;
+              gap: 8px;
+              align-self: flex-end;
+            }
             .xep-lop-default-btn {
               white-space: nowrap;
               font-weight: 800;
-              align-self: flex-end;
               cursor: pointer;
             }
-            .xep-lop-default-btn:disabled { opacity: .45; cursor: not-allowed; }
+            .xep-lop-restore-btn {
+              white-space: nowrap;
+              font-weight: 800;
+              cursor: pointer;
+            }
+            .xep-lop-default-btn:disabled,
+            .xep-lop-restore-btn:disabled { opacity: .45; cursor: not-allowed; }
             #phanNhomPanel {
               padding: 6px 4px 18px;
               display: flex;
@@ -2830,6 +2840,8 @@
               // tránh gửi lặp lại khi không có thay đổi thực sự.
               _lastSavedPayload: "",
               _lastSavedSchedule: "",
+              // Lần ghi baseline Xếp lớp lên Firebase (chống ghi đè bởi snapshot cũ).
+              _lastBaselineWriteIso: null,
             
               storageGet(storageName, key) {
                 try {
@@ -4982,8 +4994,8 @@
                 // Bản lưu mặc định của tab Xếp lớp (chỉ trạng thái các lớp đã xếp).
                 const baseline = this.loadXepLopDefaultBaseline();
                 const baselineHint = baseline
-                  ? `💾 Đã lưu mặc định lúc ${this.formatDateTime(new Date(Number(baseline.savedAt)))} — bấm nút này để khôi phục trạng thái các lớp như lúc đầu.`
-                  : "💾 Chưa lưu mặc định — bấm nút này để lưu trạng thái các lớp hiện tại.";
+                  ? `💾 Đã lưu mặc định lúc ${this.formatDateTime(new Date(Number(baseline.savedAt)))} — bấm 🔄 Khôi phục mặc định để khôi phục trạng thái các lớp.`
+                  : "💾 Chưa lưu mặc định — bấm 💾 Lưu mặc định để lưu trạng thái các lớp hiện tại.";
 
                 let html = `<div id="xepLopPanel" class="xep-lop-panel">`;
                 html += `<header class="xep-lop-head"><div>`;
@@ -4994,7 +5006,10 @@
                 if (!allowEdit) {
                   html += `<span class="xep-lop-lock-note">🔓 Bấm nút “🔐 Mở khóa xếp lịch” ở trên để chọn lớp</span>`;
                 }
-                html += `<button type="button" id="xepLopDefaultBtn" class="btn btn-success xep-lop-default-btn" ${allowEdit ? "" : "disabled"} title="${allowEdit ? "Lần đầu bấm: lưu trạng thái các lớp làm mặc định. Các lần sau: khôi phục lớp như lúc đầu được xếp." : "Chưa mở khóa xếp lịch — mở khóa trước khi lưu/khôi phục mặc định"}">💾 Lưu mặc định</button>`;
+                html += `<div class="xep-lop-default-actions">`;
+                html += `<button type="button" id="xepLopDefaultBtn" class="btn btn-success xep-lop-default-btn" ${allowEdit && !baseline ? "" : "disabled"} title="${allowEdit ? (baseline ? "Đã lưu mặc định — bấm 🔄 Khôi phục mặc định để đưa trạng thái các lớp lại đúng như bản mặc định." : "Lưu trạng thái các lớp hiện tại làm mặc định.") : "Chưa mở khóa xếp lịch — mở khóa trước khi lưu mặc định"}">💾 Lưu mặc định</button>`;
+                html += `<button type="button" id="xepLopRestoreBtn" class="btn btn-outline xep-lop-restore-btn" ${allowEdit && baseline ? "" : "disabled"} title="${allowEdit ? (baseline ? "Khôi phục trạng thái các lớp từ bản mặc định đã lưu." : "Chưa có bản mặc định để khôi phục.") : "Chưa mở khóa xếp lịch — mở khóa trước khi khôi phục"}">🔄 Khôi phục mặc định</button>`;
+                html += `</div>`;
                 html += `</header>`;
 
                 if (!excelNames.length) {
@@ -5004,6 +5019,7 @@
                     : `Chưa có lớp nào. Hãy tải file Excel trước, hoặc xếp lớp vào thẻ lịch trước.`}</div>`;
                   html += `</div>`;
                   container.innerHTML = html;
+                  this.bindXepLopPanelEvents();
                   return;
                 }
 
@@ -5079,6 +5095,10 @@
                 const defaultBtn = container.querySelector("#xepLopDefaultBtn");
                 if (defaultBtn && !defaultBtn.disabled) {
                   defaultBtn.addEventListener("click", () => this.saveXepLopDefaultBaseline());
+                }
+                const restoreBtn = container.querySelector("#xepLopRestoreBtn");
+                if (restoreBtn && !restoreBtn.disabled) {
+                  restoreBtn.addEventListener("click", () => this.restoreXepLopDefaultBaselineClick());
                 }
               },
 
@@ -5397,35 +5417,71 @@
               },
 
               /*
-               * Nút "💾 Lưu mặc định" trong tab Xếp lớp — hoạt động 2 lần:
-               *  - Lần đầu bấm: lưu trạng thái các lớp hiện tại (ngày → danh sách lớp) làm MẶC ĐỊNH.
-               *  - Các lần sau bấm: khôi phục trạng thái các lớp đúng như lúc đầu (lần bấm đầu tiên).
-               * Bản lưu chỉ ghi trạng thái các lớp, không chạm vào điểm danh/giáo viên/ca học.
+               * Nút "💾 Lưu mặc định" trong tab Xếp lớp — lưu trạng thái các lớp hiện tại
+               * (ngày → danh sách lớp) làm MẶC ĐỊNH.
+               * Bản lưu ghi ở localStorage và đồng bộ lên Firebase (data/lichHoc.baseline).
+               * Khi đã có bản mặc định, nút này bị làm mờ để tránh ghi đè — dùng nút
+               * "🔄 Khôi phục mặc định" để đưa tiến độ về đúng bản mặc định.
                */
-              saveXepLopDefaultBaseline() {
+              async saveXepLopDefaultBaseline() {
                 if (!this.scheduleEditingUnlocked()) {
                   this.showToast("Bạn cần mở khóa chế độ sửa lịch trước.", true);
                   return;
                 }
                 const existing = this.loadXepLopDefaultBaseline();
-                if (!existing) {
-                  const days = {};
-                  Object.keys(this.SCHEDULE_DAYS).forEach(day => {
-                    days[day] = this.getScheduledClassNamesForDay(day);
-                  });
-                  const snapshot = { savedAt: Date.now(), days };
-                  try {
-                    this.storageSet("localStorage", this.XEP_LOP_BASELINE_KEY, JSON.stringify(snapshot));
-                  } catch (error) {
-                    console.error("Không lưu được mặc định Xếp lớp:", error);
-                    this.showToast("Không thể lưu bản lưu mặc định.", true);
-                    return;
-                  }
-                  this.showToast("💾 Đã lưu trạng thái các lớp làm mặc định. Các lần bấm sau sẽ khôi phục trạng thái lớp lúc đầu.");
-                  this.renderXepLopPanel();
+                if (existing) {
+                  this.showToast("Đã có bản mặc định — bấm 🔄 Khôi phục mặc định để quay lại trạng thái mặc định.", true);
                   return;
                 }
-                this.restoreXepLopDefaultBaseline(existing);
+                const days = {};
+                Object.keys(this.SCHEDULE_DAYS).forEach(day => {
+                  days[day] = this.getScheduledClassNamesForDay(day);
+                });
+                const snapshot = { savedAt: Date.now(), days };
+                try {
+                  this.storageSet("localStorage", this.XEP_LOP_BASELINE_KEY, JSON.stringify(snapshot));
+                } catch (error) {
+                  console.error("Không lưu được mặc định Xếp lớp:", error);
+                  this.showToast("Không thể lưu bản lưu mặc định.", true);
+                  return;
+                }
+                let savedText = "Đã lưu MẶC ĐỊNH trên thiết bị";
+                if (this.firebase) {
+                  const synced = await this.syncXepLopBaselineToFirebase(snapshot);
+                  savedText = synced
+                    ? "Đã lưu MẶC ĐỊNH trên thiết bị và Firebase"
+                    : "Đã lưu MẶC ĐỊNH trên thiết bị; Firebase chưa đồng bộ";
+                }
+                this.showToast(`💾 ${savedText}.`);
+                // Nút lưu mờ đi, nút khôi phục sáng lên sau khi lưu.
+                this._lastRenderSchedule = 0;
+                this.renderSchedule();
+              },
+
+              /*
+               * Nút "🔄 Khôi phục mặc định" — khôi phục trạng thái các lớp từ bản mặc định đã lưu.
+               * Dùng lại restoreXepLopDefaultBaseline (giữ thẻ có điểm danh, thêm thẻ thiếu, gỡ thẻ thừa).
+               * Sau khi khôi phục, bản mặc định được coi là "đã tiêu thụ":
+               * xoá bản lưu local + Firebase để nút lưu mặc định sáng trở lại.
+               */
+              async restoreXepLopDefaultBaselineClick() {
+                if (!this.scheduleEditingUnlocked()) {
+                  this.showToast("Bạn cần mở khóa chế độ sửa lịch trước.", true);
+                  return;
+                }
+                const baseline = this.loadXepLopDefaultBaseline();
+                if (!baseline) {
+                  this.showToast("Chưa có bản mặc định để khôi phục.", true);
+                  return;
+                }
+                this.restoreXepLopDefaultBaseline(baseline);
+                // Đã tiêu thụ bản mặc định → xoá bản lưu để nút lưu sáng lại, nút khôi phục mờ đi.
+                try { this.storageRemove("localStorage", this.XEP_LOP_BASELINE_KEY); } catch (_) {}
+                if (this.firebase) {
+                  await this.syncXepLopBaselineToFirebase(null);
+                }
+                this._lastRenderSchedule = 0;
+                this.renderSchedule();
               },
 
               /*
@@ -5465,6 +5521,62 @@
                 this.renderSchedule();
                 this.queueScheduleSave();
                 this.showToast("↩ Đã khôi phục trạng thái các lớp như lúc đầu được xếp.");
+              },
+
+              /*
+               * Chuẩn hóa dữ liệu bản lưu mặc định nhận về từ Firebase.
+               * Trả về { savedAt, days } hoặc null nếu không hợp lệ.
+               */
+              normalizeXepLopBaseline(raw) {
+                if (!raw || typeof raw !== "object") return null;
+                const savedAt = Number(raw.savedAt);
+                if (!Number.isFinite(savedAt) || savedAt <= 0) return null;
+                const days = raw.days && typeof raw.days === "object" ? raw.days : null;
+                if (!days) return null;
+                return { savedAt, days };
+              },
+
+              /*
+               * Đồng bộ bản lưu mặc định lên Firebase (data/lichHoc.baseline).
+               * snapshot = null → xóa baseline. Trả về true nếu ghi thành công.
+               */
+              async syncXepLopBaselineToFirebase(snapshot) {
+                if (!this.firebase) return false;
+                this._lastBaselineWriteIso = new Date().toISOString();
+                try {
+                  await this.firebase.transactSchedule(current => ({ baseline: snapshot }));
+                  return true;
+                } catch (error) {
+                  console.error("Không đồng bộ bản lưu mặc định Xếp lớp lên Firebase:", error);
+                  return false;
+                }
+              },
+
+              /*
+               * Nhận bản lưu mặc định từ Firebase (realtime snapshot của lịch học).
+               * - Bỏ qua snapshot nhận gần kề khi máy này vừa ghi (tránh ghi đè bản lưu vừa lưu).
+               * - Bản lưu từ máy khác mới hơn/khác hợp lệ → ghi localStorage + render nút.
+               * - Bản lưu bị xóa trên máy khác → xóa localStorage + render nút.
+               */
+              applyRemoteXepLopBaseline(raw) {
+                if (this._lastBaselineWriteIso && (Date.now() - new Date(this._lastBaselineWriteIso).getTime()) < 60000) return;
+                const remote = this.normalizeXepLopBaseline(raw);
+                const local = this.loadXepLopDefaultBaseline();
+                const remoteTs = Number(remote?.savedAt || 0);
+                const localTs = Number(local?.savedAt || 0);
+                if (remote && remoteTs >= localTs) {
+                  if (JSON.stringify(remote) !== JSON.stringify(local)) {
+                    try { this.storageSet("localStorage", this.XEP_LOP_BASELINE_KEY, JSON.stringify(remote)); } catch (_) {}
+                    this._lastRenderSchedule = 0;
+                    this.renderSchedule();
+                  }
+                  return;
+                }
+                if (!remote && local) {
+                  try { this.storageRemove("localStorage", this.XEP_LOP_BASELINE_KEY); } catch (_) {}
+                  this._lastRenderSchedule = 0;
+                  this.renderSchedule();
+                }
               },
 
               /*
@@ -7635,6 +7747,11 @@
             
               async importExcel(file) {
                 if (!file) return;
+                if (this.importInProgress) {
+                  this.showToast("Đang xử lý file khác, vui lòng đợi cửa sổ xử lý hiện tại hoàn tất.", true);
+                  this.dom.excelFileInput.value = "";
+                  return;
+                }
                 this.dom.excelFileInput.value = "";
                 if (!this.requireAssistantAndUnlock()) return;
             
@@ -7650,7 +7767,18 @@
                 app.dom.searchResults.hidden = true;
                 app.setProgress(0, true);
             
-                const reader = new FileReader();
+                let reader;
+                try {
+                  reader = new FileReader();
+                } catch (readerError) {
+                  app.importInProgress = false;
+                  console.error("Không tạo được FileReader:", readerError);
+                  app.dom.fileStatus.style.color = "var(--danger)";
+                  app.dom.fileStatus.textContent = "❌ Trình duyệt không thể đọc file Excel đã chọn.";
+                  app.setProgress(0, false);
+                  app.showToast("Không thể đọc file Excel.", true);
+                  return;
+                }
             
                 /*
                  * PHẦN ĐỌC VÀ LỌC BÊN DƯỚI GIỮ ĐÚNG CẤU TRÚC CODE NGƯỜI DÙNG GỬI:
@@ -7886,7 +8014,8 @@
                               await app.firebase.save({
                                 database: JSON.parse(JSON.stringify(app.db)),
                                 filename: app.filename || "",
-                                nightResetKey: app.meta.nightResetKey || ""
+                                nightResetKey: app.meta.nightResetKey || "",
+                                attendanceWeekKey: app.meta.attendanceWeekKey || ""
                               });
                               firebaseMessage = "Đã lưu trên thiết bị và Firebase";
                               app.setSync("Đã lưu dữ liệu Excel lên Firebase.", "ok");
@@ -8118,7 +8247,16 @@
                   app.showToast("Không thể đọc file Excel.", true);
                 };
             
-                reader.readAsArrayBuffer(file);
+                try {
+                  reader.readAsArrayBuffer(file);
+                } catch (readError) {
+                  app.importInProgress = false;
+                  console.error("Lỗi đọc file Excel:", readError);
+                  app.dom.fileStatus.style.color = "var(--danger)";
+                  app.dom.fileStatus.textContent = "❌ Trình duyệt không thể đọc file Excel đã chọn.";
+                  app.setProgress(0, false);
+                  app.showToast("Không thể đọc file Excel.", true);
+                }
               },
             
               setProgress(percent, visible) {
@@ -8319,9 +8457,13 @@
                 const remoteString = JSON.stringify(incomingDb);
                 const localString = JSON.stringify(this.db);
                 const resetKeyChanged = String(payload.nightResetKey || "") !== String(this.meta.nightResetKey || "");
+                const weekKeyChanged = String(payload.attendanceWeekKey || "") !== String(this.meta.attendanceWeekKey || "");
 
                 this.filename = String(payload.filename || "");
                 this.meta.nightResetKey = String(payload.nightResetKey || "");
+                // Tuần điểm danh hiện tại cũng được đồng bộ với Firebase (giữ toàn bộ thông tin trên thiết bị).
+                this.meta.attendanceWeekKey = String(payload.attendanceWeekKey || this.meta.attendanceWeekKey || "");
+                if (weekKeyChanged) this.persistLocal();
 
                 if (remoteString !== localString) {
                   // BẢO TOÀN DỮ LIỆU PHÂN NHÓM: Nếu local có 1 trong 3 lớp phân nhóm
@@ -8352,7 +8494,8 @@
                   this._lastSavedPayload = JSON.stringify({
                     database: this.db,
                     filename: this.filename || "",
-                    nightResetKey: this.meta.nightResetKey || ""
+                    nightResetKey: this.meta.nightResetKey || "",
+                    attendanceWeekKey: this.meta.attendanceWeekKey || ""
                   });
                   if (!structuralDiff) {
                     // Không có thay đổi cấu trúc - chỉ lặng lẽ persist, KHÔNG re-render DOM,
@@ -8423,6 +8566,8 @@
                   return;
                 }
                 this._lastApplyRemoteSchedule = now;
+                // Đồng bộ bản lưu mặc định (Xếp lớp) từ Firebase — độc lập với lịch.
+                this.applyRemoteXepLopBaseline(payload?.baseline);
                 const remoteSchedule = this.normalizeSchedule(payload?.content || payload || null);
                 // Bản rỗng từ máy khác không được xóa lịch học đang có trên máy này.
                 if (!Object.values(remoteSchedule).some(list => list.length) &&
@@ -8723,7 +8868,8 @@
                 const payload = {
                   database: JSON.parse(JSON.stringify(this.db)),
                   filename: this.filename || "",
-                  nightResetKey: this.meta.nightResetKey || ""
+                  nightResetKey: this.meta.nightResetKey || "",
+                  attendanceWeekKey: this.meta.attendanceWeekKey || ""
                 };
 
                 // KIỂM TRA: nếu dữ liệu không có thay đổi thực sự so với lần lưu trước,
@@ -8744,13 +8890,14 @@
                     let mergedDb = null;
                     await this.firebase.transactDatabase(current => {
                       mergedDb = this.buildMergedDatabase(this.normalizeDatabase(current?.database || {}));
-                      return { database: mergedDb, filename: this.filename || "", nightResetKey: this.meta.nightResetKey || "" };
+                      return { database: mergedDb, filename: this.filename || "", nightResetKey: this.meta.nightResetKey || "", attendanceWeekKey: this.meta.attendanceWeekKey || "" };
                     });
                     this.adoptMergedDatabase(mergedDb);
                     const mergedPayload = {
                       database: JSON.parse(JSON.stringify(mergedDb)),
                       filename: this.filename || "",
-                      nightResetKey: this.meta.nightResetKey || ""
+                      nightResetKey: this.meta.nightResetKey || "",
+                      attendanceWeekKey: this.meta.attendanceWeekKey || ""
                     };
                     const mergedString = JSON.stringify(mergedPayload);
                     this._dbBase = JSON.parse(JSON.stringify(mergedDb));
@@ -9021,7 +9168,8 @@
                 return {
                   database: data.database || {},
                   filename: data.filename || "",
-                  nightResetKey: data.nightResetKey || ""
+                  nightResetKey: data.nightResetKey || "",
+                  attendanceWeekKey: data.attendanceWeekKey || ""
                 };
               },
             
@@ -9030,8 +9178,9 @@
                   database: payload.database || {},
                   filename: payload.filename || "",
                   nightResetKey: payload.nightResetKey || "",
+                  attendanceWeekKey: payload.attendanceWeekKey || "",
                   updatedAt: new Date().toISOString()
-                });
+                }, { merge: true });
               },
             
               // Đọc - gộp - ghi trong MỘT giao dịch: hai máy ghi cùng lúc không làm mất dữ liệu của nhau.
@@ -9079,7 +9228,8 @@
                   onData({
                     database: data.database || {},
                     filename: data.filename || "",
-                    nightResetKey: data.nightResetKey || ""
+                    nightResetKey: data.nightResetKey || "",
+                    attendanceWeekKey: data.attendanceWeekKey || ""
                   });
                 }, onError);
               },
@@ -9095,6 +9245,6 @@
             window.AttendanceApp.attachFirebase(firebaseApi);
         </script>
 
-    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5e0f9a7eb1c855c',t:'MTc5NTI3NzUzOA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5e0f9a7eb1c855c',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5e1142bfbb2853f',t:'MTc5NTI3ODYyNA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5e1142bfbb2853f',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
